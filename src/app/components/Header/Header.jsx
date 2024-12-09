@@ -74,8 +74,8 @@ const Header = () => {
             <Image
               src="/images/heart.svg"
               alt="Heart Logo"
-              width={50}
-              height={35}
+              width={40}
+              height={40}
             />
           </div>
 
@@ -85,10 +85,10 @@ const Header = () => {
             <Image
               src="/images/notification.svg"
               alt="Heart Logo"
-              width={50}
-              height={35}
+              width={40}
+              height={40}
             />
-            <div className="absolute top-0 right-0 w-[0.9rem] h-[0.9rem] bg-red-500 rounded-full border border-white"></div>
+            <div className="absolute top-0 right-0 w-[0.9rem] h-[0.9rem] bg-red-400 rounded-full border border-white"></div>
           </div>
 
           {/* Settings Icon */}
@@ -96,16 +96,16 @@ const Header = () => {
             <Image
               src="/images/setting.svg"
               alt="Heart Logo"
-              width={50}
-              height={35}
+              width={40}
+              height={40}
             />
           </div>
 
           <Image
             src="/images/profile.svg"
             alt="Profile Logo"
-            width={60}
-            height={60}
+            width={75}
+            height={75}
             className="rounded-full"
           />
         </div>
