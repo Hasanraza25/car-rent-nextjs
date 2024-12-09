@@ -47,39 +47,26 @@ const PopularCars = () => {
 
   return (
     <>
-      <div className="container max-w-[1450px] mx-auto justify-center flex flex-col overflow-hiddem">
+      <div className="container max-w-[1450px] mx-auto flex flex-col mb-20">
         <div className="flex mt-10 items-center font-bold justify-between px-5">
-          <h4 className="text-xl text-[#90A3BF] font-semibold">Popular Car</h4>
-          <div>
-            <button className="py-4 text-[#3563E9] rounded-[5px] hover:underline">
-              View All
-            </button>
-          </div>
+          <h4 className="text-xl text-[#90A3BF] font-semibold">
+            Popular Cars
+          </h4>
         </div>
-
-        <div className="w-full mt-6 relative mx-auto">
-          <div
-            className="
-     grid mt-6 gap-6 px-5 md:grid md:grid-cols-2 lg:grid-cols-4 
-      mobile:overflow-x-auto 
+        {/* Responsive grid layout */}
+        <div
+          className="grid mt-6 gap-6 px-5 sm:flex sm:flex-col sm:items-center md:grid md:grid-cols-2 lg:grid-cols-4 mobile:overflow-x-auto 
       mobile:grid-cols-[auto] 
-      mobile:grid-flow-col
-    "
-          >
-            {products.map((product, index) => (
-              <div
-                key={index}
-                className="
-          flex-shrink-0 
-          sm:w-[300px] 
-          desktop:w-auto 
-          desktop:flex-grow 
-        "
-              >
-                <ProductCard product={product} />
-              </div>
-            ))}
-          </div>
+      mobile:grid-flow-col"
+        >
+          {products.map((product, index) => (
+            <ProductCard key={index} product={product} />
+          ))}
+        </div>
+        <div className="flex items-center">
+          <button className="bg-[#3563E9] hover:bg-[#54A6FF] w-40 mt-20 py-3 mx-auto text-white text-center rounded-[5px]">
+            Show more car
+          </button>
         </div>
       </div>
     </>

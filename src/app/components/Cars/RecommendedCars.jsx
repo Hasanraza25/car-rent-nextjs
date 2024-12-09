@@ -84,6 +84,7 @@ const RecommendedCars = () => {
   ];
 
   return (
+    
     <div className="container max-w-[1450px] mx-auto flex flex-col mb-20">
       <div className="flex mt-10 items-center font-bold justify-between px-5">
         <h4 className="text-xl text-[#90A3BF] font-semibold">
