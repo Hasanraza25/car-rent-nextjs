@@ -2,8 +2,10 @@
 import { useState } from "react";
 
 const ReviewsSection = () => {
+  // State to manage the visible reviews
   const [visibleReviews, setVisibleReviews] = useState(2);
 
+  // Dummy reviews data
   const reviews = [
     {
       id: 1,
@@ -40,7 +42,7 @@ const ReviewsSection = () => {
   ];
 
   const handleShowMore = () => {
-    setVisibleReviews((prev) => prev + 2);
+    setVisibleReviews((prev) => prev + 2); // Load 2 more reviews
   };
 
   return (
@@ -57,29 +59,26 @@ const ReviewsSection = () => {
           {reviews.slice(0, visibleReviews).map((review) => (
             <div
               key={review.id}
-              className="p-6 rounded-lg flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-7 w-full"
+              className="p-6 rounded-lg flex space-x-7 w-full"
             >
-              <div className="flex-shrink-0 self-center sm:self-start">
+              <div>
                 <img
                   src={review.image}
                   alt={review.name}
-                  className="w-16 h-16 sm:w-20 sm:h-20 rounded-full"
+                  width={70}
+                  height={70}
                 />
               </div>
               <div className="flex-1">
-                <div className="flex flex-col sm:flex-row sm:justify-between">
-                  <h3 className="text-lg sm:text-xl font-bold">{review.name}</h3>
+                <div className="flex justify-between">
+                  <h3 className="text-xl font-bold">{review.name}</h3>
                   <p className="text-gray-500 text-sm">{review.date}</p>
                 </div>
-                <div className="flex flex-col sm:flex-row sm:justify-between mt-2">
-                  <p className="text-gray-400">{review.role}</p>
-                  <img
-                    src="/images/review-stars.svg"
-                    alt="Rating"
-                    className="mt-2 sm:mt-0"
-                  />
+                <div className="flex justify-between">
+                  <p className="text-gray-400 mt-4">{review.role}</p>
+                  <img src="/images/review-stars.svg" alt="Rating" />
                 </div>
-                <p className="mt-4 text-gray-600 leading-6 sm:leading-8 text-sm sm:text-base">
+                <p className="mt-4 text-gray-600 leading-8 text-base">
                   {review.text}
                 </p>
               </div>
@@ -91,7 +90,7 @@ const ReviewsSection = () => {
             <div className="text-center my-10">
               <button
                 onClick={handleShowMore}
-                className="text-gray-400 hover:underline flex items-center justify-center space-x-2"
+                className="text-gray-400 hover:underline flex items-center justify-center space-x-2 text-center mx-auto"
               >
                 <span>Show All</span>
                 <svg
@@ -102,7 +101,7 @@ const ReviewsSection = () => {
                 >
                   <path
                     fillRule="evenodd"
-                    d="M5.23 7.21a.75.75 0 011.06.02L10 10.7l3.71-3.47a.75.75 0 111.04 1.08l-4.25 4a.75.75 0 01-1.04 0l-4-4a.75.75 0 01.02-1.06z"
+                    d="M5.23 7.21a.75.75 0 011.06.02L10 10.7l3.71-3.47a.75.75 0 111.04 1.08l-4.25 4a.75.75 0 01-1.04 0l-4.25-4a.75.75 0 01.02-1.06z"
                     clipRule="evenodd"
                   />
                 </svg>
