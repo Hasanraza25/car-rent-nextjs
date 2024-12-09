@@ -27,7 +27,7 @@ const PickUpDropOff = () => {
               </label>
               <select
                 id="location"
-                className="w-32 py-2 mt-2 text-sm text-[#90A3BF] sm:p-4 rounded-md focus:outline-none appearance-none bg-[url('/images/arrow-down.svg')] bg-no-repeat bg-right bg-[length:1rem]"
+                className="md:w-32 w-full py-2 mt-2 text-sm text-[#90A3BF] sm:p-4 rounded-md focus:outline-none appearance-none bg-[url('/images/arrow-down.svg')] bg-no-repeat bg-right bg-[length:1rem]"
               >
                 <option>Select your city</option>
                 <option>City 1</option>
@@ -45,7 +45,7 @@ const PickUpDropOff = () => {
               </label>
               <select
                 id="date"
-                className="w-32 py-2 mt-2  text-sm  text-[#90A3BF] sm:p-4 rounded-md focus:outline-none appearance-none bg-[url('/images/arrow-down.svg')] bg-no-repeat bg-right bg-[length:1rem]"
+                className="md:w-32 w-full py-2 mt-2  text-sm  text-[#90A3BF] sm:p-4 rounded-md focus:outline-none appearance-none bg-[url('/images/arrow-down.svg')] bg-no-repeat bg-right bg-[length:1rem]"
               >
                 <option>Select your Date</option>
                 <option>2024-12-10</option>
@@ -63,7 +63,7 @@ const PickUpDropOff = () => {
               </label>
               <select
                 id="time"
-                className="w-32 py-2 mt-2  text-sm  text-[#90A3BF] sm:p-4 rounded-md focus:outline-none appearance-none bg-[url('/images/arrow-down.svg')] bg-no-repeat bg-right bg-[length:1rem]"
+                className="md:w-32 w-full py-2 mt-2  text-sm  text-[#90A3BF] sm:p-4 rounded-md focus:outline-none appearance-none bg-[url('/images/arrow-down.svg')] bg-no-repeat bg-right bg-[length:1rem]"
               >
                 <option>Select your Time</option>
                 <option>10:00 AM</option>
@@ -116,7 +116,7 @@ const PickUpDropOff = () => {
               </label>
               <select
                 id="location"
-                className="w-32 py-2 mt-2 text-sm text-[#90A3BF] sm:p-4 rounded-md focus:outline-none appearance-none bg-[url('/images/arrow-down.svg')] bg-no-repeat bg-right bg-[length:1rem]"
+                className="md:w-32 w-full py-2 mt-2 text-sm text-[#90A3BF] sm:p-4 rounded-md focus:outline-none appearance-none bg-[url('/images/arrow-down.svg')] bg-no-repeat bg-right bg-[length:1rem]"
               >
                 <option>Select your city</option>
                 <option>City 1</option>
@@ -134,7 +134,7 @@ const PickUpDropOff = () => {
               </label>
               <select
                 id="date"
-                className="w-32 py-2 mt-2 text-sm text-[#90A3BF] sm:p-4 rounded-md focus:outline-none appearance-none bg-[url('/images/arrow-down.svg')] bg-no-repeat bg-right bg-[length:1rem]"
+                className="md:w-32 w-full py-2 mt-2 text-sm text-[#90A3BF] sm:p-4 rounded-md focus:outline-none appearance-none bg-[url('/images/arrow-down.svg')] bg-no-repeat bg-right bg-[length:1rem]"
               >
                 <option>Select your Date</option>
                 <option>2024-12-10</option>
@@ -152,7 +152,7 @@ const PickUpDropOff = () => {
               </label>
               <select
                 id="time"
-                className="w-32 py-2 mt-2 text-sm text-[#90A3BF] sm:p-4 rounded-md focus:outline-none appearance-none bg-[url('/images/arrow-down.svg')] bg-no-repeat bg-right bg-[length:1rem]"
+                className="md:w-32 w-full py-2 mt-2 text-sm text-[#90A3BF] sm:p-4 rounded-md focus:outline-none appearance-none bg-[url('/images/arrow-down.svg')] bg-no-repeat bg-right bg-[length:1rem]"
               >
                 <option>Select your Time</option>
                 <option>10:00 AM</option>

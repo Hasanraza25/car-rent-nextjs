@@ -47,7 +47,7 @@ const PopularCars = () => {
 
   return (
     <>
-      <div className="container max-w-[1450px] mx-auto justify-center flex flex-col">
+      <div className="container max-w-[1450px] mx-auto justify-center flex flex-col overflow-hiddem">
         <div className="flex mt-10 items-center font-bold justify-between px-5">
           <h4 className="text-xl text-[#90A3BF] font-semibold">Popular Car</h4>
           <div>
@@ -57,12 +57,25 @@ const PopularCars = () => {
           </div>
         </div>
 
-        <div className="w-full mt-6 overflow-hidden relative mx-auto">
-          <div className="flex desktop:flex-wrap desktop:justify-between mobile:overflow-x-auto mobile:gap-4 tablet:overflow-x-auto tablet:gap-4">
+        <div className="w-full mt-6 relative mx-auto">
+          <div
+            className="
+     grid mt-6 gap-6 px-5 md:grid md:grid-cols-2 lg:grid-cols-4 
+
+      mobile:overflow-x-auto 
+      mobile:grid-cols-[auto] 
+      mobile:grid-flow-col
+    "
+          >
             {products.map((product, index) => (
               <div
                 key={index}
-                className="min-w-[300px] flex-shrink-0 desktop:w-[calc(25%-1rem)]"
+                className="
+          flex-shrink-0 
+          w-[300px] 
+          desktop:w-auto 
+          desktop:flex-grow 
+        "
               >
                 <ProductCard product={product} />
               </div>

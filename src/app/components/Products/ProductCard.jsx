@@ -15,7 +15,7 @@ const ProductCard = ({ product }) => {
   const peopleIcon = "/images/profile-2.svg"; // Replace with actual path
 
   return (
-    <div className="flex-shrink-0 md:w-[20.2rem] w-full h-[30rem] rounded-lg relative mx-4 border-none bg-white shadow-md">
+    <div className="flex-shrink-0 md:w-[18.2rem] w-full h-[30rem] rounded-lg relative mx-4 border-none bg-white shadow-md">
       {/* Title and Subtitle */}
       <div className="p-6">
         <Link
@@ -52,7 +52,7 @@ const ProductCard = ({ product }) => {
         <img
           src={product.image}
           alt={product.name}
-          className="w-[300px] h-auto object-contain"
+          className="w-[250px] h-auto object-contain"
         />
       </div>
 
@@ -92,7 +92,7 @@ const ProductCard = ({ product }) => {
               .replace(/[^a-z0-9]+/g, "-") // Replace non-alphanumeric characters with "-"
               .replace(/^-+|-+$/g, "")}`} // Remove leading/trailing hyphens
           >
-            <button className="bg-[#3563E9] hover:bg-[#54A6FF] py-3 px-6 text-white rounded-[5px]">
+            <button className="bg-[#3563E9] hover:bg-[#54A6FF] py-3 px-5 text-white rounded-[5px]">
               Rent Now
             </button>
           </Link>
