@@ -103,7 +103,7 @@ const CarDetail = () => {
                 </div>
                 <p className="text-gray-400 mt-7 text-lg leading-9 font-normal">
                   NISMO has become the embodiment of Nissan&#39;s outstanding
-                  performance, inspired by the "race track".
+                  performance, inspired by the &quot;race track&quot;.
                 </p>
               </div>
 

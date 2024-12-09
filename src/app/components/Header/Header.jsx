@@ -103,7 +103,6 @@ const Header = () => {
             />
           </div>
 
-          {/* Profile Icon (Laptop) */}
           <Image
             src="/images/profile.svg"
             alt="Profile Logo"
