@@ -1,10 +1,10 @@
 import Image from "next/image";
+import Link from "next/link";
 
 const PickUpDropOff = () => {
   return (
     <section className="py-10">
       <div className="mx-auto max-w-[1600px] px-4 flex flex-col items-center justify-center md:flex-row mt-5 md:space-x-6">
-        {/* Pick-Up Card */}
         <div className="bg-white p-10 rounded-lg shadow-md w-full md:w-[45%] sm:mx-auto">
           <div className="flex items-center mb-4">
             <input
@@ -18,7 +18,6 @@ const PickUpDropOff = () => {
           </div>
 
           <div className="flex items-center">
-            {/* Location Dropdown */}
             <div className="mb-4 mx-4 relative">
               <label
                 htmlFor="location"
@@ -55,8 +54,6 @@ const PickUpDropOff = () => {
                 <option>2024-12-12</option>
               </select>
             </div>
-
-            {/* Time Dropdown */}
             <div className="mb-4 mx-4 relative">
               <label
                 htmlFor="time"
@@ -77,27 +74,27 @@ const PickUpDropOff = () => {
           </div>
         </div>
 
-        {/* Small Icon */}
         <div className="my-8 bg-[#3563E9] p-4 rounded-xl cursor-pointer hover:bg-[#54A6FF] md:block hidden">
-          <Image
-            src="/images/topbottom-arrow.svg" // Path to your icon
-            alt="Icon"
-            width={40}
-            height={40}
-          />
+          <Link href="/category">
+            <Image
+              src="/images/topbottom-arrow.svg"
+              alt="Icon"
+              width={40}
+              height={40}
+            />
+          </Link>
         </div>
 
         {/* Small Icon for Mobile */}
         <div className="my-4 bg-[#3563E9] absolute p-4 rounded-xl cursor-pointer hover:bg-[#54A6FF] md:hidden">
           <Image
-            src="/images/topbottom-arrow.svg" // Path to your icon
+            src="/images/topbottom-arrow.svg"
             alt="Icon"
             width={40}
             height={40}
           />
         </div>
 
-        {/* Drop-Off Card */}
         <div className="bg-white p-10 rounded-lg shadow-md w-full md:w-[45%] mx-auto sm:mx-auto sm:mt-10">
           <div className="flex items-center mb-4">
             <input

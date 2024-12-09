@@ -79,7 +79,7 @@ const RecentCars = () => {
             </button>
           </div>
         </div>
-        <div className="grid mt-6 gap-8  px-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 sm:justify-items-center">
+        <div className="flex  mt-6 gap-8  px-4 desktop:flex-wrap desktop:justify-between mobile:overflow-x-auto tablet:overflow-x-auto tablet:gap-4">
           {products.map((product, index) => (
             <ProductCard key={index} product={product} />
           ))}
@@ -88,14 +88,16 @@ const RecentCars = () => {
 
       <div className="container mx-auto flex flex-col mb-20">
         <div className="flex mt-10 items-center font-bold justify-between px-10">
-          <h4 className="text-xl text-[#90A3BF] font-semibold">Recommended Cars</h4>
+          <h4 className="text-xl text-[#90A3BF] font-semibold">
+            Recommended Cars
+          </h4>
           <div>
             <button className="py-4 text-[#3563E9] rounded-[5px] hover:underline pr-20">
               View All
             </button>
           </div>
         </div>
-        <div className="grid mt-6 gap-8  px-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 sm:justify-items-center">
+        <div className="flex  mt-6 gap-8 px-4 desktop:flex-wrap desktop:justify-between mobile:overflow-x-auto tablet:overflow-x-auto tablet:gap-4">
           {products2.map((product, index) => (
             <ProductCard key={index} product={product} />
           ))}

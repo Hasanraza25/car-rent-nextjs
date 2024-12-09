@@ -1,13 +1,13 @@
 import React from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 const Hero = () => {
   return (
     <>
       <div className="mx-auto max-w-[1700px] px-4 mt-10">
         <div className="flex justify-center gap-4 md:flex-row flex-col md:overflow-hidden sm:mx-5">
-          {/* Card 1 */}
-          <div className="relative bg-[#54A6FF] sm:mx-auto text-white flex flex-col rounded-lg mx-10 pt-8 pl-8 pb-4 w-full md:w-1/2 sm:mx-auto sm:px-6">
+          <div className="relative bg-[#54A6FF] text-white flex flex-col rounded-lg mx-10 pt-8 pl-8 pb-4 w-full md:w-1/2 sm:mx-auto sm:px-6">
             <img
               src="/images/hero-ellipse.svg"
               alt="Background"
@@ -33,7 +33,6 @@ const Hero = () => {
             </div>
           </div>
 
-          {/* Card 2 */}
           <div className="relative bg-[#3563E9] text-white flex flex-col rounded-lg mx-10 pt-8 pl-8 pb-4 w-full md:w-1/2 sm:mx-auto sm:px-6">
             <img
               src="/images/hero-arrows.svg"

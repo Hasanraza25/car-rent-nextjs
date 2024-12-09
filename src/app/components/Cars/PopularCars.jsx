@@ -56,13 +56,13 @@ const PopularCars = () => {
             </button>
           </div>
         </div>
-        {/* Responsive sliding container */}
+
         <div className="w-full mt-6 overflow-hidden relative mx-auto">
           <div className="flex desktop:flex-wrap desktop:justify-between mobile:overflow-x-auto mobile:gap-4 tablet:overflow-x-auto tablet:gap-4">
             {products.map((product, index) => (
               <div
                 key={index}
-                className="min-w-[300px] flex-shrink-0 desktop:w-[calc(25%-1rem)]" // Adjusts width based on screen
+                className="min-w-[300px] flex-shrink-0 desktop:w-[calc(25%-1rem)]"
               >
                 <ProductCard product={product} />
               </div>

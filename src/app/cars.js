@@ -53,7 +53,7 @@ const cars = [
   },
   {
     image: "/images/cars/car-6.svg",
-    name: "CR  - V",
+    name: "CR - V",
     price: 80,
     discount: " ",
     category: "SUV",

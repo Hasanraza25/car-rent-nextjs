@@ -97,7 +97,7 @@ const CategoryCars = () => {
 
   return (
     <div className="container mx-auto flex flex-col mb-20">
-      {/* Centered grid layout on mobile */}
+
       <div className="grid mt-6 gap-8  px-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 sm:justify-items-center">
         {products.map((product, index) => (
           <ProductCard key={index} product={product} />

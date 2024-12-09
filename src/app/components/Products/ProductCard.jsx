@@ -18,7 +18,12 @@ const ProductCard = ({ product }) => {
     <div className="flex-shrink-0 md:w-[23.2rem] w-full h-[30rem] rounded-lg relative mx-4 border-none bg-white shadow-md">
       {/* Title and Subtitle */}
       <div className="p-6">
-        <Link href={`/cars/${product.name.replace(/\s+/g, "-").toLowerCase()}`}>
+        <Link
+          href={`/cars/${product.name
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, "-") // Replace non-alphanumeric characters with "-"
+            .replace(/^-+|-+$/g, "")}`} // Remove leading/trailing hyphens
+        >
           <h3 className="text-xl font-semibold cursor-pointer">
             {product.name}
           </h3>
@@ -81,9 +86,16 @@ const ProductCard = ({ product }) => {
             </span>{" "}
             day
           </span>
-          <button className="bg-[#3563E9] hover:bg-[#54A6FF] py-3 px-6 text-white rounded-[5px]">
-            Rent Now
-          </button>
+          <Link
+            href={`/rent/${product.name
+              .toLowerCase()
+              .replace(/[^a-z0-9]+/g, "-") // Replace non-alphanumeric characters with "-"
+              .replace(/^-+|-+$/g, "")}`} // Remove leading/trailing hyphens
+          >
+            <button className="bg-[#3563E9] hover:bg-[#54A6FF] py-3 px-6 text-white rounded-[5px]">
+              Rent Now
+            </button>
+          </Link>
         </div>
         <span className="text-gray-500 text-lg line-through">
           {product.discount}

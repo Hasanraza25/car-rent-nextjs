@@ -2,10 +2,10 @@
 import { useState } from "react";
 
 const ReviewsSection = () => {
-  // State to manage the visible reviews
+  
   const [visibleReviews, setVisibleReviews] = useState(2);
 
-  // Dummy reviews data
+  
   const reviews = [
     {
       id: 1,
@@ -41,13 +41,12 @@ const ReviewsSection = () => {
     },
   ];
 
-  // Handler to load more reviews
   const handleShowMore = () => {
-    setVisibleReviews((prev) => prev + 2); // Load 2 more reviews
+    setVisibleReviews((prev) => prev + 2); 
   };
 
   return (
-    <div className="py-12 max-w-[1400px]">
+    <div className="py-12 max-w-[1450px] mx-auto">
       <div className="container mx-auto px-4">
         <div className="flex items-center space-x-6 mb-5 ml-5">
           <h2 className="text-2xl font-semibold">Reviews</h2>

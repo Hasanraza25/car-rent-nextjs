@@ -25,8 +25,13 @@ const CarDetail = () => {
   const peopleIcon = "/images/profile-2.svg";
 
   const car = cars.find(
-    (car) => car.name.toLowerCase().replace(/ /g, "-") === slug
-  );
+  (car) =>
+    car.name
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-") // Replace non-alphanumeric characters with "-"
+      .replace(/^-+|-+$/g, "") === slug // Remove leading/trailing hyphens
+);
+
 
   if (!car) {
     return <div>Car not found</div>;
@@ -40,7 +45,7 @@ const CarDetail = () => {
         <div className="flex flex-col w-full px-4">
           <div className="flex flex-wrap justify-around mt-10 mx-auto">
             {/* Card 1 */}
-            <div className="relative rounded-lg text-white flex flex-col justify-between p-6 mb-8 w-full sm:w-full md:w-[45%] xl:w-[45%] ">
+            <div className="relative rounded-lg text-white flex flex-col justify-between p-6 mb-8 w-full sm:mx-auto sm:w-[90%] md:w-[45%] xl:w-[45%] ">
               <img
                 src="/images/hero-arrows.svg"
                 alt="Background"
@@ -83,7 +88,7 @@ const CarDetail = () => {
             </div>
 
             {/* Card 2 */}
-            <div className=" relative w-full sm:w-full lg:w-1/2 rounded-lg bg-white shadow-md mb-8 md:w-[45%] xl:w-[45%]">
+            <div className=" relative w-full g:w-1/2 md:h-[70%] rounded-lg bg-white shadow-md mb-8  sm:w-[90%] md:w-[45%] xl:w-[45%]">
               <div className="p-6">
                 <Link
                   href={`/cars/${car.name.replace(/\s+/g, "-").toLowerCase()}`}
@@ -102,7 +107,6 @@ const CarDetail = () => {
                 </p>
               </div>
 
-              {/* Action Buttons */}
               <div className="absolute top-4 right-2 flex flex-col space-y-2">
                 <button
                   className="bg-white w-8 h-8 rounded-full flex items-center justify-center hover:text-red-500"
@@ -115,8 +119,6 @@ const CarDetail = () => {
                   />
                 </button>
               </div>
-
-              {/* Litres, Genre, and People */}
               <div className="flex flex-wrap justify-between mx-8 mt-2 space-x-6">
                 <div className="flex items-center space-x-4 text-[#90A3BF]">
                   <span className="text-lg">Type Car</span>

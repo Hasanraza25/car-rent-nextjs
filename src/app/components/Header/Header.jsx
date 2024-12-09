@@ -5,7 +5,6 @@ const Header = () => {
   return (
     <header className="py-6 bg-white border-b">
       <div className="mx-auto max-w-[1700px] px-4 flex items-center justify-between md:flex-row flex-col">
-        {/* Logo and Profile for Mobile */}
         <div className="w-full flex items-center justify-between md:hidden mb-4">
           {/* Logo */}
           <Link href="/">
@@ -22,7 +21,6 @@ const Header = () => {
           />
         </div>
 
-        {/* Main Header Content */}
         <div className="w-full flex items-center justify-between md:justify-start">
           {/* Logo for Laptop */}
           <Link href="/">
