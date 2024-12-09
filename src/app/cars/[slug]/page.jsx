@@ -82,7 +82,7 @@ const CarDetail = () => {
             </div>
 
             {/* Card 2 */}
-            <div className="relative w-full md:w-[45%] bg-white shadow-md rounded-lg mx-auto p-4 h-[80%]">
+            <div className="relative w-full md:w-[45%] bg-white shadow-md rounded-lg mx-auto p-4 h-[67%]">
               <div className="p-3">
                 <Link
                   href={`/cars/${car.name.replace(/\s+/g, "-").toLowerCase()}`}

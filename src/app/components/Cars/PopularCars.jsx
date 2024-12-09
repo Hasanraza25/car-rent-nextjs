@@ -69,7 +69,6 @@ const PopularCars = () => {
             ))}
           </div>
         </div>
-        <hr className="mb-10" />
       </div>
     </>
   );
