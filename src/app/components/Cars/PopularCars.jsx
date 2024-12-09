@@ -61,7 +61,6 @@ const PopularCars = () => {
           <div
             className="
      grid mt-6 gap-6 px-5 md:grid md:grid-cols-2 lg:grid-cols-4 
-
       mobile:overflow-x-auto 
       mobile:grid-cols-[auto] 
       mobile:grid-flow-col
@@ -72,7 +71,7 @@ const PopularCars = () => {
                 key={index}
                 className="
           flex-shrink-0 
-          w-[300px] 
+          sm:w-[300px] 
           desktop:w-auto 
           desktop:flex-grow 
         "
