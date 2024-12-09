@@ -47,7 +47,7 @@ const PopularCars = () => {
 
   return (
     <>
-      <div className="container max-w-[1600px] mx-auto justify-center flex flex-col">
+      <div className="container max-w-[1450px] mx-auto justify-center flex flex-col">
         <div className="flex mt-10 items-center font-bold justify-between px-5">
           <h4 className="text-xl text-[#90A3BF] font-semibold">Popular Car</h4>
           <div>

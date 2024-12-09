@@ -84,7 +84,7 @@ const RecommendedCars = () => {
   ];
 
   return (
-    <div className="container max-w-[1600px] mx-auto flex flex-col mb-20">
+    <div className="container max-w-[1450px] mx-auto flex flex-col mb-20">
       <div className="flex mt-10 items-center font-bold justify-between px-5">
         <h4 className="text-xl text-[#90A3BF] font-semibold">
           Recommended Car
@@ -100,7 +100,6 @@ const RecommendedCars = () => {
         <button className="bg-[#3563E9] hover:bg-[#54A6FF] w-40 mt-20 py-3 mx-auto text-white text-center rounded-[5px]">
           Show more car
         </button>
-        <p className="text-end text-[#90A3BF] mt-20 sm:hidden">120 Car</p>
       </div>
     </div>
   );

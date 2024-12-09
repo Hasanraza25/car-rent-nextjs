@@ -14,7 +14,7 @@ const Hero = () => {
               className="absolute inset-0 w-full h-full object-cover"
             />
             <div className="relative z-10">
-              <h1 className="text-white text-[2.5rem] sm:text-[1.8rem] leading-snug tracking-normal">
+              <h1 className="text-white text-[2.5rem] md:w-[70%] sm:text-[1.8rem] leading-snug tracking-normal">
                 The Best Platform for Car Rental
               </h1>
               <p className="md:w-96 text-lg mt-5 ">
@@ -37,10 +37,10 @@ const Hero = () => {
             <img
               src="/images/hero-arrows.svg"
               alt="Background"
-              className="absolute inset-0 w-full h-full object-cover"
+              className="absolute inset-0 w-full h-full object-cover rounded-xl"
             />
             <div className="realtive z-10">
-              <h1 className="text-white text-[2.5rem] sm:text-[1.8rem] leading-snug tracking-normal">
+              <h1 className="text-white text-[2.5rem] md:w-[70%] sm:text-[1.8rem] leading-snug tracking-normal">
                 Easy way to rent a car at a low price
               </h1>
               <p className="md:w-96 text-lg mt-5">

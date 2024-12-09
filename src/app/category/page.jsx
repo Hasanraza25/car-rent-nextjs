@@ -11,7 +11,7 @@ const CategoryCar = () => {
       <Header />
       <div className="flex flex-1">
         <Sidebar />
-        <div className="flex flex-col w-full md:pr-20">
+        <div className="flex flex-col w-full">
           <PickUpDropOff />
           <CategoryCars />
         </div>

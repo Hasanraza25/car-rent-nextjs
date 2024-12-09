@@ -79,7 +79,7 @@ const RecentCars = () => {
             </button>
           </div>
         </div>
-        <div className="flex  mt-6 gap-8  px-4 desktop:flex-wrap desktop:justify-between mobile:overflow-x-auto tablet:overflow-x-auto tablet:gap-4">
+        <div className="flex mt-6 gap-8 desktop:flex-wrap desktop:justify-between mobile:overflow-x-auto tablet:overflow-x-auto tablet:gap-4">
           {products.map((product, index) => (
             <ProductCard key={index} product={product} />
           ))}
@@ -97,7 +97,7 @@ const RecentCars = () => {
             </button>
           </div>
         </div>
-        <div className="flex  mt-6 gap-8 px-4 desktop:flex-wrap desktop:justify-between mobile:overflow-x-auto tablet:overflow-x-auto tablet:gap-4">
+        <div className="flex  mt-6 gap-8 desktop:flex-wrap desktop:justify-between mobile:overflow-x-auto tablet:overflow-x-auto tablet:gap-4">
           {products2.map((product, index) => (
             <ProductCard key={index} product={product} />
           ))}
