@@ -20,7 +20,7 @@ const Sidebar = () => {
   const [price, setPrice] = useState(100);
 
   return (
-    <div className="w-[400px] min-h-screen bg-white shadow-md p-6 pl-20 sm:hidden">
+    <div className="w-[400px] min-h-screen bg-white shadow-md p-6 pl-20 tablet:hidden mobile:hidden">
       {/* Type Section */}
       <div className="mb-8">
         <h3 className="text-xs font-medium text-gray-400 tracking-widest mb-4">

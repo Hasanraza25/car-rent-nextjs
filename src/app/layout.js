@@ -1,11 +1,6 @@
 import localFont from "next/font/local";
 import "./globals.css";
 
-const poppins = localFont({
-  src: "./fonts/Poppins/Poppins-Regular.ttf",
-  variable: "--font-poppins",
-  weight: "100 600 700 900",
-});
 
 const jakartaSans = localFont({
   src: "./fonts/Plus_Jakarta_Sans/static/PlusJakartaSans-Medium.ttf",
@@ -35,7 +30,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body
-        className={`${poppins.variable} ${jakartaSans.variable} ${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${jakartaSans.variable} ${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         {children}
       </body>
