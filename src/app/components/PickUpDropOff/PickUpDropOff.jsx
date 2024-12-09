@@ -54,7 +54,7 @@ const PickUpDropOff = () => {
                 <option>2024-12-12</option>
               </select>
             </div>
-            <div className="mb-4 mx-4 relative  border-r pr-5">
+            <div className="mb-4 mx-4 relative pr-5">
               <label
                 htmlFor="time"
                 className="block text-lg font-bold text-black"
@@ -147,7 +147,7 @@ const PickUpDropOff = () => {
             </div>
 
             {/* Time Dropdown */}
-            <div className="mb-4 mx-4 relative border-r pr-5">
+            <div className="mb-4 mx-4 relative pr-5">
               <label
                 htmlFor="time"
                 className="block text-lg font-bold text-black"
