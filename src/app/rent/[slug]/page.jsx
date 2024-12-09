@@ -549,9 +549,9 @@ const RentForm = () => {
                 <input
                   type="text"
                   placeholder="Apply promo code"
-                  className="flex-1 bg-gray-100 rounded-lg px-5 py-3 text-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="flex-1 bg-gray-100 rounded-lg px-5 py-3 text-lg sm:text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 />
-                <button className="absolute right-0 bg-transparent text-black px-4 py-2 rounded-lg text-lg">
+                <button className="absolute right-0 bg-transparent text-black px-4 py-2 rounded-lg text-lg sm:text-sm">
                   Apply now
                 </button>
               </div>

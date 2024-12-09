@@ -18,7 +18,7 @@ const PickUpDropOff = () => {
           </div>
 
           <div className="flex items-center">
-            <div className="mb-4 mx-4 relative">
+            <div className="mb-4 mx-4 relative border-r pr-5">
               <label
                 htmlFor="location"
                 className="block text-lg font-bold text-black"
@@ -37,7 +37,7 @@ const PickUpDropOff = () => {
             </div>
 
             {/* Date Dropdown */}
-            <div className="mb-4 mx-4 relative">
+            <div className="mb-4 mx-4 relative  border-r pr-5">
               <label
                 htmlFor="date"
                 className="block text-lg font-bold text-black"
@@ -54,7 +54,7 @@ const PickUpDropOff = () => {
                 <option>2024-12-12</option>
               </select>
             </div>
-            <div className="mb-4 mx-4 relative">
+            <div className="mb-4 mx-4 relative  border-r pr-5">
               <label
                 htmlFor="time"
                 className="block text-lg font-bold text-black"
@@ -109,7 +109,7 @@ const PickUpDropOff = () => {
 
           <div className="flex items-center">
             {/* Location Dropdown */}
-            <div className="mb-4 mx-4 relative">
+            <div className="mb-4 mx-4 relative  border-r pr-5">
               <label
                 htmlFor="location"
                 className="block text-lg font-bold text-black"
@@ -128,7 +128,7 @@ const PickUpDropOff = () => {
             </div>
 
             {/* Date Dropdown */}
-            <div className="mb-4 mx-4 relative">
+            <div className="mb-4 mx-4 relative  border-r pr-5">
               <label
                 htmlFor="date"
                 className="block text-lg font-bold text-black"
@@ -147,7 +147,7 @@ const PickUpDropOff = () => {
             </div>
 
             {/* Time Dropdown */}
-            <div className="mb-4 mx-4 relative">
+            <div className="mb-4 mx-4 relative border-r pr-5">
               <label
                 htmlFor="time"
                 className="block text-lg font-bold text-black"
