@@ -16,22 +16,22 @@ const ProductCard = ({ product }) => {
 
   return (
     <div className="flex-shrink-0 w-full h-[30rem] rounded-lg relative border-none bg-white shadow-md">
-      {/* Title and Subtitle */}
-      <div className="p-6">
-        <Link
-          href={`/cars/${product.name
-            .toLowerCase()
-            .replace(/[^a-z0-9]+/g, "-") // Replace non-alphanumeric characters with "-"
-            .replace(/^-+|-+$/g, "")}`} // Remove leading/trailing hyphens
-        >
+      <Link
+        href={`/cars/${product.name
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, "-") // Replace non-alphanumeric characters with "-"
+          .replace(/^-+|-+$/g, "")}`} // Remove leading/trailing hyphens
+      >
+        {/* Title and Subtitle */}
+        <div className="p-6">
           <h3 className="text-xl font-semibold cursor-pointer">
             {product.name}
           </h3>
-        </Link>
-        <p className="text-[#90A3BF] text-sm font-semibold mt-2">
-          {product.category}
-        </p>
-      </div>
+          <p className="text-[#90A3BF] text-sm font-semibold mt-2">
+            {product.category}
+          </p>
+        </div>
+      </Link>
 
       {/* Action Buttons (Heart) */}
       <div className="absolute top-4 right-2 flex flex-col space-y-2">
@@ -46,16 +46,21 @@ const ProductCard = ({ product }) => {
           />
         </button>
       </div>
-
-      {/* Product Image with specific width */}
-      <div className="w-full h-40 mt-4 flex items-center justify-center">
-        <img
-          src={product.image}
-          alt={product.name}
-          className="w-[250px] h-auto object-contain"
-        />
-      </div>
-
+      <Link
+        href={`/cars/${product.name
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, "-") // Replace non-alphanumeric characters with "-"
+          .replace(/^-+|-+$/g, "")}`} // Remove leading/trailing hyphens
+      >
+        {/* Product Image with specific width */}
+        <div className="w-full h-40 mt-4 flex items-center justify-center">
+          <img
+            src={product.image}
+            alt={product.name}
+            className="w-[250px] h-auto object-contain"
+          />
+        </div>
+      </Link>
       {/* Flex with Litres, Genre, and People */}
       <div className="flex items-center justify-between mt-10 px-6">
         {/* Litres */}
