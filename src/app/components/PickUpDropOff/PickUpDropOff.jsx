@@ -116,7 +116,7 @@ const PickUpDropOff = () => {
               </label>
               <select
                 id="location"
-                className="lg:w-32 w-full py-2 mt-2 text-sm text-[#90A3BF] rounded-md focus:outline-none appearance-none bg-[url('/images/arrow-down.svg')] bg-no-repeat bg-right bg-[length:1rem]"
+                className="lg:w-32 w-full py-2 mt-2 text-sm text-[#90A3BF] sm:p-4 rounded-md focus:outline-none appearance-none bg-[url('/images/arrow-down.svg')] bg-no-repeat bg-right bg-[length:1rem]"
               >
                 <option>Select your city</option>
                 <option>City 1</option>

@@ -80,14 +80,20 @@ const RecentCars = () => {
           </div>
         </div>
         <div
-          className=" grid mt-6 gap-6 md:grid md:grid-cols-2 lg:grid-cols-3
+          className="grid mt-6 gap-6 px-5 md:grid md:grid-cols-2 lg:grid-cols-3
       mobile:overflow-x-auto 
       mobile:grid-cols-[auto] 
-      mobile:grid-flow-col
-      "
+      mobile:grid-flow-col"
         >
           {products.map((product, index) => (
-            <ProductCard key={index} product={product} />
+            <div
+              key={index}
+              className="
+     flex-shrink-0 sm:w-[20rem]
+   "
+            >
+              <ProductCard key={index} product={product} />
+            </div>
           ))}
         </div>
       </div>
@@ -104,14 +110,20 @@ const RecentCars = () => {
           </div>
         </div>
         <div
-          className="grid mt-6 gap-6 md:grid md:grid-cols-2 lg:grid-cols-3
+          className="grid mt-6 gap-6 px-5 md:grid md:grid-cols-2 lg:grid-cols-3
       mobile:overflow-x-auto 
       mobile:grid-cols-[auto] 
-      mobile:grid-flow-col
-      "
+      mobile:grid-flow-col"
         >
           {products2.map((product, index) => (
-            <ProductCard key={index} product={product} />
+            <div
+              key={index}
+              className="
+      flex-shrink-0 sm:w-[20rem]
+    "
+            >
+              <ProductCard key={index} product={product} />
+            </div>
           ))}
         </div>
       </div>
