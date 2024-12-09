@@ -74,32 +74,30 @@ const Header = () => {
             <Image
               src="/images/heart.svg"
               alt="Heart Logo"
-              width={35}
-              height={30}
+              width={50}
+              height={35}
             />
           </div>
 
           {/* Notification Icon with Badge */}
-          <div className="relative">
-            <div className="p-3 border border-gray-300 rounded-full flex items-center justify-center">
-              <Image
-                src="/images/notification.svg"
-                alt="Notification Logo"
-                width={40}
-                height={40}
-              />
-            </div>
-            {/* Red Circle */}
+
+          <div className="relative p-3 border border-gray-300 rounded-full flex items-center justify-center">
+            <Image
+              src="/images/notification.svg"
+              alt="Heart Logo"
+              width={50}
+              height={35}
+            />
             <div className="absolute top-0 right-0 w-[0.9rem] h-[0.9rem] bg-red-500 rounded-full border border-white"></div>
           </div>
 
           {/* Settings Icon */}
-          <div className="border border-gray-300 rounded-full flex items-center justify-center w-[4.3rem]">
+          <div className="p-3 border border-gray-300 rounded-full flex items-center justify-center">
             <Image
               src="/images/setting.svg"
-              alt="Setting Logo"
-              width={30}
-              height={30}
+              alt="Heart Logo"
+              width={50}
+              height={35}
             />
           </div>
 
