@@ -74,7 +74,7 @@ const RecentCars = () => {
         <div className="flex mt-10 items-center font-bold justify-between px-10">
           <h4 className="text-xl text-[#90A3BF] font-semibold">Recent Cars</h4>
           <div>
-            <button className="py-4 text-[#3563E9] rounded-[5px] hover:underline pr-20">
+            <button className="py-4 text-[#3563E9] rounded-[5px] hover:underline md:pr-20">
               View All
             </button>
           </div>
@@ -92,7 +92,7 @@ const RecentCars = () => {
             Recommended Cars
           </h4>
           <div>
-            <button className="py-4 text-[#3563E9] rounded-[5px] hover:underline pr-20">
+            <button className="py-4 text-[#3563E9] rounded-[5px] hover:underline md:pr-20">
               View All
             </button>
           </div>
