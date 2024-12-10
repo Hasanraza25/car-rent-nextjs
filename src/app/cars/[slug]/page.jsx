@@ -20,94 +20,89 @@ const CarDetail = () => {
   const heartUnfilled = "/images/heart-unfilled.svg";
   const heartFilled = "/images/heart-filled.svg";
 
-  const litresIcon = "/images/gas-station.svg";
-  const genreIcon = "/images/handle.svg";
-  const peopleIcon = "/images/profile-2.svg";
-
   const car = cars.find(
-  (car) =>
-    car.name
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, "-") // Replace non-alphanumeric characters with "-"
-      .replace(/^-+|-+$/g, "") === slug // Remove leading/trailing hyphens
-);
-
+    (car) =>
+      car.name
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "") === slug
+  );
 
   if (!car) {
     return <div>Car not found</div>;
   }
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col overflow-hidden">
       <Header />
-      <div className="flex flex-1">
+      <div className="flex flex-1 flex-col md:flex-row">
         <Sidebar />
-        <div className="flex flex-col w-full px-4">
-          <div className="flex flex-wrap justify-around mt-10 mx-auto">
+        <div className="flex flex-col w-full px-4 sm:px-2">
+          <div className="flex flex-col md:flex-row flex-wrap justify-around mt-10 mx-auto w-full max-w-[1400px]">
             {/* Card 1 */}
-            <div className="relative rounded-lg text-white flex flex-col justify-between p-6 mb-8 w-full sm:mx-auto sm:w-[90%] md:w-[45%] xl:w-[45%] ">
+            <div className="relative rounded-lg text-white flex flex-col justify-between p-6 mb-8 w-full sm:w-[90%] md:w-[45%] mx-auto">
               <img
                 src="/images/hero-arrows.svg"
                 alt="Background"
                 className="absolute inset-0 w-full h-[70%] object-cover rounded-lg"
               />
-              <div className="relative z-10">
-                <h1 className="text-white text-[2.3rem] sm:text-[1.8rem] w-[20rem] leading-snug">
+              <div className="relative z-10 ">
+                <h1 className="text-white text-[2.5rem] sm:text-[1.5rem]  w-[80%] leading-snug ">
                   Sports car with the best design and acceleration
                 </h1>
-                <p className="md:w-80 text-lg mt-5 leading-7 font-light">
+                <p className="text-lg mt-5 leading-8 font-light w-[60%]">
                   Safety and comfort while driving a futuristic and elegant
                   sports car
                 </p>
                 <img
                   src={car.image}
-                  alt="Car 2"
-                  className="mx-auto mt-10 sm:mt-10 pb-10"
-                  width="400px"
+                  alt="Car"
+                  className="mx-auto mt-6 sm:mt-4 w-full max-w-[500px] rounded-lg"
                 />
               </div>
 
               {/* Flex for 3 smaller images */}
-              <div className="flex mt-8 space-x-6 sm:w-full md:w-auto justify-center">
+              <div className="flex mt-32 space-x-4 justify-center">
                 <img
                   src="/images/car-view-1.svg"
                   alt="Car View 1"
-                  className="sm:w-[10rem] sm:h-[5rem]"
+                  className="w-[200px] h-[120px] sm:w-[100px]"
                 />
                 <img
                   src="/images/car-view-2.svg"
                   alt="Car View 2"
-                  className="sm:w-[10rem] sm:h-[5rem]"
+                  className="w-[200px] h-[120px] sm:w-[100px]"
                 />
                 <img
                   src="/images/car-view-3.svg"
                   alt="Car View 3"
-                  className="sm:w-[10rem] sm:h-[5rem]"
+                  className="w-[200px] h-[120px] sm:w-[100px]"
                 />
               </div>
             </div>
 
             {/* Card 2 */}
-            <div className=" relative w-full g:w-1/2 md:h-[70%] rounded-lg bg-white shadow-md mb-8  sm:w-[90%] md:w-[45%] xl:w-[45%]">
-              <div className="p-6">
+            <div className="relative w-full md:w-[45%] bg-white shadow-md rounded-lg mx-auto p-4 h-[80%]">
+              <div className="p-3">
                 <Link
                   href={`/cars/${car.name.replace(/\s+/g, "-").toLowerCase()}`}
                 >
-                  <h3 className="text-3xl font-semibold cursor-pointer">
+                  <h3 className="text-4xl font-semibold cursor-pointer">
                     {car.name}
                   </h3>
                 </Link>
-                <div className="flex mt-2">
+                <div className="flex mt-3">
                   <img src="/images/review-stars.svg" alt="Review Stars" />
-                  <p className="ml-3 text-gray-400 text-sm">440+ Reviewer</p>
+                  <p className="ml-3 text-gray-400 text-sm">440+ Reviewier</p>
                 </div>
-                <p className="text-gray-400 mt-7 text-lg leading-9 font-normal">
+                <p className="text-gray-500 mt-5 text-[1.3rem] leading-10 font-normal">
                   NISMO has become the embodiment of Nissan&#39;s outstanding
-                  performance, inspired by the &quot;race track&quot;.
+                  performance, inspired by the most unforgiving proving ground,
+                  the &quot;race track&quot;.
                 </p>
               </div>
 
-              <div className="absolute top-4 right-2 flex flex-col space-y-2">
+              <div className="absolute top-6 right-4">
                 <button
                   className="bg-white w-8 h-8 rounded-full flex items-center justify-center hover:text-red-500"
                   onClick={() => setIsHeartClicked(!isHeartClicked)}
@@ -119,43 +114,42 @@ const CarDetail = () => {
                   />
                 </button>
               </div>
-              <div className="flex flex-wrap justify-between mx-8 mt-2 space-x-6">
-                <div className="flex items-center space-x-4 text-[#90A3BF]">
-                  <span className="text-lg">Type Car</span>
-                  <span className="text-lg text-gray-600">{car.category}</span>
+
+              <div className="flex flex-col md:flex-row justify-between mx-2 mt-3 space-y-2 md:space-y-0 md:space-x-4 text-sm text-[#90A3BF]">
+                <div className="flex items-center justify-between w-full text-lg">
+                  <span>Type Car:</span>
+                  <span className="text-gray-600">{car.category}</span>
                 </div>
-                <div className="flex items-center space-x-4 text-[#90A3BF]">
-                  <span className="text-lg">Capacity</span>
-                  <span className="text-lg text-gray-600">
-                    {car.people} Person
-                  </span>
+                <div className="flex items-center justify-between w-full text-lg">
+                  <span>Capacity:</span>
+                  <span className="text-gray-600">{car.people} Person</span>
                 </div>
               </div>
-              <div className="flex flex-wrap justify-between mx-8 mt-2 space-x-6">
-                <div className="flex items-center space-x-4 text-[#90A3BF]">
-                  <span className="text-lg">Steering</span>
-                  <span className="text-lg text-gray-600">{car.genre}</span>
+              <div className="flex flex-col md:flex-row justify-between mx-2 mt-2 space-y-2 md:space-y-0 md:space-x-4 text-sm text-[#90A3BF]">
+                <div className="flex items-center justify-between w-full text-lg">
+                  <span>Steering:</span>
+                  <span className="text-gray-600">{car.genre}</span>
                 </div>
-                <div className="flex items-center space-x-4 text-[#90A3BF]">
-                  <span className="text-lg">Gasoline</span>
-                  <span className="text-lg text-gray-600">{car.litres}L</span>
+                <div className="flex items-center justify-between w-full text-lg">
+                  <span>Gasoline:</span>
+                  <span className="text-gray-600">{car.litres}L</span>
                 </div>
               </div>
 
               {/* Pricing Section */}
-              <div className="mt-8 p-4 m-3">
-                <div className="flex items-center justify-between space-x-2">
-                  <span className="text-[#90A3BF]">
+              <div className="mt-10 text-center">
+                <div className="flex items-center justify-between space-x-4">
+                  <span className="text-[#90A3BF] text-xl ml-2">
                     <span className="text-black text-3xl font-bold">
                       ${car.price}.00/
                     </span>{" "}
                     days
                   </span>
-                  <button className="bg-[#3563E9] hover:bg-[#54A6FF] py-4 px-6 text-white rounded-[5px]">
+                  <button className="bg-[#3563E9] hover:bg-[#54A6FF] py-3 px-5 text-white text-lg rounded-md">
                     Rent Now
                   </button>
                 </div>
-                <span className="text-[#90A3BF] text-lg line-through">
+                <span className="text-[#90A3BF] text-sm line-through">
                   {car.discount}
                 </span>
               </div>
