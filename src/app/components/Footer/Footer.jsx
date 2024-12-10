@@ -1,3 +1,4 @@
+import Link from "next/link";
 import React from "react";
 
 const Footer = () => {
@@ -5,7 +6,9 @@ const Footer = () => {
     <div className="md:bg-white">
       <div className="mx-auto max-w-[1600px] flex flex-wrap justify-between px-4 py-20 md:border-b">
         <div className="flex-shrink-0 w-full lg:w-auto mb-10 lg:mb-0">
-          <div className="text-[#3563E9] text-4xl font-semibold">MORENT</div>
+          <Link href="/">
+            <div className="text-[#3563E9] text-4xl font-semibold">MORENT</div>
+          </Link>
           <p className="mt-10 text-[#90A3BF] w-full lg:w-[20rem] sm:pe-14 text-[1rem]">
             Our vision is to provide convenience and help increase your sales
             business.

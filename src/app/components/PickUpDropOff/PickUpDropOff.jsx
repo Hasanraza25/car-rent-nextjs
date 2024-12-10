@@ -17,8 +17,8 @@ const PickUpDropOff = () => {
             </label>
           </div>
 
-          <div className="flex items-center">
-            <div className="mb-4 mx-4 relative border-r pr-5">
+          <div className="flex flex-col md:flex-row items-center md:space-x-4">
+            <div className="mb-4 md:mb-0 w-full relative border-r sm:border-none pr-5">
               <label
                 htmlFor="location"
                 className="block text-lg font-bold text-black"
@@ -36,8 +36,7 @@ const PickUpDropOff = () => {
               </select>
             </div>
 
-            {/* Date Dropdown */}
-            <div className="mb-4 mx-4 relative  border-r pr-5">
+            <div className="mb-4 md:mb-0 w-full relative border-r sm:border-none pr-5">
               <label
                 htmlFor="date"
                 className="block text-lg font-bold text-black"
@@ -54,7 +53,8 @@ const PickUpDropOff = () => {
                 <option>2024-12-12</option>
               </select>
             </div>
-            <div className="mb-4 mx-4 relative pr-5">
+
+            <div className="w-full relative pr-5">
               <label
                 htmlFor="time"
                 className="block text-lg font-bold text-black"
@@ -85,7 +85,6 @@ const PickUpDropOff = () => {
           </Link>
         </div>
 
-        {/* Small Icon for Mobile */}
         <div className="my-4 bg-[#3563E9] absolute p-4 rounded-xl cursor-pointer hover:bg-[#54A6FF] md:hidden">
           <Image
             src="/images/topbottom-arrow.svg"
@@ -107,9 +106,8 @@ const PickUpDropOff = () => {
             </label>
           </div>
 
-          <div className="flex items-center">
-            {/* Location Dropdown */}
-            <div className="mb-4 mx-4 relative  border-r pr-5">
+          <div className="flex flex-col md:flex-row items-center md:space-x-4">
+            <div className="mb-4 md:mb-0 w-full relative border-r sm:border-none pr-5">
               <label
                 htmlFor="location"
                 className="block text-lg font-bold text-black"
@@ -127,8 +125,7 @@ const PickUpDropOff = () => {
               </select>
             </div>
 
-            {/* Date Dropdown */}
-            <div className="mb-4 mx-4 relative  border-r pr-5">
+            <div className="mb-4 md:mb-0 w-full relative border-r sm:border-none pr-5">
               <label
                 htmlFor="date"
                 className="block text-lg font-bold text-black"
@@ -146,8 +143,7 @@ const PickUpDropOff = () => {
               </select>
             </div>
 
-            {/* Time Dropdown */}
-            <div className="mb-4 mx-4 relative pr-5">
+            <div className="w-full relative pr-5">
               <label
                 htmlFor="time"
                 className="block text-lg font-bold text-black"
