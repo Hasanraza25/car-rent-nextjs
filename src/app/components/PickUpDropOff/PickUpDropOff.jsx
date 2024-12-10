@@ -5,7 +5,7 @@ const PickUpDropOff = () => {
   return (
     <section className="py-10">
       <div className="mx-auto max-w-[1600px] px-4 flex flex-col items-center justify-center md:flex-row mt-5 md:space-x-6">
-        <div className="bg-white p-10 rounded-lg shadow-md w-full md:w-[45%] sm:mx-auto">
+        <div className="bg-white p-10 sm:p-6 rounded-lg shadow-md w-full md:w-[45%] sm:mx-auto">
           <div className="flex items-center mb-4">
             <input
               type="checkbox"
@@ -94,7 +94,7 @@ const PickUpDropOff = () => {
           />
         </div>
 
-        <div className="bg-white p-10 rounded-lg shadow-md w-full md:w-[45%] mx-auto sm:mx-auto sm:mt-10">
+        <div className="bg-white p-10 sm:p-6 rounded-lg shadow-md w-full md:w-[45%] mx-auto sm:mx-auto sm:mt-10">
           <div className="flex items-center mb-4">
             <input
               type="checkbox"
