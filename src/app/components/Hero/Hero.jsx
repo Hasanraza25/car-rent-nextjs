@@ -5,11 +5,11 @@ const Hero = () => {
     <div className="mx-auto max-w-[1700px] px-4 mt-10">
       <div className="flex flex-wrap justify-center gap-6 lg:flex-nowrap">
         {/* First Card */}
-        <div className="relative bg-[#54A6FF] text-white flex flex-col rounded-lg pt-8 pl-8 pb-4 w-full max-w-[670px] sm:px-6 lg:flex-1">
+        <div className="relative bg-[#54A6FF] text-white flex flex-col rounded-lg pt-8 pl-8 w-full max-w-[700px] sm:px-6 lg:flex-1">
           <img
             src="/images/hero-ellipse.svg"
             alt="Background"
-            className="absolute inset-0 w-full h-full object-cover rounded-lg opacity-10"
+            className="absolute inset-0 w-full h-full object-cover rounded-lg"
           />
           <div className="relative z-10">
             <h1 className="text-white text-[2.2rem] sm:text-[1.8rem] leading-snug tracking-normal">
@@ -24,7 +24,7 @@ const Hero = () => {
             <img
               src="/images/hero-car1.svg"
               alt="Car 1"
-              className="mx-auto mt-8 w-[90%] sm:w-[70%] lg:w-[60%]"
+              className="mx-auto mt-8 w-[90%] sm:w-full sm:mb-5 lg:w-[80%]"
             />
           </div>
         </div>
@@ -34,7 +34,7 @@ const Hero = () => {
           <img
             src="/images/hero-arrows.svg"
             alt="Background"
-            className="absolute inset-0 w-full h-full object-cover rounded-lg opacity-10"
+            className="absolute inset-0 w-full h-full object-cover rounded-lg "
           />
           <div className="relative z-10">
             <h1 className="text-white text-[2.2rem] sm:text-[1.8rem] leading-snug tracking-normal">
@@ -49,7 +49,7 @@ const Hero = () => {
             <img
               src="/images/hero-car2.svg"
               alt="Car 2"
-              className="mx-auto mt-8 w-[90%] sm:w-[70%] lg:w-[60%]"
+              className="mx-auto mt-8 w-[90%] sm:w-full sm:mb-5 lg:w-[70%]"
             />
           </div>
         </div>

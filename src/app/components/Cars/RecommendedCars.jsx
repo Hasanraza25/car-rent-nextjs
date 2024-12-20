@@ -1,5 +1,6 @@
 import React from "react";
 import ProductCard from "../Products/ProductCard";
+import Link from "next/link";
 
 const RecommendedCars = () => {
   const products = [
@@ -84,7 +85,6 @@ const RecommendedCars = () => {
   ];
 
   return (
-    
     <div className="container max-w-[1450px] mx-auto flex flex-col mb-20">
       <div className="flex mt-10 items-center font-bold justify-between px-5">
         <h4 className="text-xl text-[#90A3BF] font-semibold">
@@ -98,9 +98,11 @@ const RecommendedCars = () => {
         ))}
       </div>
       <div className="flex items-center">
-        <button className="bg-[#3563E9] hover:bg-[#54A6FF] w-40 mt-20 py-3 mx-auto text-white text-center rounded-[5px]">
-          Show more car
-        </button>
+        <Link href="/category" className="mx-auto">
+          <button className="bg-[#3563E9] hover:bg-[#54A6FF] w-40 mt-20 py-3 mx-auto text-white text-center rounded-[5px]">
+            Show more car
+          </button>
+        </Link>
       </div>
     </div>
   );

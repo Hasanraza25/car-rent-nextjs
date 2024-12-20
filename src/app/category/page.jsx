@@ -9,7 +9,7 @@ const CategoryCar = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
-      <div className="flex flex-1">
+      <div className="relative flex flex-1 min-h-screen">
         <Sidebar />
         <div className="flex flex-col w-full">
           <PickUpDropOff />

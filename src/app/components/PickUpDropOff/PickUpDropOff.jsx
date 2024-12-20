@@ -75,14 +75,12 @@ const PickUpDropOff = () => {
         </div>
 
         <div className="md:my-8 sm:absolute bg-[#3563E9] p-4 rounded-xl cursor-pointer hover:bg-[#54A6FF] md:block hidden">
-          <Link href="/category">
-            <Image
-              src="/images/topbottom-arrow.svg"
-              alt="Icon"
-              width={40}
-              height={40}
-            />
-          </Link>
+          <Image
+            src="/images/topbottom-arrow.svg"
+            alt="Icon"
+            width={40}
+            height={40}
+          />
         </div>
 
         <div className="my-4 bg-[#3563E9] absolute p-4 rounded-xl cursor-pointer hover:bg-[#54A6FF] md:hidden">

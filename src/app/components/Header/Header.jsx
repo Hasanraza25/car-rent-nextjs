@@ -20,7 +20,7 @@ const Header = () => {
             className="rounded-full"
           />
         </div>
-
+    
         <div className="w-full flex items-center justify-between md:justify-start">
           {/* Logo for Laptop */}
           <Link href="/">
@@ -45,7 +45,7 @@ const Header = () => {
             <input
               type="text"
               placeholder="Search something here"
-              className="w-full h-12 pl-16 pr-10 rounded-full sm:rounded-xl sm:text-sm sm:pr-0 py-8 bg-white text-[#596780] border focus:outline-none tracking-wider font-[500]"
+              className="w-full h-12 pl-16 pr-10 rounded-full sm:text-sm sm:pr-0 py-8 bg-white text-[#596780] border focus:outline-none tracking-wider font-[500]"
             />
             <div className="sm:hidden absolute flex items-center right-5">
               <Image
