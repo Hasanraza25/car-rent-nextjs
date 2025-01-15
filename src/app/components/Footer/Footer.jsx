@@ -4,7 +4,7 @@ import React from "react";
 const Footer = () => {
   return (
     <div className="md:bg-white">
-      <div className="mx-auto max-w-[1400px] flex flex-wrap justify-between px-4 py-20 md:border-b">
+      <div className="mx-auto max-w-[1700px] flex flex-wrap justify-between px-4 py-20 md:border-b">
         <div className="flex-shrink-0 w-full lg:w-auto mb-10 lg:mb-0">
           <Link href="/">
             <div className="text-[#3563E9] text-4xl font-semibold">MORENT</div>

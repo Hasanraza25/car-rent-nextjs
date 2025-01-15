@@ -38,7 +38,7 @@ const CarDetail = () => {
       <div className="flex flex-1 flex-col md:flex-row">
         <Sidebar />
         <div className="flex flex-col w-full px-4 sm:px-2">
-          <div className="flex flex-col md:flex-row flex-wrap justify-around mt-10 mx-auto w-full max-w-[1400px]">
+          <div className="flex flex-col md:flex-row flex-wrap justify-around mt-10 mx-auto w-full max-w-[1700px]">
             {/* Card 1 */}
             <div className="relative rounded-lg text-white flex flex-col justify-between p-6 mb-8 w-full sm:w-[90%] md:w-[45%] mx-auto">
               <img

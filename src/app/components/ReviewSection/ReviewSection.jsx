@@ -46,7 +46,7 @@ const ReviewsSection = () => {
   };
 
   return (
-    <div className="py-12 max-w-[1450px] mx-auto">
+    <div className="py-12 max-w-[1700px] mx-auto">
       <div className="container mx-auto px-4">
         <div className="flex items-center space-x-6 mb-5 ml-5">
           <h2 className="text-2xl font-semibold">Reviews</h2>

@@ -5,7 +5,7 @@ const Hero = () => {
     <div className="mx-auto max-w-[1700px] px-4 mt-10">
       <div className="flex flex-wrap justify-center gap-6 lg:flex-nowrap">
         {/* First Card */}
-        <div className="relative bg-[#54A6FF] text-white flex flex-col rounded-lg pt-8 pl-8 w-full max-w-[700px] sm:px-6 lg:flex-1">
+        <div className="relative bg-[#54A6FF] text-white flex flex-col rounded-lg pt-8 pl-8 w-full px-10 sm:px-6 lg:flex-1">
           <img
             src="/images/hero-ellipse.svg"
             alt="Background"
@@ -30,7 +30,7 @@ const Hero = () => {
         </div>
 
         {/* Second Card */}
-        <div className="relative bg-[#3563E9] text-white flex flex-col rounded-lg pt-8 pl-8 pb-4 w-full max-w-[700px] sm:px-6 lg:flex-1">
+        <div className="relative bg-[#3563E9] text-white flex flex-col rounded-lg pt-8 pl-8 pb-4 w-full px-6 sm:px-6 lg:flex-1">
           <img
             src="/images/hero-arrows.svg"
             alt="Background"
