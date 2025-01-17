@@ -1,88 +1,25 @@
-import React from "react";
+"use client"
+import React, { useEffect, useState } from "react";
 import ProductCard from "../Products/ProductCard";
 import Link from "next/link";
+import { client } from "@/sanity/lib/client";
 
 const RecommendedCars = () => {
-  const products = [
-    {
-      image: "/images/cars/car-5.svg",
-      name: "All New Rush",
-      price: 72,
-      discount: "$80.00",
-      category: "SUV",
-      genre: "Manual",
-      litres: 70,
-      people: 6,
-    },
-    {
-      image: "/images/cars/car-6.svg",
-      name: "CR  - V",
-      price: 80,
-      discount: " ",
-      category: "SUV",
-      genre: "Manual",
-      litres: 80,
-      people: 6,
-    },
-    {
-      image: "/images/cars/car-7.svg",
-      name: "All New Terios",
-      price: 74,
-      discount: " ",
-      category: "SUV",
-      genre: "Manual",
-      litres: 90,
-      people: 6,
-    },
-    {
-      image: "/images/cars/car-6.svg",
-      name: "CR  - V",
-      price: 80,
-      discount: " ",
-      category: "SUV",
-      genre: "Manual",
-      litres: 80,
-      people: 6,
-    },
-    {
-      image: "/images/cars/car-9.svg",
-      name: "MG ZX Exclusice",
-      price: 76,
-      discount: "$80.00",
-      category: "Hatchback",
-      genre: "Manual",
-      litres: 70,
-      people: 4,
-    },
-    {
-      image: "/images/cars/car-10.svg",
-      name: "New MG ZS",
-      price: 80,
-      category: "SUV",
-      genre: "Manual",
-      litres: 80,
-      people: 6,
-    },
-    {
-      image: "/images/cars/car-11.svg",
-      name: "MG ZX Excite",
-      price: 74,
-      discount: " ",
-      category: "Hatchback",
-      genre: "Manual",
-      litres: 90,
-      people: 4,
-    },
-    {
-      image: "/images/cars/car-10.svg",
-      name: "New MG ZS",
-      price: 80,
-      category: "SUV",
-      genre: "Manual",
-      litres: 80,
-      people: 6,
-    },
-  ];
+  const [products, setProducts] = useState([]);
+
+  const getCars = async () => {
+    try {
+      const query = `*[_type == 'car' && 'recommended' in section ] | order(_createdAt asc)`;
+      const products = await client.fetch(query);
+      setProducts(products);
+    } catch (err) {
+      console.error("Error fetching cars:", err);
+    }
+  };
+
+  useEffect(() => {
+    getCars();
+  }, []);
 
   return (
     <div className="container max-w-[1700px] mx-auto flex flex-col mb-20">

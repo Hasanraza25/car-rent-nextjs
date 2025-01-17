@@ -1,72 +1,40 @@
-import React from "react";
+"use client";
+import React, { useEffect, useState } from "react";
 import ProductCard from "../Products/ProductCard";
+import { client } from "@/sanity/lib/client";
+import Link from "next/link";
 
 const RecentCars = () => {
-  const products = [
-    {
-      image: "/images/cars/car-1.svg",
-      name: "Koenigsegg",
-      price: 99,
-      discount: " ",
-      category: "Sport",
-      genre: "Manual",
-      litres: 90,
-      people: 2,
-    },
-    {
-      image: "/images/cars/car-2.svg",
-      name: "Nissan GT - R",
-      price: 80,
-      discount: "$100",
-      category: "Sport",
-      genre: "Manual",
-      litres: 80,
-      people: 2,
-    },
-    {
-      image: "/images/cars/car-3.svg",
-      name: "Rolls - Royce",
-      price: 96,
-      discount: " ",
-      category: "Sedan",
-      genre: "Manual",
-      litres: 70,
-      people: 4,
-    },
-  ];
+  const [recentProducts, setRecentProducts] = useState([]);
+  const [recommendedProducts, setRecommendedProducts] = useState([]);
 
-  const products2 = [
-    {
-      image: "/images/cars/car-5.svg",
-      name: "All New Rush",
-      price: 72,
-      discount: "$80.00",
-      category: "SUV",
-      genre: "Manual",
-      litres: 70,
-      people: 6,
-    },
-    {
-      image: "/images/cars/car-6.svg",
-      name: "CR  - V",
-      price: 80,
-      discount: " ",
-      category: "SUV",
-      genre: "Manual",
-      litres: 80,
-      people: 6,
-    },
-    {
-      image: "/images/cars/car-7.svg",
-      name: "All New Terios",
-      price: 74,
-      discount: " ",
-      category: "SUV",
-      genre: "Manual",
-      litres: 90,
-      people: 6,
-    },
-  ];
+  const getRecentCars = async () => {
+    try {
+      const query = `*[_type == 'car' && 'recent' in section ][0..2] | order(_createdAt asc)`;
+      const products = await client.fetch(query);
+      setRecentProducts(products);
+    } catch (err) {
+      console.error("Error fetching cars:", err);
+    }
+  };
+
+  useEffect(() => {
+    getRecentCars();
+  }, []);
+
+  const getRecommendedCars = async () => {
+    try {
+      const query = `*[_type == 'car' && 'recommended' in section ][0..2] | order(_createdAt asc)`;
+      const products = await client.fetch(query);
+      setRecommendedProducts(products);
+    } catch (err) {
+      console.error("Error fetching cars:", err);
+    }
+  };
+
+  useEffect(() => {
+    getRecommendedCars();
+  }, []);
 
   return (
     <>
@@ -74,9 +42,11 @@ const RecentCars = () => {
         <div className="flex mt-10 items-center font-bold justify-between px-10">
           <h4 className="text-xl text-[#90A3BF] font-semibold">Recent Cars</h4>
           <div>
-            <button className="py-4 text-[#3563E9] rounded-[5px] hover:underline md:pr-20">
-              View All
-            </button>
+            <Link href={"/category"} className="">
+              <button className="py-4 text-[#3563E9] rounded-[5px] hover:underline md:pr-20">
+                View All
+              </button>
+            </Link>
           </div>
         </div>
         <div
@@ -85,7 +55,7 @@ const RecentCars = () => {
       mobile:grid-cols-[auto] 
       mobile:grid-flow-col"
         >
-          {products.map((product, index) => (
+          {recentProducts.map((product, index) => (
             <div
               key={index}
               className="
@@ -115,7 +85,7 @@ const RecentCars = () => {
       mobile:grid-cols-[auto] 
       mobile:grid-flow-col"
         >
-          {products2.map((product, index) => (
+          {recommendedProducts.map((product, index) => (
             <div
               key={index}
               className="

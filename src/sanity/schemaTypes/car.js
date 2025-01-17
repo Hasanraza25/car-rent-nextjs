@@ -6,14 +6,17 @@ export default defineType({
   type: "document",
   fields: [
     defineField({
-      name: "createdAt",
-      title: "Created At",
-      type: "datetime",
-    }),
-    defineField({
       name: "name",
       title: "Name",
       type: "string",
+    }),
+    defineField({
+      name: "slug",
+      title: "Slug",
+      type: "slug",
+      options: {
+        source: "name",
+      },
     }),
     defineField({
       name: "type",
@@ -33,8 +36,12 @@ export default defineType({
     defineField({
       name: "image",
       title: "Image",
-      type: "url",
+      type: "image", // Correctly defines the field as an image type
+      options: {
+        hotspot: true, // Optional, enables image cropping in the Sanity Studio
+      },
     }),
+
     defineField({
       name: "discount",
       title: "Discount",
@@ -51,7 +58,6 @@ export default defineType({
           { title: "Recent Cars", value: "recent" },
           { title: "Recommended Cars", value: "recommended" },
         ],
-       
       },
     }),
     defineField({

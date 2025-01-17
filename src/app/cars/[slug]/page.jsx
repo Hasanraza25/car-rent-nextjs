@@ -1,32 +1,46 @@
 "use client";
 
-import React, { useState } from "react";
-import { usePathname } from "next/navigation";
+import React, { useEffect, useState } from "react";
 import Header from "@/app/components/Header/Header";
 import Sidebar from "@/app/components/Sidebar/Sidebar";
 import Footer from "@/app/components/Footer/Footer";
 import Link from "next/link";
-import CategoryCars from "@/app/components/Cars/CategoryCars";
 import ReviewsSection from "@/app/components/ReviewSection/ReviewSection";
 import RecentCars from "@/app/components/Cars/RecentCars";
-import cars from "@/app/cars";
+import { client, urlFor } from "@/sanity/lib/client";
 
-const CarDetail = () => {
-  const pathname = usePathname();
-  const slug = pathname?.split("/").pop();
-
+const CarDetail = ({ params }) => {
+  const slug = params.slug;
+  const [car, setCar] = useState([]);
   const [isHeartClicked, setIsHeartClicked] = useState(false);
+  const getCars = async () => {
+    try {
+      const query = `*[_type == 'car']{
+        name,
+        type,
+        price,
+        stock,
+        image,
+        discount,
+        steering,
+        fuelCapacity,
+        seatingCapacity,
+        description,
+        "currentSlug": slug.current,
+      }`;
+      const products = await client.fetch(query);
+      setCar(products.find((car) => car.currentSlug === slug));
+    } catch (err) {
+      console.error("Error fetching cars:", err);
+    }
+  };
+
+  useEffect(() => {
+    getCars();
+  }, []);
 
   const heartUnfilled = "/images/heart-unfilled.svg";
   const heartFilled = "/images/heart-filled.svg";
-
-  const car = cars.find(
-    (car) =>
-      car.name
-        .toLowerCase()
-        .replace(/[^a-z0-9]+/g, "-")
-        .replace(/^-+|-+$/g, "") === slug
-  );
 
   if (!car) {
     return <div>Car not found</div>;
@@ -38,55 +52,62 @@ const CarDetail = () => {
       <div className="flex flex-1 flex-col md:flex-row">
         <Sidebar />
         <div className="flex flex-col w-full px-4 sm:px-2">
-          <div className="flex flex-col md:flex-row flex-wrap justify-around mt-10 mx-auto w-full max-w-[1700px]">
+          <div className="flex flex-col md:flex-row justify-around mx-auto w-full mt-5 max-w-[1700px]">
             {/* Card 1 */}
-            <div className="relative rounded-lg text-white flex flex-col justify-between p-6 mb-8 w-full sm:w-[90%] md:w-[45%] mx-auto">
-              <img
-                src="/images/hero-arrows.svg"
-                alt="Background"
-                className="absolute inset-0 w-full h-[70%] object-cover rounded-lg"
-              />
-              <div className="relative z-10 ">
-                <h1 className="text-white text-[2.5rem] sm:text-[1.5rem]  w-[80%] leading-snug ">
+            <div className="relative rounded-lg text-white flex flex-col justify-evenly p-6 sm:p-0 mb-8 w-full sm:w-[90%] md:w-[45%] mx-auto min-h-[auto]">
+              {/* Main Content with Background Image */}
+              <div
+                className="relative z-10 py-10 bg-cover bg-center rounded-lg"
+                style={{
+                  backgroundImage: "url('/images/hero-arrows.svg')",
+                }}
+              >
+                <h1 className="text-white text-[2.5rem] sm:text-[1.5rem] w-full sm:w-[80%] leading-snug pl-5">
                   Sports car with the best design and acceleration
                 </h1>
-                <p className="text-lg mt-5 leading-8 font-light w-[60%]">
+                <p className="text-lg mt-5 leading-8 font-light w-full sm:line-clamp-3 px-5">
                   Safety and comfort while driving a futuristic and elegant
                   sports car
                 </p>
                 <img
-                  src={car.image}
+                  src={car.image ? urlFor(car.image).url() : ""}
                   alt="Car"
-                  className="mx-auto mt-6 sm:mt-4 w-full max-w-[500px] rounded-lg"
+                  className="mx-auto mt-6 sm:mt-4 w-full max-w-[300px] rounded-lg"
                 />
               </div>
 
-              {/* Flex for 3 smaller images */}
-              <div className="flex mt-32 space-x-4 justify-center">
-                <img
-                  src="/images/car-view-1.svg"
-                  alt="Car View 1"
-                  className="w-[200px] h-[120px] sm:w-[100px]"
-                />
+              {/* Flex Container for Smaller Images */}
+              <div className="flex flex-wrap mt-12 sm:mt-8 gap-4 justify-around  z-20">
+                <div className="flex items-center relative w-[200px] h-[120px] sm:w-[100px] sm:h-[80px]">
+                  <div
+                    className="absolute inset-0 bg-cover bg-center z-10 rounded-xl"
+                    style={{
+                      backgroundImage: "url('/images/look.svg')",
+                    }}
+                  ></div>
+                  <img
+                    src={car.image ? urlFor(car.image).url() : ""}
+                    alt="Car"
+                    className="absolute left-1/2 top-1/2 object-contain z-20 w-[80%] transform -translate-x-1/2 -translate-y-1/2"
+                  />
+                </div>
                 <img
                   src="/images/car-view-2.svg"
                   alt="Car View 2"
-                  className="w-[200px] h-[120px] sm:w-[100px]"
+                  className="w-[200px] h-[120px] sm:w-[100px] sm:h-[80px] rounded-lg object-cover"
                 />
                 <img
                   src="/images/car-view-3.svg"
                   alt="Car View 3"
-                  className="w-[200px] h-[120px] sm:w-[100px]"
+                  className="w-[200px] h-[120px] sm:w-[100px] sm:h-[80px] rounded-lg object-cover"
                 />
               </div>
             </div>
 
             {/* Card 2 */}
-            <div className="relative w-full md:w-[45%] bg-white shadow-md rounded-lg mx-auto p-4 h-[67%]">
+            <div className="relative w-full md:w-[45%] sm:w-[90%] bg-white shadow-md rounded-lg mx-auto p-4 h-full md:mt-6">
               <div className="p-3">
-                <Link
-                  href={`/cars/${car.name.replace(/\s+/g, "-").toLowerCase()}`}
-                >
+                <Link href={`/cars/${car.currentSlug}`}>
                   <h3 className="text-4xl font-semibold cursor-pointer">
                     {car.name}
                   </h3>
@@ -116,42 +137,44 @@ const CarDetail = () => {
               </div>
 
               <div className="flex flex-col md:flex-row justify-between mx-2 mt-3 space-y-2 md:space-y-0 md:space-x-4 text-sm text-[#90A3BF]">
-                <div className="flex items-center justify-between w-full text-lg">
+                <div className="flex  flex-wrap md:flex-col lg:flex-row items-center justify-between w-full text-lg">
                   <span>Type Car:</span>
-                  <span className="text-gray-600">{car.category}</span>
+                  <span className="text-gray-600">{car.type}</span>
                 </div>
-                <div className="flex items-center justify-between w-full text-lg">
+                <div className="flex flex-wrap md:flex-col lg:flex-row items-center justify-between w-full text-lg">
                   <span>Capacity:</span>
-                  <span className="text-gray-600">{car.people} Person</span>
+                  <span className="text-gray-600">
+                    {car.seatingCapacity} Person
+                  </span>
                 </div>
               </div>
               <div className="flex flex-col md:flex-row justify-between mx-2 mt-2 space-y-2 md:space-y-0 md:space-x-4 text-sm text-[#90A3BF]">
-                <div className="flex items-center justify-between w-full text-lg">
+                <div className="flex  flex-wrap md:flex-col lg:flex-row items-center justify-between w-full text-lg">
                   <span>Steering:</span>
-                  <span className="text-gray-600">{car.genre}</span>
+                  <span className="text-gray-600">{car.steering}</span>
                 </div>
-                <div className="flex items-center justify-between w-full text-lg">
+                <div className="flex flex-wrap md:flex-col lg:flex-row items-center justify-between w-full text-lg">
                   <span>Gasoline:</span>
-                  <span className="text-gray-600">{car.litres}L</span>
+                  <span className="text-gray-600">{car.fuelCapacity}L</span>
                 </div>
               </div>
 
               {/* Pricing Section */}
               <div className="mt-10 text-center">
-                <div className="flex items-center justify-between space-x-4">
-                  <span className="text-[#90A3BF] text-xl ml-2">
-                    <span className="text-black text-3xl font-bold">
+                <div className="flex flex-wrap items-center justify-between sm:justify-center gap-4 space-x-4">
+                  <div className="text-left">
+                    <span className="text-black text-3xl font-bold block">
                       ${car.price}.00/
-                    </span>{" "}
-                    days
-                  </span>
+                      <span className="text-[#90A3BF] text-xl">days</span>
+                    </span>
+                    <span className="text-[#90A3BF] text-base line-through block mt-1">
+                      {car.discount}
+                    </span>
+                  </div>
                   <button className="bg-[#3563E9] hover:bg-[#54A6FF] py-3 px-5 text-white text-lg rounded-md">
                     Rent Now
                   </button>
                 </div>
-                <span className="text-[#90A3BF] text-sm line-through">
-                  {car.discount}
-                </span>
               </div>
             </div>
           </div>

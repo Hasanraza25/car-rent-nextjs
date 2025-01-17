@@ -1,4 +1,5 @@
 "use client";
+import { urlFor } from "@/sanity/lib/client";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -17,10 +18,7 @@ const ProductCard = ({ product }) => {
   return (
     <div className="flex-shrink-0 w-full h-[30rem] rounded-lg relative border-none bg-white shadow-md">
       <Link
-        href={`/cars/${product.name
-          .toLowerCase()
-          .replace(/[^a-z0-9]+/g, "-") // Replace non-alphanumeric characters with "-"
-          .replace(/^-+|-+$/g, "")}`} // Remove leading/trailing hyphens
+        href={`/cars/${product.slug.current}`} // Remove leading/trailing hyphens
       >
         {/* Title and Subtitle */}
         <div className="p-6">
@@ -28,7 +26,7 @@ const ProductCard = ({ product }) => {
             {product.name}
           </h3>
           <p className="text-[#90A3BF] text-sm font-semibold mt-2">
-            {product.category}
+            {product.type}
           </p>
         </div>
       </Link>
@@ -47,15 +45,12 @@ const ProductCard = ({ product }) => {
         </button>
       </div>
       <Link
-        href={`/cars/${product.name
-          .toLowerCase()
-          .replace(/[^a-z0-9]+/g, "-") // Replace non-alphanumeric characters with "-"
-          .replace(/^-+|-+$/g, "")}`} // Remove leading/trailing hyphens
+        href={`/cars/${product.slug.current}`} // Remove leading/trailing hyphens
       >
         {/* Product Image with specific width */}
         <div className="w-full h-40 mt-4 flex items-center justify-center">
           <img
-            src={product.image}
+            src={urlFor(product.image)}
             alt={product.name}
             className="w-[250px] h-auto object-contain"
           />
@@ -66,19 +61,19 @@ const ProductCard = ({ product }) => {
         {/* Litres */}
         <div className="flex items-center space-x-2 text-[#90A3BF]">
           <img src={litresIcon} alt="Litres Icon" className="w-7 h-7" />
-          <span className="text-sm">{product.litres}L</span>
+          <span className="text-sm">{product.fuelCapacity}L</span>
         </div>
 
         {/* Genre */}
         <div className="flex items-center space-x-2 text-[#90A3BF]">
           <img src={genreIcon} alt="Genre Icon" className="w-7 h-7" />
-          <span className="text-sm">{product.genre}</span>
+          <span className="text-sm">{product.steering}</span>
         </div>
 
         {/* People */}
         <div className="flex items-center space-x-2 text-[#90A3BF]">
           <img src={peopleIcon} alt="People Icon" className="w-7 h-7" />
-          <span className="text-sm">{product.people} People</span>
+          <span className="text-sm">{product.seatingCapacity} People</span>
         </div>
       </div>
 
@@ -92,10 +87,7 @@ const ProductCard = ({ product }) => {
             day
           </span>
           <Link
-            href={`/rent/${product.name
-              .toLowerCase()
-              .replace(/[^a-z0-9]+/g, "-") // Replace non-alphanumeric characters with "-"
-              .replace(/^-+|-+$/g, "")}`} // Remove leading/trailing hyphens
+            href={`/rent/${product.slug.current}`}
           >
             <button className="bg-[#3563E9] hover:bg-[#54A6FF] py-3 px-5 text-white rounded-[5px]">
               Rent Now

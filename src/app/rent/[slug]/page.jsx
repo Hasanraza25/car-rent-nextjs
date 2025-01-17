@@ -1,21 +1,42 @@
 "use client";
 import Footer from "@/app/components/Footer/Footer";
 import Header from "@/app/components/Header/Header";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import cars from "@/app/cars";
 import { usePathname } from "next/navigation";
-const RentForm = () => {
-  const pathname = usePathname();
+import { client, urlFor } from "@/sanity/lib/client";
 
-  const slug = pathname?.split("/").pop();
+const RentForm = ({ params }) => {
+  const slug = params.slug;
 
-  const car = cars.find(
-    (car) =>
-      car.name
-        .toLowerCase()
-        .replace(/[^a-z0-9]+/g, "-")
-        .replace(/^-+|-+$/g, "") === slug
-  );
+  const [car, setCar] = useState([]);
+
+  const getCars = async () => {
+    try {
+      const query = `*[_type == 'car']{
+            name,
+            type,
+            price,
+            stock,
+            image,
+            discount,
+            steering,
+            fuelCapacity,
+            seatingCapacity,
+            description,
+            "currentSlug": slug.current,
+          }`;
+      const products = await client.fetch(query);
+      setCar(products.find((car) => car.currentSlug === slug));
+    } catch (err) {
+      console.error("Error fetching cars:", err);
+    }
+  };
+
+  useEffect(() => {
+    getCars();
+  }, []);
+
 
   if (!car) {
     return <div>Car not found</div>;
@@ -519,7 +540,7 @@ const RentForm = () => {
                 ></div>
 
                 <img
-                  src={car.image}
+                  src={car.image ? urlFor(car.image).url() : " "}
                   alt="Car"
                   className="w-20 h-20 object-contain z-10 m-auto"
                 />

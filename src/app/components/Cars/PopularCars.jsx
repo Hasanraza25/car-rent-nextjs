@@ -1,57 +1,30 @@
-import React from "react";
+"use client"
+import React, { useEffect, useState } from "react";
 import ProductCard from "../Products/ProductCard";
+import { client } from "@/sanity/lib/client";
 
 const PopularCars = () => {
-  const products = [
-    {
-      image: "/images/cars/car-1.svg",
-      name: "Koenigsegg",
-      price: 99,
-      discount: " ",
-      category: "Sport",
-      genre: "Manual",
-      litres: 90,
-      people: 2,
-    },
-    {
-      image: "/images/cars/car-2.svg",
-      name: "Nissan GT - R",
-      price: 80,
-      discount: "$100",
-      category: "Sport",
-      genre: "Manual",
-      litres: 80,
-      people: 2,
-    },
-    {
-      image: "/images/cars/car-3.svg",
-      name: "Rolls - Royce",
-      price: 96,
-      discount: " ",
-      category: "Sedan",
-      genre: "Manual",
-      litres: 70,
-      people: 4,
-    },
-    {
-      image: "/images/cars/car-4.svg",
-      name: "Nissan GT - R",
-      price: 80,
-      discount: "$100",
-      category: "Sport",
-      genre: "Manual",
-      litres: 80,
-      people: 2,
-    },
-  ];
+  const [products, setProducts] = useState([]);
 
+  const getCars = async () => {
+    try {
+      const query = `*[_type == 'car' && 'popular' in section ] | order(_createdAt asc)`;
+      const products = await client.fetch(query);
+      setProducts(products);
+    } catch (err) {
+      console.error("Error fetching cars:", err);
+    }
+  };
+  
+  useEffect(() => {
+    getCars();
+  }, []);
+  
   return (
     <>
-    <div className="container max-w-[1700px] mx-auto flex flex-col mb-20">
-      <div className="flex mt-10 items-center font-bold justify-between px-5">
-        <h4 className="text-xl text-[#90A3BF] font-semibold">
-          Popular Cars
-        </h4>
+      <div className="container max-w-[1700px] mx-auto flex flex-col mb-20">
+        <div className="flex mt-10 items-center font-bold justify-between px-5">
+          <h4 className="text-xl text-[#90A3BF] font-semibold">Popular Cars</h4>
           <div>
             <button className="py-4 text-[#3563E9] rounded-[5px] hover:underline">
               View All
