@@ -1,12 +1,12 @@
-"use client"
+"use client";
 import { useWishlist } from "@/app/context/WishlistContext";
 import Image from "next/image";
 import Link from "next/link";
 
 const Header = () => {
-    const { wishlistItems } = useWishlist();
+  const { wishlistItems } = useWishlist();
   return (
-    <header className="py-6 bg-white border-b sticky w-full z-40 top-0 left-0">
+    <header className="py-6 bg-white border-b">
       <div className="mx-auto max-w-[1700px] px-4 flex items-center justify-between md:flex-row flex-col ">
         <div className="w-full flex items-center justify-between md:hidden mb-4">
           {/* Logo */}
@@ -35,7 +35,7 @@ const Header = () => {
           {/* Search Field */}
           <div className="relative w-full lg:w-[550px] md:w-[350px] ml-0 lg:ml-28 md:ml-10 flex items-center sm:mt-5">
             {/* Search Icon */}
-            <div className="absolute top-0 left-5 flex items-center h-full text-gray-500">
+            <div className="absolute top-0 left-5 sm:left-3 flex items-center h-full text-gray-500">
               <Image
                 src="/images/search-icon.svg"
                 alt="Search Logo"
@@ -48,7 +48,7 @@ const Header = () => {
             <input
               type="text"
               placeholder="Search something here"
-              className="w-full h-12 pl-16 pr-10 rounded-full sm:text-sm sm:pr-0 py-8 bg-white text-[#596780] border focus:outline-none tracking-wider font-[500]"
+              className="w-full h-12 sm:h-8 pl-16 pr-10 sm:pl-12 rounded-full sm:text-xs sm:pr-0 sm:py-6 py-8 bg-white text-[#596780] border focus:outline-none tracking-wider font-[500]"
             />
             <div className="sm:hidden absolute flex items-center right-5">
               <Image
@@ -65,8 +65,8 @@ const Header = () => {
             <Image
               src="/images/volume-icon.svg"
               alt="Volume Logo"
-              width={35}
-              height={35}
+              width={23}
+              height={23}
             />
           </div>
         </div>
@@ -74,17 +74,19 @@ const Header = () => {
         <div className="hidden md:flex space-x-3">
           {/* Heart Icon */}
           <div className="relative p-3 border border-gray-300 rounded-full flex items-center justify-center">
-            <Image
-              src="/images/heart.svg"
-              alt="Heart Logo"
-              width={40}
-              height={40}
-            />
-            {wishlistItems && wishlistItems.length > 0 && (
-              <span className="absolute top-0 right-0 text-xs font-bold text-white bg-red-400 rounded-full w-5 h-5 flex items-center justify-center">
-                {wishlistItems.length}
-              </span>
-            )}
+            <Link href={"/wishlist"}>
+              <Image
+                src="/images/heart.svg"
+                alt="Heart Logo"
+                width={40}
+                height={40}
+              />
+              {wishlistItems && wishlistItems.length > 0 && (
+                <span className="absolute top-0 right-0 text-xs font-bold text-white bg-red-400 rounded-full w-5 h-5 flex items-center justify-center">
+                  {wishlistItems.length}
+                </span>
+              )}
+            </Link>
           </div>
 
           {/* Notification Icon with Badge */}
@@ -117,6 +119,8 @@ const Header = () => {
             className="rounded-full"
           />
         </div>
+
+        
       </div>
     </header>
   );

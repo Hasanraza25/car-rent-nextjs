@@ -18,10 +18,12 @@ const ProductCard = ({ product }) => {
   const genreIcon = "/images/handle.svg"; // Replace with actual path
   const peopleIcon = "/images/profile-2.svg"; // Replace with actual path
 
-  useEffect(()=>{
-    if(wishlistItems.some((item)=>item.currentSlug === product.currentSlug)){
-      setIsHeartClicked(true)
-    };
+  useEffect(() => {
+    if (
+      wishlistItems.some((item) => item.currentSlug === product.currentSlug)
+    ) {
+      setIsHeartClicked(true);
+    }
   }, [wishlistItems, product.currentSlug]);
 
   const handleAddToWishlist = (e) => {
@@ -39,7 +41,7 @@ const ProductCard = ({ product }) => {
   };
 
   return (
-    <div className="flex-shrink-0 w-full h-[30rem] rounded-lg relative border-none bg-white shadow-md">
+    <div className="w-full h-full min-h-[28.2rem] mobile:min-h-[32rem] rounded-lg relative border-none bg-white shadow-md">
       <Link
         href={`/cars/${product.currentSlug}`} // Remove leading/trailing hyphens
       >
@@ -80,7 +82,7 @@ const ProductCard = ({ product }) => {
         </div>
       </Link>
       {/* Flex with Litres, Genre, and People */}
-      <div className="flex items-center justify-between mt-10 px-6">
+      <div className="flex flex-wrap items-center justify-between mt-10 px-6 gap-3">
         {/* Litres */}
         <div className="flex items-center space-x-2 text-[#90A3BF]">
           <img src={litresIcon} alt="Litres Icon" className="w-7 h-7" />
@@ -103,23 +105,23 @@ const ProductCard = ({ product }) => {
       {/* Pricing Section */}
       <div className="mt-4 p-4 m-3">
         <div className="flex items-center justify-between space-x-2">
-          <span className="text-[#90A3BF]">
-            <span className="text-black text-lg font-bold">
-              ${product.price}.00/
-            </span>{" "}
-            day
+          <span className="flex flex-col text-[#90A3BF]">
+            <span>
+              <span className="text-black text-lg font-bold">
+                ${product.price}.00/
+              </span>{" "}
+              day
+            </span>
+            <span className="text-gray-500 text-lg line-through">
+              {product.discount}
+            </span>
           </span>
-          <Link
-            href={`/rent/${product.currentSlug}`}
-          >
-            <button className="bg-[#3563E9] hover:bg-[#54A6FF] py-3 px-5 text-white rounded-[5px]">
+          <Link href={`/rent/${product.currentSlug}`}>
+            <button className="bg-[#3563E9] hover:bg-[#54A6FF] py-3 px-5 mobile:px-3 text-white rounded-[5px]">
               Rent Now
             </button>
           </Link>
         </div>
-        <span className="text-gray-500 text-lg line-through">
-          {product.discount}
-        </span>
       </div>
     </div>
   );

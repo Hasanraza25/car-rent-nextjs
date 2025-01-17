@@ -70,7 +70,7 @@ const RecommendedCars = () => {
         ))}
       </div>
       <div className="flex items-center">
-        <Link href="/category" className="mx-auto">
+        <Link href="/cars" className="mx-auto">
           <button className="bg-[#3563E9] hover:bg-[#54A6FF] w-40 mt-20 py-3 mx-auto text-white text-center rounded-[5px]">
             Show more car
           </button>

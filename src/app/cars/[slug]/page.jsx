@@ -1,9 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import Header from "@/app/components/Header/Header";
 import Sidebar from "@/app/components/Sidebar/Sidebar";
-import Footer from "@/app/components/Footer/Footer";
 import Link from "next/link";
 import ReviewsSection from "@/app/components/ReviewSection/ReviewSection";
 import RecentCars from "@/app/components/Cars/RecentCars";
@@ -76,7 +74,6 @@ const CarDetail = ({ params }) => {
 
   return (
     <div className="min-h-screen flex flex-col overflow-hidden">
-      <Header />
       <div className="flex flex-1 flex-col md:flex-row">
         <Sidebar />
         <div className="flex flex-col w-full px-4 sm:px-2">
@@ -90,7 +87,7 @@ const CarDetail = ({ params }) => {
                   backgroundImage: "url('/images/hero-arrows.svg')",
                 }}
               >
-                <h1 className="text-white text-[2.5rem] sm:text-[1.5rem] w-full sm:w-[80%] leading-snug pl-5">
+                <h1 className="text-white text-[2.5rem] sm:text-[1.5rem] w-full sm:w-[80%] leading-snug px-5">
                   Sports car with the best design and acceleration
                 </h1>
                 <p className="text-lg mt-5 leading-8 font-light w-full sm:line-clamp-3 px-5">
@@ -213,7 +210,6 @@ const CarDetail = ({ params }) => {
           <RecentCars />
         </div>
       </div>
-      <Footer />
     </div>
   );
 };

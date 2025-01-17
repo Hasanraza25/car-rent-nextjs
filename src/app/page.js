@@ -9,12 +9,10 @@ import Footer from "./components/Footer/Footer";
 export default function Home() {
   return (
     <>
-      <Header />
       <Hero />
       <PickUpDropOff />
       <Cars />
       <RecommendedCars />
-      <Footer />
     </>
   );
 }

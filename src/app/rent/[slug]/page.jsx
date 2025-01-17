@@ -1,6 +1,4 @@
 "use client";
-import Footer from "@/app/components/Footer/Footer";
-import Header from "@/app/components/Header/Header";
 import React, { useEffect, useState } from "react"; 
 import { client, urlFor } from "@/sanity/lib/client";
 
@@ -41,7 +39,6 @@ const RentForm = ({ params }) => {
   }
   return (
     <>
-      <Header />
       <div className="mx-auto max-w-[1700px] px-4 flex flex-col lg:flex-row lg:my-10 space-y-6 lg:space-y-0 lg:space-x-10">
         <div className="order-2 lg:order-1 w-full lg:w-2/3 flex flex-col space-y-6 lg:space-y-10">
           <div className="w-full bg-white h-full p-6 rounded-lg shadow-md">
@@ -592,7 +589,6 @@ const RentForm = ({ params }) => {
           </div>
         </div>
       </div>
-      <Footer />
     </>
   );
 };
