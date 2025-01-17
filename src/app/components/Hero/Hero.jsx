@@ -2,7 +2,7 @@ import React from "react";
 
 const Hero = () => {
   return (
-    <div className="mx-auto max-w-[1700px] px-4 mt-10">
+    <div className="mx-auto max-w-[1700px] px-4 md:px-10 mt-10">
       <div className="flex flex-wrap justify-center gap-6 lg:flex-nowrap">
         {/* First Card */}
         <div className="relative bg-[#54A6FF] text-white flex flex-col rounded-lg pt-8 pl-8 w-full px-10 sm:px-6 lg:flex-1">

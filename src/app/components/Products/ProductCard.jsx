@@ -4,6 +4,7 @@ import { urlFor } from "@/sanity/lib/client";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const ProductCard = ({ product }) => {
   const [isHeartClicked, setIsHeartClicked] = useState(false); // For heart image toggle

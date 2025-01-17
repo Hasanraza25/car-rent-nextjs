@@ -71,7 +71,7 @@ const PopularCars = () => {
   if (loading) {
     return (
       <div className="container max-w-[1700px] mx-auto flex flex-col overflow-hidden">
-        <div className="flex mt-10 items-center font-bold justify-between px-5">
+        <div className="flex mt-10 items-center font-bold justify-between px-10">
           <h4 className="text-xl text-[#90A3BF] font-semibold">
             Popular Cars
           </h4>

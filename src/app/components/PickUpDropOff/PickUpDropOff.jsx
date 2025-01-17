@@ -4,7 +4,7 @@ import Link from "next/link";
 const PickUpDropOff = () => {
   return (
     <section className="py-10">
-      <div className="mx-auto max-w-[1750px] px-4 flex flex-col items-center justify-center w-full xl:flex-row mt-5 xl:space-x-6">
+      <div className="mx-auto max-w-[1750px] px-4 md:px-8 flex flex-col items-center justify-center w-full xl:flex-row mt-5 xl:space-x-6">
         <div className="bg-white py-10 px-7 sm:p-6 rounded-lg shadow-md w-full xl:w-[45%] sm:mx-auto">
           <div className="flex items-center mb-4">
             <input

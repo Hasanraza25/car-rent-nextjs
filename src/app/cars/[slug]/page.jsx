@@ -8,6 +8,7 @@ import RecentCars from "@/app/components/Cars/RecentCars";
 import { client, urlFor } from "@/sanity/lib/client";
 import { useWishlist } from "@/app/context/WishlistContext";
 import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const CarDetail = ({ params }) => {
   const slug = params.slug;
