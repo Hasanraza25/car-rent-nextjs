@@ -8,11 +8,16 @@ import Link from "next/link";
 import ReviewsSection from "@/app/components/ReviewSection/ReviewSection";
 import RecentCars from "@/app/components/Cars/RecentCars";
 import { client, urlFor } from "@/sanity/lib/client";
+import { useWishlist } from "@/app/context/WishlistContext";
+import { toast } from "react-toastify";
 
 const CarDetail = ({ params }) => {
   const slug = params.slug;
   const [car, setCar] = useState([]);
   const [isHeartClicked, setIsHeartClicked] = useState(false);
+
+  const { wishlistItems, addToWishlist, removeFromWishlist } = useWishlist();
+
   const getCars = async () => {
     try {
       const query = `*[_type == 'car']{
@@ -39,8 +44,31 @@ const CarDetail = ({ params }) => {
     getCars();
   }, []);
 
+  useEffect(() => {
+    if (
+      wishlistItems.some((item) => item.currentSlug === car.currentSlug)
+    ) {
+      setIsHeartClicked(true);
+    }
+  }, [wishlistItems, car.currentSlug]);
+
   const heartUnfilled = "/images/heart-unfilled.svg";
   const heartFilled = "/images/heart-filled.svg";
+
+    const handleAddToWishlist = (e) => {
+      e.preventDefault();
+      setIsHeartClicked(!isHeartClicked);
+      if (isHeartClicked) {
+        removeFromWishlist(car.currentSlug);
+      } else {
+        addToWishlist(car);
+        toast.success("Car added to Wishlist!", {
+          autoClose: 2000,
+          closeButton: false,
+        });
+      }
+    };
+  
 
   if (!car) {
     return <div>Car not found</div>;
@@ -126,7 +154,7 @@ const CarDetail = ({ params }) => {
               <div className="absolute top-6 right-4">
                 <button
                   className="bg-white w-8 h-8 rounded-full flex items-center justify-center hover:text-red-500"
-                  onClick={() => setIsHeartClicked(!isHeartClicked)}
+                  onClick={handleAddToWishlist}
                 >
                   <img
                     src={isHeartClicked ? heartFilled : heartUnfilled}
