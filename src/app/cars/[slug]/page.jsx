@@ -54,7 +54,7 @@ const CarDetail = ({ params }) => {
         <div className="flex flex-col w-full px-4 sm:px-2">
           <div className="flex flex-col md:flex-row justify-around mx-auto w-full mt-5 max-w-[1700px]">
             {/* Card 1 */}
-            <div className="relative rounded-lg text-white flex flex-col justify-evenly p-6 sm:p-0 mb-8 w-full sm:w-[90%] md:w-[45%] mx-auto min-h-[auto]">
+            <div className="relative rounded-lg text-white flex flex-col justify-evenly p-6 sm:p-0 mb-8 w-full sm:w-[90%] md:w-[45%] mx-auto">
               {/* Main Content with Background Image */}
               <div
                 className="relative z-10 py-10 bg-cover bg-center rounded-lg"
@@ -105,7 +105,7 @@ const CarDetail = ({ params }) => {
             </div>
 
             {/* Card 2 */}
-            <div className="relative w-full md:w-[45%] sm:w-[90%] bg-white shadow-md rounded-lg mx-auto p-4 h-full md:mt-6">
+            <div className="relative w-full md:w-[45%] md:max-h-[42rem]  lg:max-h-[35rem] sm:w-[90%] bg-white shadow-md rounded-lg mx-auto p-4 md:mt-6">
               <div className="p-3">
                 <Link href={`/cars/${car.currentSlug}`}>
                   <h3 className="text-4xl font-semibold cursor-pointer">
