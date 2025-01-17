@@ -1,9 +1,7 @@
 "use client";
 import Footer from "@/app/components/Footer/Footer";
 import Header from "@/app/components/Header/Header";
-import React, { useEffect, useState } from "react";
-import cars from "@/app/cars";
-import { usePathname } from "next/navigation";
+import React, { useEffect, useState } from "react"; 
 import { client, urlFor } from "@/sanity/lib/client";
 
 const RentForm = ({ params }) => {

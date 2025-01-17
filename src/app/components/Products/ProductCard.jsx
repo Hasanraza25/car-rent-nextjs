@@ -1,10 +1,13 @@
 "use client";
+import { useWishlist } from "@/app/context/WishlistContext";
 import { urlFor } from "@/sanity/lib/client";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 const ProductCard = ({ product }) => {
   const [isHeartClicked, setIsHeartClicked] = useState(false); // For heart image toggle
+  const { wishlistItems, addToWishlist, removeFromWishlist } = useWishlist();
 
   // Heart images (unfilled and filled)
   const heartUnfilled = "/images/heart-unfilled.svg"; // Replace with actual path
@@ -15,10 +18,30 @@ const ProductCard = ({ product }) => {
   const genreIcon = "/images/handle.svg"; // Replace with actual path
   const peopleIcon = "/images/profile-2.svg"; // Replace with actual path
 
+  useEffect(()=>{
+    if(wishlistItems.some((item)=>item.currentSlug === product.currentSlug)){
+      setIsHeartClicked(true)
+    };
+  }, [wishlistItems, product.currentSlug]);
+
+  const handleAddToWishlist = (e) => {
+    e.preventDefault();
+    setIsHeartClicked(!isHeartClicked);
+    if (isHeartClicked) {
+      removeFromWishlist(product.currentSlug);
+    } else {
+      addToWishlist(product);
+      toast.success("Car added to Wishlist!", {
+        autoClose: 2000,
+        closeButton: false,
+      });
+    }
+  };
+
   return (
     <div className="flex-shrink-0 w-full h-[30rem] rounded-lg relative border-none bg-white shadow-md">
       <Link
-        href={`/cars/${product.slug.current}`} // Remove leading/trailing hyphens
+        href={`/cars/${product.currentSlug}`} // Remove leading/trailing hyphens
       >
         {/* Title and Subtitle */}
         <div className="p-6">
@@ -35,7 +58,7 @@ const ProductCard = ({ product }) => {
       <div className="absolute top-4 right-2 flex flex-col space-y-2">
         <button
           className="bg-white w-8 h-8 rounded-full flex items-center justify-center hover:text-red-500"
-          onClick={() => setIsHeartClicked(!isHeartClicked)}
+          onClick={handleAddToWishlist}
         >
           <img
             src={isHeartClicked ? heartFilled : heartUnfilled}
@@ -45,7 +68,7 @@ const ProductCard = ({ product }) => {
         </button>
       </div>
       <Link
-        href={`/cars/${product.slug.current}`} // Remove leading/trailing hyphens
+        href={`/cars/${product.currentSlug}`} // Remove leading/trailing hyphens
       >
         {/* Product Image with specific width */}
         <div className="w-full h-40 mt-4 flex items-center justify-center">
@@ -87,7 +110,7 @@ const ProductCard = ({ product }) => {
             day
           </span>
           <Link
-            href={`/rent/${product.slug.current}`}
+            href={`/rent/${product.currentSlug}`}
           >
             <button className="bg-[#3563E9] hover:bg-[#54A6FF] py-3 px-5 text-white rounded-[5px]">
               Rent Now

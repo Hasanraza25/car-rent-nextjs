@@ -10,7 +10,19 @@ const RecentCars = () => {
 
   const getRecentCars = async () => {
     try {
-      const query = `*[_type == 'car' && 'recent' in section ][0..2] | order(_createdAt asc)`;
+      const query = `*[_type == 'car' && 'recent' in section ][0..2] | order(_createdAt asc){
+       name,
+        type,
+        price,
+        stock,
+        image,
+        discount,
+        steering,
+        fuelCapacity,
+        seatingCapacity,
+        description,
+        "currentSlug": slug.current,
+        }`;
       const products = await client.fetch(query);
       setRecentProducts(products);
     } catch (err) {
@@ -24,7 +36,19 @@ const RecentCars = () => {
 
   const getRecommendedCars = async () => {
     try {
-      const query = `*[_type == 'car' && 'recommended' in section ][0..2] | order(_createdAt asc)`;
+      const query = `*[_type == 'car' && 'recommended' in section ][0..2] | order(_createdAt asc){
+       name,
+        type,
+        price,
+        stock,
+        image,
+        discount,
+        steering,
+        fuelCapacity,
+        seatingCapacity,
+        description,
+        "currentSlug": slug.current,
+        }`;
       const products = await client.fetch(query);
       setRecommendedProducts(products);
     } catch (err) {

@@ -2,23 +2,49 @@
 import React, { useEffect, useState } from "react";
 import ProductCard from "../Products/ProductCard";
 import { client } from "@/sanity/lib/client";
+import { ClipLoader } from "react-spinners";
 
 const CategoryCars = () => {
   const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const getCars = async () => {
     try {
-      const query = `*[_type == 'car' ] | order(_createdAt asc)`;
+      const query = `*[_type == 'car' ] | order(_createdAt asc){
+         name,
+        type,
+        price,
+        stock,
+        image,
+        discount,
+        steering,
+        fuelCapacity,
+        seatingCapacity,
+        description,
+        "currentSlug": slug.current,
+      }`;
       const products = await client.fetch(query);
       setProducts(products);
     } catch (err) {
       console.error("Error fetching cars:", err);
+    } finally {
+      setLoading(false);
     }
   };
 
   useEffect(() => {
     getCars();
   }, []);
+
+  if (loading) {
+    return (
+      <>
+        <div className="flex justify-center items-center h-64">
+          <ClipLoader color="#db4444" size={80} />
+        </div>
+      </>
+    );
+  }
 
   return (
     <div className="container mx-auto flex flex-col mb-20">

@@ -1,19 +1,35 @@
-"use client"
+"use client";
 import React, { useEffect, useState } from "react";
 import ProductCard from "../Products/ProductCard";
 import Link from "next/link";
 import { client } from "@/sanity/lib/client";
+import { ClipLoader } from "react-spinners";
 
 const RecommendedCars = () => {
   const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const getCars = async () => {
     try {
-      const query = `*[_type == 'car' && 'recommended' in section ] | order(_createdAt asc)`;
+      const query = `*[_type == 'car' && 'recommended' in section ] | order(_createdAt asc){
+       name,
+        type,
+        price,
+        stock,
+        image,
+        discount,
+        steering,
+        fuelCapacity,
+        seatingCapacity,
+        description,
+        "currentSlug": slug.current,
+      }`;
       const products = await client.fetch(query);
       setProducts(products);
     } catch (err) {
       console.error("Error fetching cars:", err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -21,11 +37,30 @@ const RecommendedCars = () => {
     getCars();
   }, []);
 
+  if (loading) {
+    return (
+      <>
+        <div className="container max-w-[1700px] mx-auto flex flex-col">
+          <div className="flex mt-10 items-center font-bold justify-between px-5">
+            <div className="flex mt-10 items-center font-bold justify-between px-5">
+              <h4 className="text-xl text-[#90A3BF] font-semibold">
+                Recommended Cars
+              </h4>
+            </div>
+          </div>
+        </div>
+        <div className="flex justify-center items-center h-64">
+          <ClipLoader color="#db4444" size={80} />
+        </div>
+      </>
+    );
+  }
+
   return (
     <div className="container max-w-[1700px] mx-auto flex flex-col mb-20">
       <div className="flex mt-10 items-center font-bold justify-between px-5">
         <h4 className="text-xl text-[#90A3BF] font-semibold">
-          Recommended Car
+          Recommended Cars
         </h4>
       </div>
       {/* Responsive grid layout */}

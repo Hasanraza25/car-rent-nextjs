@@ -1,10 +1,13 @@
+"use client"
+import { useWishlist } from "@/app/context/WishlistContext";
 import Image from "next/image";
 import Link from "next/link";
 
 const Header = () => {
+    const { wishlistItems } = useWishlist();
   return (
-    <header className="py-6 bg-white border-b">
-      <div className="mx-auto max-w-[1700px] px-4 flex items-center justify-between md:flex-row flex-col">
+    <header className="py-6 bg-white border-b sticky w-full z-40 top-0 left-0">
+      <div className="mx-auto max-w-[1700px] px-4 flex items-center justify-between md:flex-row flex-col ">
         <div className="w-full flex items-center justify-between md:hidden mb-4">
           {/* Logo */}
           <Link href="/">
@@ -20,7 +23,7 @@ const Header = () => {
             className="rounded-full"
           />
         </div>
-    
+
         <div className="w-full flex items-center justify-between md:justify-start">
           {/* Logo for Laptop */}
           <Link href="/">
@@ -70,13 +73,18 @@ const Header = () => {
 
         <div className="hidden md:flex space-x-3">
           {/* Heart Icon */}
-          <div className="p-3 border border-gray-300 rounded-full flex items-center justify-center">
+          <div className="relative p-3 border border-gray-300 rounded-full flex items-center justify-center">
             <Image
               src="/images/heart.svg"
               alt="Heart Logo"
               width={40}
               height={40}
             />
+            {wishlistItems && wishlistItems.length > 0 && (
+              <span className="absolute top-0 right-0 text-xs font-bold text-white bg-red-400 rounded-full w-5 h-5 flex items-center justify-center">
+                {wishlistItems.length}
+              </span>
+            )}
           </div>
 
           {/* Notification Icon with Badge */}

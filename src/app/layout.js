@@ -1,14 +1,13 @@
+
 import localFont from "next/font/local";
 import "./globals.css";
-
+import { WishlistProvider } from "./context/WishlistContext";
 
 const jakartaSans = localFont({
   src: "./fonts/Plus_Jakarta_Sans/static/PlusJakartaSans-Medium.ttf",
   variable: "--font-jakarata-sans",
   weight: "100 200 300 400 500 600 700 800 900",
 });
-
-
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -32,7 +31,7 @@ export default function RootLayout({ children }) {
       <body
         className={`${jakartaSans.variable} ${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <WishlistProvider>{children}</WishlistProvider>
       </body>
     </html>
   );
