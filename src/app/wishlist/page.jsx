@@ -1,56 +1,12 @@
 "use client";
 import Link from "next/link";
-import React, { useEffect, useRef, useState } from "react";
+import React from "react";
 import ProductCard from "../components/Products/ProductCard";
-import { useWishlist } from "../context/WishlistContext";
+import { useWishlist } from "../Context/WishlistContext";
 
 const WishlistPage = () => {
   const { wishlistItems } = useWishlist();
-
-  const sliderRef = useRef(null);
-
-  // Dragging Logic
-  const isDragging = useRef(false);
-  const startX = useRef(0);
-  const scrollLeft = useRef(0);
-  const [isMobileOrTablet, setIsMobileOrTablet] = useState(false);
-
-  // Detect screen size to enable/disable drag
-  useEffect(() => {
-    const checkScreenSize = () => {
-      setIsMobileOrTablet(window.innerWidth < 1024); // Enable drag for screen widths less than 1024px
-    };
-
-    checkScreenSize();
-    window.addEventListener("resize", checkScreenSize);
-
-    return () => window.removeEventListener("resize", checkScreenSize);
-  }, []);
-
-  const handleMouseDown = (e) => {
-    if (!isMobileOrTablet) return;
-    isDragging.current = true;
-    startX.current = e.pageX - sliderRef.current.offsetLeft;
-    scrollLeft.current = sliderRef.current.scrollLeft;
-  };
-
-  const handleMouseLeave = () => {
-    if (!isMobileOrTablet) return;
-    isDragging.current = false;
-  };
-
-  const handleMouseUp = () => {
-    if (!isMobileOrTablet) return;
-    isDragging.current = false;
-  };
-
-  const handleMouseMove = (e) => {
-    if (!isDragging.current || !isMobileOrTablet) return;
-    e.preventDefault();
-    const x = e.pageX - sliderRef.current.offsetLeft;
-    const walk = (x - startX.current) * 2; // Scroll faster
-    sliderRef.current.scrollLeft = scrollLeft.current - walk;
-  };
+  
   return (
     <>
       <div className="container mx-auto flex flex-col px-8 overflow-hidden my-10">

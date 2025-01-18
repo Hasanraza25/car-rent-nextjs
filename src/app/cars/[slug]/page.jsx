@@ -6,7 +6,7 @@ import Link from "next/link";
 import ReviewsSection from "@/app/components/ReviewSection/ReviewSection";
 import RecentCars from "@/app/components/Cars/RecentCars";
 import { client, urlFor } from "@/sanity/lib/client";
-import { useWishlist } from "@/app/context/WishlistContext";
+import { useWishlist } from "@/app/Context/WishlistContext";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 

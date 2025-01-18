@@ -1,5 +1,5 @@
 "use client";
-import { useWishlist } from "@/app/context/WishlistContext";
+import { useWishlist } from "@/app/Context/WishlistContext";
 import { urlFor } from "@/sanity/lib/client";
 import Link from "next/link";
 import { useEffect, useState } from "react";

@@ -1,6 +1,6 @@
 import localFont from "next/font/local";
 import "./globals.css";
-import { WishlistProvider } from "./context/WishlistContext";
+import { WishlistProvider } from "./Context/WishlistContext";
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
 

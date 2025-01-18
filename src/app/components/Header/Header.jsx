@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { useWishlist } from "@/app/context/WishlistContext";
+import { useWishlist } from "@/app/Context/WishlistContext";
 import Image from "next/image";
 import Link from "next/link";
 
