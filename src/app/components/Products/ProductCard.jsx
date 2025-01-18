@@ -2,34 +2,21 @@
 import { useWishlist } from "@/app/Context/WishlistContext";
 import { urlFor } from "@/sanity/lib/client";
 import Link from "next/link";
-import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const ProductCard = ({ product }) => {
-  const [isHeartClicked, setIsHeartClicked] = useState(false); // For heart image toggle
   const { wishlistItems, addToWishlist, removeFromWishlist } = useWishlist();
 
-  // Heart images (unfilled and filled)
-  const heartUnfilled = "/images/heart-unfilled.svg"; // Replace with actual path
-  const heartFilled = "/images/heart-filled.svg"; // Replace with actual path
+  const heartUnfilled = "/images/heart-unfilled.svg";
+  const heartFilled = "/images/heart-filled.svg";
 
-  // Icon images for litres, genre, and people
-  const litresIcon = "/images/gas-station.svg"; // Replace with actual path
-  const genreIcon = "/images/handle.svg"; // Replace with actual path
-  const peopleIcon = "/images/profile-2.svg"; // Replace with actual path
+  const isHeartClicked = wishlistItems.some(
+    (item) => item.currentSlug === product.currentSlug
+  );
 
-  useEffect(() => {
-    if (
-      wishlistItems.some((item) => item.currentSlug === product.currentSlug)
-    ) {
-      setIsHeartClicked(true);
-    }
-  }, [wishlistItems, product.currentSlug]);
-
-  const handleAddToWishlist = (e) => {
+  const handleWishlistToggle = (e) => {
     e.preventDefault();
-    setIsHeartClicked(!isHeartClicked);
     if (isHeartClicked) {
       removeFromWishlist(product.currentSlug);
     } else {
@@ -43,9 +30,7 @@ const ProductCard = ({ product }) => {
 
   return (
     <div className="w-full h-full min-h-[28.2rem] mobile:min-h-[32rem] rounded-lg relative border-none bg-white shadow-md">
-      <Link
-        href={`/cars/${product.currentSlug}`} // Remove leading/trailing hyphens
-      >
+      <Link href={`/cars/${product.currentSlug}`}>
         {/* Title and Subtitle */}
         <div className="p-6">
           <h3 className="text-xl font-semibold cursor-pointer">
@@ -61,7 +46,7 @@ const ProductCard = ({ product }) => {
       <div className="absolute top-4 right-2 flex flex-col space-y-2">
         <button
           className="bg-white w-8 h-8 rounded-full flex items-center justify-center hover:text-red-500"
-          onClick={handleAddToWishlist}
+          onClick={handleWishlistToggle}
         >
           <img
             src={isHeartClicked ? heartFilled : heartUnfilled}
@@ -70,10 +55,8 @@ const ProductCard = ({ product }) => {
           />
         </button>
       </div>
-      <Link
-        href={`/cars/${product.currentSlug}`} // Remove leading/trailing hyphens
-      >
-        {/* Product Image with specific width */}
+      <Link href={`/cars/${product.currentSlug}`}>
+        {/* Product Image */}
         <div className="w-full h-40 mt-4 flex items-center justify-center">
           <img
             src={urlFor(product.image)}
@@ -82,23 +65,32 @@ const ProductCard = ({ product }) => {
           />
         </div>
       </Link>
+
       {/* Flex with Litres, Genre, and People */}
       <div className="flex flex-wrap items-center justify-between mt-10 px-6 gap-3">
         {/* Litres */}
         <div className="flex items-center space-x-2 text-[#90A3BF]">
-          <img src={litresIcon} alt="Litres Icon" className="w-7 h-7" />
+          <img
+            src="/images/gas-station.svg"
+            alt="Litres Icon"
+            className="w-7 h-7"
+          />
           <span className="text-sm">{product.fuelCapacity}L</span>
         </div>
 
         {/* Genre */}
         <div className="flex items-center space-x-2 text-[#90A3BF]">
-          <img src={genreIcon} alt="Genre Icon" className="w-7 h-7" />
+          <img src="/images/handle.svg" alt="Genre Icon" className="w-7 h-7" />
           <span className="text-sm">{product.steering}</span>
         </div>
 
         {/* People */}
         <div className="flex items-center space-x-2 text-[#90A3BF]">
-          <img src={peopleIcon} alt="People Icon" className="w-7 h-7" />
+          <img
+            src="/images/profile-2.svg"
+            alt="People Icon"
+            className="w-7 h-7"
+          />
           <span className="text-sm">{product.seatingCapacity} People</span>
         </div>
       </div>

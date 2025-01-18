@@ -3,7 +3,6 @@ const { createContext, useContext, useEffect, useState } = require("react");
 
 const WishlistContext = createContext();
 
-
 export const WishlistProvider = ({ children }) => {
   const [wishlistItems, setWishlistItems] = useState([]);
   const [isHydrated, setIsHydrated] = useState(false);
@@ -24,7 +23,15 @@ export const WishlistProvider = ({ children }) => {
 
   const addToWishlist = (item) => {
     setWishlistItems((prevItems) => {
-      return [item, ...prevItems];
+      const isItemInWishlist = prevItems.some(
+        (wishlistItem) => wishlistItem.currentSlug === item.currentSlug
+      );
+
+      if (!isItemInWishlist) {
+        return [item, ...prevItems];
+      }
+
+      return prevItems;
     });
   };
 
