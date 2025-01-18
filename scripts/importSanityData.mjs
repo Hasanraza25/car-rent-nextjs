@@ -36,7 +36,8 @@ async function importData() {
   try {
     console.log("Fetching products from API...");
     const response = await axios.get(
-      "https://6787d134c4a42c9161085f07.mockapi.io/api/car-rental-marketplace/products"
+      "https://6787d134c4a42c9161085f07.mockapi.io/api
+      // /car-rental-marketplace/products"
     );
     const products = response.data;
 

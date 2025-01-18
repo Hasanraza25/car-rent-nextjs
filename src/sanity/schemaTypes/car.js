@@ -36,9 +36,9 @@ export default defineType({
     defineField({
       name: "image",
       title: "Image",
-      type: "image", // Correctly defines the field as an image type
+      type: "image", 
       options: {
-        hotspot: true, // Optional, enables image cropping in the Sanity Studio
+        hotspot: true,
       },
     }),
 
