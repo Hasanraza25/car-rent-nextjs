@@ -12,7 +12,7 @@ const RecentCars = () => {
     try {
       const query = `*[_type == 'car' && 'recent' in section ][0..2] | order(_createdAt asc){
        name,
-        type,
+        "category": type->name,
         price,
         stock,
         image,
@@ -38,7 +38,7 @@ const RecentCars = () => {
     try {
       const query = `*[_type == 'car' && 'recommended' in section ][0..2] | order(_createdAt asc){
        name,
-        type,
+        "category": type->name,
         price,
         stock,
         image,

@@ -1,4 +1,5 @@
 import { defineField, defineType } from "sanity";
+import { client } from "sanity"; // Ensure this import is present
 
 export default defineType({
   name: "car",
@@ -20,8 +21,10 @@ export default defineType({
     }),
     defineField({
       name: "type",
+      type: "reference",
       title: "Type",
-      type: "string",
+      to: [{ type: "categories" }], // Reference to the categories schema
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: "price",
@@ -36,12 +39,11 @@ export default defineType({
     defineField({
       name: "image",
       title: "Image",
-      type: "image", 
+      type: "image",
       options: {
         hotspot: true,
       },
     }),
-
     defineField({
       name: "discount",
       title: "Discount",
@@ -85,5 +87,46 @@ export default defineType({
       title: "Description",
       type: "text",
     }),
+  ],
+
+  // Update the category's total stock when a car is added or modified
+  documentActions: [
+    async (prevContext) => {
+      const { document } = prevContext;
+
+      // Check if the document is a car and if stock is modified
+      if (document._type === "car" && document.stock && document.type._ref) {
+        const categoryId = document.type._ref;
+
+        // Fetch all cars related to this category
+        const carsInCategory = await client.fetch(
+          `*[_type == "car" && references($categoryId)]`,
+          { categoryId }
+        );
+
+        // Calculate the total stock
+        const totalStock = carsInCategory.reduce(
+          (sum, car) => sum + (car.stock || 0),
+          0
+        );
+
+        // Ensure the category's totalStock is updated
+        await client
+          .patch(categoryId) // Specify the category document ID
+          .set({ totalStock: totalStock }) // Set the new total stock value
+          .commit();
+
+        // Return the updated context after mutation
+        return [
+          ...prevContext,
+          {
+            title: "Total Stock Updated",
+            message: `Total stock for category updated to ${totalStock}`,
+          },
+        ];
+      }
+
+      return prevContext;
+    },
   ],
 });

@@ -1,5 +1,6 @@
 import car from "./car";
+import categories from "./categories";
 
 export const schema = {
-  types: [car],
-}
+  types: [car, categories],
+};

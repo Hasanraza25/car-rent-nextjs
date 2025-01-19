@@ -21,7 +21,7 @@ const CarDetail = ({ params }) => {
     try {
       const query = `*[_type == 'car']{
         name,
-        type,
+        "category": type->name,
         price,
         stock,
         image,
@@ -165,7 +165,7 @@ const CarDetail = ({ params }) => {
               <div className="flex flex-col md:flex-row justify-between mx-2 mt-3 space-y-2 md:space-y-0 md:space-x-4 text-sm text-[#90A3BF]">
                 <div className="flex  flex-wrap md:flex-col lg:flex-row items-center justify-between w-full text-lg">
                   <span>Type Car:</span>
-                  <span className="text-gray-600">{car.type}</span>
+                  <span className="text-gray-600">{car.category}</span>
                 </div>
                 <div className="flex flex-wrap md:flex-col lg:flex-row items-center justify-between w-full text-lg">
                   <span>Capacity:</span>

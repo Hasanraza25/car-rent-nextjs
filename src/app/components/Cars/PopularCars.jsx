@@ -15,7 +15,7 @@ const PopularCars = () => {
     try {
       const query = `*[_type == 'car' && 'popular' in section ] | order(_createdAt asc){
           name,
-        type,
+        "category": type->name,
         price,
         stock,
         image,

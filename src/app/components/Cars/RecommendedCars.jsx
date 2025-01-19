@@ -13,7 +13,7 @@ const RecommendedCars = () => {
     try {
       const query = `*[_type == 'car' && 'recommended' in section ] | order(_createdAt asc){
        name,
-        type,
+        "category": type->name,
         price,
         stock,
         image,

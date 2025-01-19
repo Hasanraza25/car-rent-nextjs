@@ -37,7 +37,7 @@ const ProductCard = ({ product }) => {
             {product.name}
           </h3>
           <p className="text-[#90A3BF] text-sm font-semibold mt-2">
-            {product.type}
+            {product.category}
           </p>
         </div>
       </Link>

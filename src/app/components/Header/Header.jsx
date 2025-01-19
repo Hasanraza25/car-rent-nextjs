@@ -15,7 +15,6 @@ const Header = () => {
   return (
     <header className="py-6 bg-white border-b">
       <div className="mx-auto max-w-[1700px] px-4 md:px-10 flex items-center justify-between md:flex-row flex-col">
-        {/* Mobile Header */}
         <div className="w-full flex items-center justify-between md:hidden mb-4">
           <Link href="/">
             <div className="text-[#3563E9] text-4xl font-semibold">MORENT</div>
@@ -60,7 +59,6 @@ const Header = () => {
           </div>
         </div>
 
-        {/* Desktop Header */}
         <div className="w-full flex items-center justify-between md:justify-start">
           <Link href="/">
             <div className="hidden md:block text-[#3563E9] text-4xl font-semibold">
@@ -68,7 +66,7 @@ const Header = () => {
             </div>
           </Link>
 
-          <div className="relative w-full md:w-[300px] lg:w-[550px] ml-0 lg:ml-28 md:ml-7  flex flex-col md:flex-row items-center">
+          <div className="relative w-[100px] md:w-[300px] xl:w-[550px] ml-0 lg:ml-28 md:ml-7  flex flex-col md:flex-row items-center">
             <div className="absolute top-0 left-5 flex items-center h-full text-gray-500">
               <Image
                 src="/images/search-icon.svg"
@@ -86,24 +84,22 @@ const Header = () => {
         </div>
 
         <div className="hidden md:flex space-x-5 items-center">
-          {/* Wishlist Icon */}
-            <Link href={"/wishlist"}>
-          <div className="relative p-3 border border-gray-300 rounded-full">
+          <Link href={"/wishlist"}>
+            <div className="relative p-3 border border-gray-300 rounded-full">
               <Image
                 src="/images/heart.svg"
                 alt="Heart Logo"
-                width={40}
-                height={40}
+                width={50}
+                height={50}
               />
               {wishlistItems?.length > 0 && (
-                <span className="absolute top-0 right-0 text-xs font-bold text-white bg-red-400 rounded-full w-5 h-5 flex items-center justify-center">
+                <span className="absolute top-0 right-0 text-[10px] font-bold text-white bg-red-400 rounded-full w-4 h-4 flex items-center justify-center">
                   {wishlistItems.length}
                 </span>
               )}
-          </div>
-            </Link>
+            </div>
+          </Link>
 
-          {/* Notification Icon */}
           <div className="relative p-3 border border-gray-300 rounded-full">
             <Image
               src="/images/notification.svg"
@@ -111,10 +107,9 @@ const Header = () => {
               width={40}
               height={40}
             />
-            <div className="absolute top-0 right-0 w-3 h-3 bg-red-400 rounded-full border border-white"></div>
+            <div className="absolute top-0 right-0 w-4 h-4 bg-red-400 rounded-full border border-white"></div>
           </div>
 
-          {/* Settings Icon */}
           <div className="p-3 border border-gray-300 rounded-full">
             <Image
               src="/images/setting.svg"
@@ -124,7 +119,6 @@ const Header = () => {
             />
           </div>
 
-          {/* Profile Dropdown */}
           <div className="relative">
             <Image
               src="/images/profile.svg"

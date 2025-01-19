@@ -12,7 +12,7 @@ const CategoryCars = () => {
     try {
       const query = `*[_type == 'car' ] | order(_createdAt asc){
          name,
-        type,
+        "category": type->name,
         price,
         stock,
         image,

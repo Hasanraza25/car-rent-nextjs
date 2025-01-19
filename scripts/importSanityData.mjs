@@ -34,10 +34,18 @@ async function uploadImageToSanity(imageUrl) {
 
 async function importData() {
   try {
+    console.log("Fetching categories from Sanity...");
+    const categories = await client.fetch(
+      `*[_type == "categories"]{_id, name}`
+    );
+    const categoryMap = categories.reduce((map, category) => {
+      map[category.name] = category._id; // Map category name to its ID
+      return map;
+    }, {});
+
     console.log("Fetching products from API...");
     const response = await axios.get(
-      "https://6787d134c4a42c9161085f07.mockapi.io/api
-      // /car-rental-marketplace/products"
+      "https://6787d134c4a42c9161085f07.mockapi.io/api/car-rental-marketplace/products"
     );
     const products = response.data;
 
@@ -45,9 +53,17 @@ async function importData() {
     for (const product of products) {
       console.log(`Processing product: ${product.name}`);
       let imageRef = null;
+
       if (product.image) {
         imageRef = await uploadImageToSanity(product.image);
       }
+
+      const categoryRef = categoryMap[product.type]; // Get the category ID
+      if (!categoryRef) {
+        console.warn(`Category "${product.type}" not found. Skipping product.`);
+        continue;
+      }
+
       const sanityProduct = {
         _type: "car",
         name: product.name,
@@ -68,7 +84,10 @@ async function importData() {
         fuelCapacity: product.fuelCapacity || 0,
         seatingCapacity: product.seatingCapacity || 0,
         id: product.id,
-        type: product.type || "Unknown",
+        type: {
+          _type: "reference",
+          _ref: categoryRef, // Use the reference ID
+        },
         section: product.section || [],
       };
 
