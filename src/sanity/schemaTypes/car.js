@@ -1,5 +1,13 @@
 import { defineField, defineType } from "sanity";
-import { client } from "sanity"; // Ensure this import is present
+import { createClient } from "@sanity/client";
+
+const client = createClient({
+  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
+  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET,
+  useCdn: false,
+  token: process.env.SANITY_API_TOKEN,
+  apiVersion: "2021-08-31",
+});
 
 export default defineType({
   name: "car",
@@ -87,46 +95,5 @@ export default defineType({
       title: "Description",
       type: "text",
     }),
-  ],
-
-  // Update the category's total stock when a car is added or modified
-  documentActions: [
-    async (prevContext) => {
-      const { document } = prevContext;
-
-      // Check if the document is a car and if stock is modified
-      if (document._type === "car" && document.stock && document.type._ref) {
-        const categoryId = document.type._ref;
-
-        // Fetch all cars related to this category
-        const carsInCategory = await client.fetch(
-          `*[_type == "car" && references($categoryId)]`,
-          { categoryId }
-        );
-
-        // Calculate the total stock
-        const totalStock = carsInCategory.reduce(
-          (sum, car) => sum + (car.stock || 0),
-          0
-        );
-
-        // Ensure the category's totalStock is updated
-        await client
-          .patch(categoryId) // Specify the category document ID
-          .set({ totalStock: totalStock }) // Set the new total stock value
-          .commit();
-
-        // Return the updated context after mutation
-        return [
-          ...prevContext,
-          {
-            title: "Total Stock Updated",
-            message: `Total stock for category updated to ${totalStock}`,
-          },
-        ];
-      }
-
-      return prevContext;
-    },
   ],
 });
