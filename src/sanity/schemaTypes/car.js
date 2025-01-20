@@ -32,7 +32,6 @@ export default defineType({
       type: "reference",
       title: "Type",
       to: [{ type: "categories" }], // Reference to the categories schema
-      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: "price",
