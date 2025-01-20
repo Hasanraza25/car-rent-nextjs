@@ -1,19 +1,17 @@
-const sanityClient = require('@sanity/client');
+import { createClient } from "@sanity/client";
 
-const client = sanityClient({
+const client = createClient({
   projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
   dataset: process.env.NEXT_PUBLIC_SANITY_DATASET,
   useCdn: false,
   token: process.env.SANITY_API_TOKEN,
-  apiVersion: '2021-08-31',
+  apiVersion: "2021-08-31",
 });
 
-const handler = async (req, res) => {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ message: 'Method not allowed' });
-  }
 
-  const { body } = req;
+export const POST = async (req, res) => {
+
+  const { body } = await req.json();
 
   // Ensure the webhook is triggered by changes to "car" documents
   if (body._type !== 'car') {
@@ -48,11 +46,9 @@ const handler = async (req, res) => {
       .set({ totalStock })
       .commit();
 
-    res.status(200).json({ message: 'Category total stock updated successfully' });
+    return res.status(200).json({ message: 'Category total stock updated successfully' });
   } catch (error) {
     console.error('Error updating category stock:', error);
-    res.status(500).json({ message: 'Internal server error' });
+    return res.status(500).json({ message: 'Internal server error' });
   }
 };
-
-module.exports = handler;
