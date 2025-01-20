@@ -1,4 +1,4 @@
-// pages/api/updateStock.js
+import { defineField, defineType } from "sanity";
 import { createClient } from "@sanity/client";
 
 const client = createClient({
@@ -9,39 +9,91 @@ const client = createClient({
   apiVersion: "2021-08-31",
 });
 
-export default async function handler(req, res) {
-  if (req.method === "POST") {
-    const { categoryId } = req.body;
-
-    if (!categoryId) {
-      return res.status(400).json({ error: "Missing categoryId" });
-    }
-
-    try {
-      // Fetch all cars with the given categoryId
-      const cars = await client.fetch(
-        `*[_type == "car" && references($categoryId)] { stock }`,
-        { categoryId }
-      );
-
-      // Calculate total stock
-      const totalStock = cars.reduce((sum, car) => sum + (car.stock || 0), 0);
-
-      // Update the category's totalStock field
-      const updatedCategory = await client
-        .patch(categoryId)
-        .set({ totalStock })
-        .commit();
-
-      res.status(200).json({
-        message: "Total stock updated successfully",
-        updatedCategory,
-      });
-    } catch (error) {
-      console.error("Error updating total stock:", error);
-      res.status(500).json({ error: "Failed to update total stock" });
-    }
-  } else {
-    res.status(405).json({ error: "Method not allowed" });
-  }
-}
+export default defineType({
+  name: "car",
+  title: "Car",
+  type: "document",
+  fields: [
+    defineField({
+      name: "name",
+      title: "Name",
+      type: "string",
+    }),
+    defineField({
+      name: "slug",
+      title: "Slug",
+      type: "slug",
+      options: {
+        source: "name",
+      },
+    }),
+    defineField({
+      name: "type",
+      type: "reference",
+      title: "Type",
+      to: [{ type: "categories" }], // Reference to the categories schema
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: "price",
+      title: "Price",
+      type: "number",
+    }),
+    defineField({
+      name: "stock",
+      title: "Stock",
+      type: "number",
+    }),
+    defineField({
+      name: "image",
+      title: "Image",
+      type: "image",
+      options: {
+        hotspot: true,
+      },
+    }),
+    defineField({
+      name: "discount",
+      title: "Discount",
+      type: "string",
+    }),
+    defineField({
+      name: "section",
+      title: "Section",
+      type: "array",
+      of: [{ type: "string" }],
+      options: {
+        list: [
+          { title: "Popular Cars", value: "popular" },
+          { title: "Recent Cars", value: "recent" },
+          { title: "Recommended Cars", value: "recommended" },
+        ],
+      },
+    }),
+    defineField({
+      name: "steering",
+      title: "Steering",
+      type: "string",
+    }),
+    defineField({
+      name: "fuelCapacity",
+      title: "Fuel Capacity",
+      type: "number",
+    }),
+    defineField({
+      name: "seatingCapacity",
+      title: "Seating Capacity",
+      type: "number",
+    }),
+    defineField({
+      name: "id",
+      title: "ID",
+      type: "string",
+    }),
+    defineField({
+      name: "description",
+      title: "Description",
+      type: "text",
+    }),
+  ],
+});
