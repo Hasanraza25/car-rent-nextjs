@@ -22,6 +22,8 @@ export default async function POST(req, res) {
         `*[_type == "car" && references($categoryId)] { stock }`,
         { categoryId }
       );
+      console.log("Received categoryId:", categoryId);
+      console.log("Fetched cars:", cars);
 
       // Calculate total stock
       const totalStock = cars.reduce((sum, car) => sum + (car.stock || 0), 0);
