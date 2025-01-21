@@ -43,3 +43,10 @@ p {
     gap: 20px; /* Adjust gap if needed */
   }
 }
+
+@media(min-width: 750px) and (max-width: 850px){
+  .header-searchbar{
+    width: 250px !important;
+    font-size: ;
+  }
+}
