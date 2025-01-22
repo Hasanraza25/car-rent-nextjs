@@ -4,14 +4,27 @@ import ProductCard from "../Products/ProductCard";
 import { client } from "@/sanity/lib/client";
 import { ClipLoader } from "react-spinners";
 
-const CategoryCars = () => {
+const CategoryCars = ({ filters }) => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const getCars = async () => {
     try {
-      const query = `*[_type == 'car' ] | order(_createdAt asc){
-         name,
+      const { categories, capacities, price } = filters;
+      console.log("Filters:", filters); // Log the filters to see what is being passed
+
+      let query = `*[_type == 'car' && price <= ${price}`;
+
+      if (categories.length > 0) {
+        query += ` && type->name in [${categories.map((c) => `"${c}"`).join(", ")}]`;
+      }
+
+      if (capacities.length > 0) {
+        query += ` && seatingCapacity in [${capacities.join(", ")}]`;
+      }
+
+      query += `] | order(_createdAt asc) {
+        name,
         "category": type->name,
         price,
         stock,
@@ -23,6 +36,9 @@ const CategoryCars = () => {
         description,
         "currentSlug": slug.current,
       }`;
+
+      console.log("Query:", query); // Log the query to see the final query
+
       const products = await client.fetch(query);
       setProducts(products);
     } catch (err) {
@@ -34,15 +50,13 @@ const CategoryCars = () => {
 
   useEffect(() => {
     getCars();
-  }, []);
+  }, [filters]);
 
   if (loading) {
     return (
-      <>
-        <div className="flex justify-center items-center h-64">
-          <ClipLoader color="#db4444" size={80} />
-        </div>
-      </>
+      <div className="flex justify-center items-center h-64">
+        <ClipLoader color="#db4444" size={80} />
+      </div>
     );
   }
 
