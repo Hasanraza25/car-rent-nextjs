@@ -1,6 +1,7 @@
 "use client";
-import React, { useEffect, useState } from "react"; 
+import React, { useEffect, useState } from "react";
 import { client, urlFor } from "@/sanity/lib/client";
+import Image from "next/image";
 
 const RentForm = ({ params }) => {
   const slug = params.slug;
@@ -32,7 +33,6 @@ const RentForm = ({ params }) => {
   useEffect(() => {
     getCars();
   }, []);
-
 
   if (!car) {
     return <div>Car not found</div>;
@@ -533,12 +533,19 @@ const RentForm = ({ params }) => {
                     backgroundImage: "url('/images/look.svg')",
                   }}
                 ></div>
-
-                <img
-                  src={car.image ? urlFor(car.image).url() : " "}
-                  alt="Car"
-                  className="w-20 h-20 object-contain z-10 m-auto"
-                />
+                {car.image == null ? (
+                  <div className="loader">
+                  </div>
+                ) : (
+                  <Image
+                    src={car.image ? urlFor(car.image).url() : ""}
+                    alt={car.name}
+                    className="w-20 h-20 object-contain z-10 m-auto"
+                    width={80} // Fixed width for the image
+                    height={80} // Fixed height for the image
+                    priority // Ensures the image is loaded with higher priority
+                  />
+                )}
               </div>
 
               <div className="ml-4">

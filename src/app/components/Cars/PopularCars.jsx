@@ -2,10 +2,10 @@
 import React, { Suspense, useEffect, useState } from "react";
 import ProductCard from "../Products/ProductCard";
 import { client } from "@/sanity/lib/client";
-import { ClipLoader } from "react-spinners";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import Link from "next/link";
 
 const PopularCars = () => {
   const [products, setProducts] = useState([]);
@@ -72,9 +72,7 @@ const PopularCars = () => {
     return (
       <div className="container max-w-[1700px] mx-auto flex flex-col overflow-hidden">
         <div className="flex mt-10 items-center font-bold justify-between px-10">
-          <h4 className="text-xl text-[#90A3BF] font-semibold">
-            Popular Cars
-          </h4>
+          <h4 className="text-xl text-[#90A3BF] font-semibold">Popular Cars</h4>
           <div>
             <button className="py-4 text-[#3563E9] rounded-[5px] hover:underline">
               View All
@@ -82,7 +80,7 @@ const PopularCars = () => {
           </div>
         </div>
         <div className="flex justify-center items-center h-64">
-          <ClipLoader color="#3563E9" size={80} />
+          <div className="loader"></div>
         </div>
       </div>
     );
@@ -93,14 +91,14 @@ const PopularCars = () => {
       <div className="flex mt-10 items-center font-bold justify-between px-5">
         <h4 className="text-xl text-[#90A3BF] font-semibold">Popular Cars</h4>
         <div>
-          <button className="py-4 text-[#3563E9] rounded-[5px] hover:underline">
+          <Link href={"/cars"} className="py-4 text-[#3563E9] rounded-[5px] hover:underline">
             View All
-          </button>
+          </Link>
         </div>
       </div>
 
       <div className="w-full mt-6 relative mx-auto px-3">
-        <Suspense fallback={<ClipLoader size={50} color="#3563E9" />}>
+        <Suspense fallback={<div className="loader"></div>}>
           <Slider {...sliderSettings}>
             {products.map((product, index) => (
               <div key={index} className="px-3">

@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import ProductCard from "../Products/ProductCard";
 import Link from "next/link";
 import { client } from "@/sanity/lib/client";
-import { ClipLoader } from "react-spinners";
 
 const RecommendedCars = () => {
   const [products, setProducts] = useState([]);
@@ -50,7 +49,7 @@ const RecommendedCars = () => {
           </div>
         </div>
         <div className="flex justify-center items-center h-64">
-          <ClipLoader color="#3563E9" size={80} />
+        <div className="loader"></div>
         </div>
       </>
     );
