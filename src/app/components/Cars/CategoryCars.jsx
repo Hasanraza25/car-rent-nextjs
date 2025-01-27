@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import ProductCard from "../Products/ProductCard";
 import { client } from "@/sanity/lib/client";
 import { ClipLoader } from "react-spinners";
+import Image from "next/image";
 
 const CategoryCars = ({ filters }) => {
   const [products, setProducts] = useState([]);
@@ -60,9 +61,36 @@ const CategoryCars = ({ filters }) => {
     );
   }
 
+  if (products.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center text-center px-3 my-10">
+        <Image
+          src="/images/no-cars-found.png" // Replace with the actual path to your image
+          alt="No cars found"
+          width={400}
+          height={300}
+          className="w-full max-w-md h-auto mb-6"
+        />
+        <h2 className="text-2xl font-bold text-gray-700 mb-2">
+          No Cars Found!
+        </h2>
+        <p className="text-gray-500 mb-4">
+          We couldn&#34;t find any cars that match your filters. Try adjusting
+          the filters to see more options.
+        </p>
+        <button
+          onClick={() => window.location.reload()}
+          className="bg-[#3563E9] hover:bg-[#54A6FF] py-3 px-6 text-white text-center rounded-md"
+        >
+          Reset Filters
+        </button>
+      </div>
+    );
+  }
+
   return (
     <div className="container mx-auto flex flex-col mb-20">
-      <div className="grid mt-6 gap-8  px-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 sm:justify-items-center">
+      <div className="grid mt-6 gap-8 px-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 sm:justify-items-center">
         {products.map((product, index) => (
           <ProductCard key={index} product={product} />
         ))}
