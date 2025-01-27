@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React, { useState } from "react";
 import Sidebar from "../components/Sidebar/Sidebar";
 import PickUpDropOff from "../components/PickUpDropOff/PickUpDropOff";
@@ -16,13 +16,16 @@ const CategoryCar = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <div className="relative flex flex-1 min-h-screen">
-        <Sidebar onFilterChange={handleFilterChange} />
-        <div className="flex flex-col w-full">
-          <PickUpDropOff />
-          <CategoryCars filters={filters} />
-        </div>
+    <div className="min-h-screen flex flex-row">
+      {/* Sidebar */}
+      <div className="flex flex-col">
+      <Sidebar onFilterChange={handleFilterChange} />
+    <span className="bg-white h-screen"></span>
+      </div>
+      {/* Main Content */}
+      <div className="flex flex-col w-full">
+        <PickUpDropOff />
+        <CategoryCars filters={filters} />
       </div>
     </div>
   );
