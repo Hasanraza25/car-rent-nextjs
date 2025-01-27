@@ -50,7 +50,7 @@ const RecommendedCars = () => {
           </div>
         </div>
         <div className="flex justify-center items-center h-64">
-          <ClipLoader color="#db4444" size={80} />
+          <ClipLoader color="#3563E9" size={80} />
         </div>
       </>
     );

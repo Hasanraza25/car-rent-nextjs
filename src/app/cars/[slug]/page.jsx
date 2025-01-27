@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import Sidebar from "@/app/components/Sidebar/Sidebar";
+import React, { Suspense, useEffect, useState } from "react";
+// import Sidebar from "@/app/components/Sidebar/Sidebar";
 import Link from "next/link";
 import ReviewsSection from "@/app/components/ReviewSection/ReviewSection";
 import RecentCars from "@/app/components/Cars/RecentCars";
@@ -9,6 +9,8 @@ import { client, urlFor } from "@/sanity/lib/client";
 import { useWishlist } from "@/app/Context/WishlistContext";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Image from "next/image";
+import { ClipLoader } from "react-spinners";
 
 const CarDetail = ({ params }) => {
   const slug = params.slug;
@@ -44,9 +46,7 @@ const CarDetail = ({ params }) => {
   }, []);
 
   useEffect(() => {
-    if (
-      wishlistItems.some((item) => item.currentSlug === car.currentSlug)
-    ) {
+    if (wishlistItems.some((item) => item.currentSlug === car.currentSlug)) {
       setIsHeartClicked(true);
     }
   }, [wishlistItems, car.currentSlug]);
@@ -54,20 +54,19 @@ const CarDetail = ({ params }) => {
   const heartUnfilled = "/images/heart-unfilled.svg";
   const heartFilled = "/images/heart-filled.svg";
 
-    const handleAddToWishlist = (e) => {
-      e.preventDefault();
-      setIsHeartClicked(!isHeartClicked);
-      if (isHeartClicked) {
-        removeFromWishlist(car.currentSlug);
-      } else {
-        addToWishlist(car);
-        toast.success("Car added to Wishlist!", {
-          autoClose: 2000,
-          closeButton: false,
-        });
-      }
-    };
-  
+  const handleAddToWishlist = (e) => {
+    e.preventDefault();
+    setIsHeartClicked(!isHeartClicked);
+    if (isHeartClicked) {
+      removeFromWishlist(car.currentSlug);
+    } else {
+      addToWishlist(car);
+      toast.success("Car added to Wishlist!", {
+        autoClose: 2000,
+        closeButton: false,
+      });
+    }
+  };
 
   if (!car) {
     return <div>Car not found</div>;
@@ -76,7 +75,7 @@ const CarDetail = ({ params }) => {
   return (
     <div className="min-h-screen flex flex-col overflow-hidden">
       <div className="flex flex-1 flex-col md:flex-row">
-        <Sidebar />
+        {/* <Sidebar /> */}
         <div className="flex flex-col w-full px-4 sm:px-2">
           <div className="flex flex-col md:flex-row justify-around mx-auto w-full mt-5 max-w-[1700px]">
             {/* Card 1 */}
@@ -95,10 +94,16 @@ const CarDetail = ({ params }) => {
                   Safety and comfort while driving a futuristic and elegant
                   sports car
                 </p>
-                <img
+
+                {/* Conditional rendering for image or loading spinner */}
+
+                <Image
                   src={car.image ? urlFor(car.image).url() : ""}
                   alt="Car"
                   className="mx-auto mt-6 sm:mt-4 w-full max-w-[300px] rounded-lg"
+                  width={300} // Define a fixed width or use dynamic width depending on your layout
+                  height={200} // Define a fixed height or use dynamic height
+                  layout="responsive" // Ensures the image is responsive
                 />
               </div>
 

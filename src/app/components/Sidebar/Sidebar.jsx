@@ -1,7 +1,8 @@
 "use client";
+import React, { useEffect, useState, Suspense } from "react";
 import { client } from "@/sanity/lib/client";
-import React, { useEffect, useState } from "react";
 import { FiArrowRight, FiArrowLeft } from "react-icons/fi";
+import { ClipLoader } from "react-spinners";
 
 const Sidebar = ({ onFilterChange }) => {
   const [categories, setCategories] = useState([]);
@@ -47,7 +48,7 @@ const Sidebar = ({ onFilterChange }) => {
         return acc;
       }, {});
 
-      const groupedArray = Object.values(groupedData); // to convert object to array
+      const groupedArray = Object.values(groupedData);
       setSeatingCapacities(groupedArray);
     } catch (err) {
       console.log("Categories failed to fetch:", err);
@@ -71,7 +72,6 @@ const Sidebar = ({ onFilterChange }) => {
   };
 
   const handleFilterCars = () => {
-    // Ensure capacities are numbers
     const formattedCapacities = selectedCapacities.map((capacity) =>
       Number(capacity)
     );
@@ -87,7 +87,7 @@ const Sidebar = ({ onFilterChange }) => {
       {/* Sidebar Toggle Button (Mobile and Tablet Only) */}
       <button
         onClick={toggleSidebar}
-        className="fixed top-5 left-5 z-50 p-2 bg-white  shadow-md rounded-full focus:outline-none tablet:block mobile:block hidden"
+        className="fixed top-5 left-5 z-50 p-2 bg-white shadow-md rounded-full focus:outline-none tablet:block mobile:block hidden"
       >
         {isOpen ? <FiArrowLeft size={24} /> : <FiArrowRight size={24} />}
       </button>
@@ -103,26 +103,33 @@ const Sidebar = ({ onFilterChange }) => {
           <h3 className="text-xs font-medium text-gray-400 tracking-widest mb-4">
             TYPE
           </h3>
-          <div className="space-y-4">
-            {categories.map((category) => (
-              <label
-                key={category.name}
-                className="flex items-center text-sm font-medium text-gray-500"
-              >
-                <input
-                  type="checkbox"
-                  className="form-checkbox h-4 w-4 text-blue-500 rounded border-gray-300 tracking-widest"
-                  onChange={() => handleCategoryChange(category.name)}
-                />
-                <span className="ml-3 text-lg">
-                  {category.name}{" "}
-                  <span className="text-gray-400">
-                    &nbsp;({category.totalStock || 0})
-                  </span>
-                </span>
-              </label>
-            ))}
-          </div>
+
+          <Suspense fallback={<ClipLoader color="#3563E9" size={50} className="mx-auto mt-6" />}>
+            <div className="space-y-4">
+              {categories.length === 0 ? (
+                <ClipLoader color="#3563E9" size={50} className="mx-auto mt-6" />
+              ) : (
+                categories.map((category) => (
+                  <label
+                    key={category.name}
+                    className="flex items-center text-sm font-medium text-gray-500"
+                  >
+                    <input
+                      type="checkbox"
+                      className="form-checkbox h-4 w-4 text-blue-500 rounded border-gray-300 tracking-widest"
+                      onChange={() => handleCategoryChange(category.name)}
+                    />
+                    <span className="ml-3 text-lg">
+                      {category.name}{" "}
+                      <span className="text-gray-400">
+                        &nbsp;({category.totalStock || 0})
+                      </span>
+                    </span>
+                  </label>
+                ))
+              )}
+            </div>
+          </Suspense>
         </div>
 
         {/* Capacity Section */}
@@ -130,26 +137,33 @@ const Sidebar = ({ onFilterChange }) => {
           <h3 className="text-xs font-medium text-gray-400 tracking-widest mb-4">
             CAPACITY
           </h3>
-          <div className="space-y-4">
-            {seatingCapacities.map((capacity) => (
-              <label
-                key={capacity.seatingCapacity}
-                className="flex items-center text-sm text-gray-500"
-              >
-                <input
-                  type="checkbox"
-                  className="form-checkbox h-4 w-4 text-blue-500 rounded border-gray-200"
-                  onChange={() =>
-                    handleCapacityChange(capacity.seatingCapacity)
-                  }
-                />
-                <span className="ml-3 text-lg">
-                  {capacity.seatingCapacity} Person{" "}
-                  <span className="text-gray-400">({capacity.count})</span>
-                </span>
-              </label>
-            ))}
-          </div>
+
+          <Suspense fallback={<ClipLoader color="#3563E9" size={50} className="mx-auto mt-6" />}>
+            <div className="space-y-4">
+              {seatingCapacities.length === 0 ? (
+                <ClipLoader color="#3563E9" size={50} className="mx-auto mt-6" />
+              ) : (
+                seatingCapacities.map((capacity) => (
+                  <label
+                    key={capacity.seatingCapacity}
+                    className="flex items-center text-sm text-gray-500"
+                  >
+                    <input
+                      type="checkbox"
+                      className="form-checkbox h-4 w-4 text-blue-500 rounded border-gray-200"
+                      onChange={() =>
+                        handleCapacityChange(capacity.seatingCapacity)
+                      }
+                    />
+                    <span className="ml-3 text-lg">
+                      {capacity.seatingCapacity} Person{" "}
+                      <span className="text-gray-400">({capacity.count})</span>
+                    </span>
+                  </label>
+                ))
+              )}
+            </div>
+          </Suspense>
         </div>
 
         {/* Price Section */}
