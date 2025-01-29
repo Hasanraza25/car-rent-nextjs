@@ -93,17 +93,15 @@ const CarDetail = ({ params }) => {
                   sports car
                 </p>
 
-
-                  <Image
-                    src={car.image ? urlFor(car.image).url() : ""}
-                    alt="Car"
-                    className="mx-auto mt-6 sm:mt-4 w-full max-w-[300px] rounded-lg"
-                    width={300} // Define a fixed width or use dynamic width depending on your layout
-                    height={200} // Define a fixed height or use dynamic height
-                    layout="responsive" // Ensures the image is responsive
-                    priority
-                  />
- 
+                <Image
+                  src={car.image ? urlFor(car.image).url() : ""}
+                  alt="Car"
+                  className="mx-auto mt-6 sm:mt-4 w-full max-w-[300px] rounded-lg"
+                  width={300} // Define a fixed width or use dynamic width depending on your layout
+                  height={200} // Define a fixed height or use dynamic height
+                  layout="responsive" // Ensures the image is responsive
+                  priority
+                />
               </div>
 
               {/* Flex Container for Smaller Images */}
@@ -115,21 +113,34 @@ const CarDetail = ({ params }) => {
                       backgroundImage: "url('/images/look.svg')",
                     }}
                   ></div>
-                  <img
-                    src={car.image ? urlFor(car.image).url() : ""}
+                  <Image
+                    src={
+                      car.image
+                        ? urlFor(car.image).url()
+                        : "/images/placeholder.jpg"
+                    }
                     alt="Car"
+                    width={160} // Adjust based on 80% of the container
+                    height={96} // Adjust based on 80% of the container
                     className="absolute left-1/2 top-1/2 object-contain z-20 w-[80%] transform -translate-x-1/2 -translate-y-1/2"
+                    priority
                   />
                 </div>
-                <img
+                <Image
                   src="/images/car-view-2.svg"
                   alt="Car View 2"
+                  width={200}
+                  height={120}
                   className="w-[200px] h-[120px] sm:w-[100px] sm:h-[80px] rounded-lg object-cover"
+                  priority
                 />
-                <img
+                <Image
                   src="/images/car-view-3.svg"
                   alt="Car View 3"
+                  width={200}
+                  height={120}
                   className="w-[200px] h-[120px] sm:w-[100px] sm:h-[80px] rounded-lg object-cover"
+                  priority
                 />
               </div>
             </div>

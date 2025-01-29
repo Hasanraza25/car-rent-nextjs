@@ -1,11 +1,10 @@
 "use client";
+import Image from "next/image";
 import { useState } from "react";
 
 const ReviewsSection = () => {
-  // State to manage the visible reviews
   const [visibleReviews, setVisibleReviews] = useState(2);
 
-  // Dummy reviews data
   const reviews = [
     {
       id: 1,
@@ -42,7 +41,7 @@ const ReviewsSection = () => {
   ];
 
   const handleShowMore = () => {
-    setVisibleReviews((prev) => prev + 2); // Load 2 more reviews
+    setVisibleReviews((prev) => prev + 2);
   };
 
   return (
@@ -59,33 +58,40 @@ const ReviewsSection = () => {
           {reviews.slice(0, visibleReviews).map((review) => (
             <div
               key={review.id}
-              className="p-6 rounded-lg flex space-x-7 w-full"
+              className="p-6 rounded-lg flex flex-col md:flex-row space-y-5 md:space-y-0 md:space-x-7 w-full"
             >
-              <div>
-                <img
+              <div className="flex-shrink-0 mx-auto md:mx-0">
+                <Image
                   src={review.image}
                   alt={review.name}
                   width={70}
                   height={70}
+                  className="w-[70px] h-[70px] rounded-full"
+                  priority
                 />
               </div>
-              <div className="flex-1">
-                <div className="flex justify-between">
+              <div className="flex-1 text-center md:text-center">
+                <div className="flex flex-wrap gap-2 justify-between">
                   <h3 className="text-xl font-bold">{review.name}</h3>
                   <p className="text-gray-500 text-sm">{review.date}</p>
                 </div>
-                <div className="flex justify-between">
-                  <p className="text-gray-400 mt-4">{review.role}</p>
-                  <img src="/images/review-stars.svg" alt="Rating" />
+                <div className="flex flex-wrap gap-2 justify-between">
+                  <p className="text-gray-400 mt-2">{review.role}</p>
+                  <Image
+                    src="/images/review-stars.svg"
+                    alt="Rating"
+                    width={100}
+                    height={20}
+                    priority
+                  />
                 </div>
-                <p className="mt-4 text-gray-600 leading-8 text-base">
+                <p className="mt-4 text-gray-600 leading-8 text-base text-center md:text-left">
                   {review.text}
                 </p>
               </div>
             </div>
           ))}
 
-          {/* "Show More" Button */}
           {visibleReviews < reviews.length && (
             <div className="text-center my-10">
               <button
