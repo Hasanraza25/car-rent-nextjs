@@ -525,8 +525,8 @@ const RentForm = ({ params }) => {
               price of your rental car.
             </p>
 
-            <div className="flex items-center mt-6">
-              <div className="flex items-center relative w-20 h-20">
+            <div className="flex flex-wrap mobile:justify-center items-center mt-6 mobile:gap-2" >
+              <div className="flex flex-wrap items-center mobile:justify-center mobile:gap-2 relative w-20 h-20">
                 <div
                   className="absolute inset-0 bg-cover bg-center rounded-lg"
                   style={{
@@ -548,7 +548,7 @@ const RentForm = ({ params }) => {
                 )}
               </div>
 
-              <div className="ml-4">
+              <div className="md:ml-4 mobile:text-center mobile:gap-2">
                 <h3 className="text-2xl font-semibold text-gray-800">
                   {car.name}
                 </h3>
