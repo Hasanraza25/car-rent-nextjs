@@ -1,26 +1,33 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useWishlist } from "@/app/Context/WishlistContext";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const Header = () => {
   const { wishlistItems } = useWishlist();
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
+  const profileRef = useRef(null);
+  const pathname = usePathname();
 
   const toggleProfileDropdown = () => {
     setIsProfileOpen((prev) => !prev);
+  };
+
+  const closeProfileDropdown = () => {
+    setIsProfileOpen(false);
   };
 
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
       if (currentScrollY > lastScrollY) {
-        setIsVisible(false); // Hide header when scrolling down
+        setIsVisible(false);
       } else {
-        setIsVisible(true); // Show header when scrolling up
+        setIsVisible(true);
       }
       setLastScrollY(currentScrollY);
     };
@@ -28,6 +35,23 @@ const Header = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, [lastScrollY]);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (profileRef.current && !profileRef.current.contains(event.target)) {
+        closeProfileDropdown();
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  useEffect(() => {
+    closeProfileDropdown();
+  }, [pathname]);
 
   return (
     <header
@@ -40,7 +64,7 @@ const Header = () => {
           <Link href="/">
             <div className="text-[#3563E9] text-4xl font-semibold">MORENT</div>
           </Link>
-          <div className="relative">
+          <div className="relative" ref={profileRef}>
             <Image
               src="/images/profile.svg"
               alt="Profile Logo"
@@ -59,12 +83,33 @@ const Header = () => {
                       </div>
                     </Link>
                   </li>
-                  <li>
+                  <li className="md:hidden">
                     <Link href="/settings">
                       <div className="block text-gray-700 hover:text-blue-500">
                         Settings
                       </div>
                     </Link>
+                  </li>
+
+                  <li className="md:hidden relative">
+                    <Link href="/wishlist">
+                      <div className="block text-gray-700 hover:text-blue-500">
+                        Your Wishlists
+                      </div>
+                    </Link>
+                    {wishlistItems?.length > 0 && (
+                      <span className="absolute top-0 right-0 text-[10px] font-bold text-white bg-red-400 rounded-full w-4 h-4 flex items-center justify-center">
+                        {wishlistItems.length}
+                      </span>
+                    )}
+                  </li>
+                  <li className="md:hidden relative">
+                    <Link href="/notifications">
+                      <div className="block text-gray-700 hover:text-blue-500">
+                        Notifications
+                      </div>
+                    </Link>
+                    <div className="absolute top-0 right-0 w-4 h-4 bg-red-400 rounded-full border border-white"></div>
                   </li>
                   <li>
                     <button
@@ -140,7 +185,7 @@ const Header = () => {
             />
           </div>
 
-          <div className="relative">
+          <div className="relative" ref={profileRef}>
             <Image
               src="/images/profile.svg"
               alt="Profile Logo"
@@ -156,13 +201,6 @@ const Header = () => {
                     <Link href="/profile">
                       <div className="block text-gray-700 hover:text-blue-500">
                         My Profile
-                      </div>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/settings">
-                      <div className="block text-gray-700 hover:text-blue-500">
-                        Settings
                       </div>
                     </Link>
                   </li>
