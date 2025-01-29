@@ -49,6 +49,8 @@ const Header = () => {
     };
   }, []);
 
+
+
   useEffect(() => {
     closeProfileDropdown();
   }, [pathname]);
@@ -220,6 +222,7 @@ const Header = () => {
       </div>
     </header>
   );
+
 };
 
 export default Header;
