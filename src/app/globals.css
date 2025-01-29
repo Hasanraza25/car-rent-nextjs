@@ -8,6 +8,7 @@ body {
   font-family: var(--font-jakarata-sans), monospace;
   background-color: #f6f7f9;
   overflow-x: hidden;
+  padding-top: 80px;
 }
 
 h1,
@@ -72,6 +73,11 @@ p {
     66%{background-size:calc(100%/3) 100%,calc(100%/3) 100%,calc(100%/3) 0%  }
 }
 
+@media(max-width: 767px){
+  body{
+    padding-top: 130px;
+  }
+}
 
 
 @media (min-width: 1000px) and (max-width: 1250px) {
