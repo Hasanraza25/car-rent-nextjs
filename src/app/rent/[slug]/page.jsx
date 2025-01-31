@@ -7,6 +7,13 @@ const RentForm = ({ params }) => {
   const slug = params.slug;
 
   const [car, setCar] = useState([]);
+  const [days, setDays] = useState(1); // Default rental days is 1
+
+  // Limit days between 1 and 5
+  const handleDaysChange = (value) => {
+    const newDays = Math.max(1, Math.min(5, value));
+    setDays(newDays);
+  };
 
   const getCars = async () => {
     try {
@@ -525,7 +532,7 @@ const RentForm = ({ params }) => {
               price of your rental car.
             </p>
 
-            <div className="flex flex-wrap mobile:justify-center items-center mt-6 mobile:gap-2" >
+            <div className="flex flex-wrap mobile:justify-center items-center mt-6 mobile:gap-2">
               <div className="flex flex-wrap items-center mobile:justify-center mobile:gap-2 relative w-20 h-20">
                 <div
                   className="absolute inset-0 bg-cover bg-center rounded-lg"
@@ -534,16 +541,15 @@ const RentForm = ({ params }) => {
                   }}
                 ></div>
                 {car.image == null ? (
-                  <div className="loader">
-                  </div>
+                  <div className="loader"></div>
                 ) : (
                   <Image
                     src={car.image ? urlFor(car.image).url() : ""}
                     alt={car.name}
                     className="w-20 h-20 object-contain z-10 m-auto"
-                    width={80} // Fixed width for the image
-                    height={80} // Fixed height for the image
-                    priority // Ensures the image is loaded with higher priority
+                    width={80}
+                    height={80}
+                    priority
                   />
                 )}
               </div>
@@ -559,10 +565,34 @@ const RentForm = ({ params }) => {
               </div>
             </div>
 
+            {/* Number of Days Selection */}
+            <div className="mt-6">
+              <label className="text-base font-medium text-gray-700">
+                Number of Days (Max 5)
+              </label>
+              <div className="flex items-center space-x-4 mt-2">
+                <button
+                  onClick={() => handleDaysChange(days - 1)}
+                  className="px-3 py-2 bg-gray-200 rounded-lg text-black"
+                  disabled={days <= 1}
+                >
+                  -
+                </button>
+                <span className="text-lg font-semibold">{days}</span>
+                <button
+                  onClick={() => handleDaysChange(days + 1)}
+                  className="px-3 py-2 bg-gray-200 rounded-lg text-black"
+                  disabled={days >= 5}
+                >
+                  +
+                </button>
+              </div>
+            </div>
+
             <div className="mt-6 border-t border-gray-200 pt-8">
               <div className="flex justify-between text-base text-gray-400 mb-4">
                 <p>Subtotal</p>
-                <p className="text-black">${car.price}.00</p>
+                <p className="text-black">${car.price * days}.00</p>
               </div>
               <div className="flex justify-between text-base text-gray-400 mb-4">
                 <p>Tax</p>
@@ -586,7 +616,7 @@ const RentForm = ({ params }) => {
                   Total Rental Price
                 </p>
                 <p className="text-3xl font-bold text-gray-800">
-                  ${car.price}.00
+                  ${car.price * days}.00
                 </p>
               </div>
               <p className="text-sm text-gray-400 mt-1">
