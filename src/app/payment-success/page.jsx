@@ -1,24 +1,45 @@
+"use client";
+import { useEffect, useRef } from "react";
+import { Howl } from "howler";
 
 export default function PaymentSuccess({ searchParams }) {
   const { payment_intent } = searchParams;
+  const soundRef = useRef(null);
+
+  useEffect(() => {
+    soundRef.current = new Howl({
+      src: ["/success-sound.mp3"],
+      volume: 0.5,
+      onplay: () => {
+        console.log("Sound played successfully");
+      },
+      onloaderror: (error) => {
+        console.error("Failed to load sound:", error);
+      },
+      onplayerror: (error) => {
+        console.error("Failed to play sound:", error);
+      },
+    });
+
+    soundRef.current.play();
+
+    return () => {
+      if (soundRef.current) {
+        soundRef.current.unload();
+      }
+    };
+  }, []);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-green-50 to-green-100 p-6">
       {/* Success Container */}
       <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full text-center transform transition-all duration-500 hover:scale-105">
-        {/* Green Tick GIF */}
+        {/* Green Tick Video */}
         <div className="flex justify-center mb-6">
-          <div className="flex justify-center mb-6">
-            <video
-              autoPlay
-              muted
-              playsInline
-              preload="auto"
-              className="w-32 h-32"
-            >
-              <source src="/verify.mp4" type="video/mp4" />
-            </video>
-          </div>
+          <video autoPlay muted playsInline className="w-32 h-32">
+            <source src="/verify.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
         </div>
 
         {/* Success Message */}
