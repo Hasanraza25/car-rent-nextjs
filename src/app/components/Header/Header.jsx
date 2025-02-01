@@ -57,11 +57,11 @@ const Header = () => {
 
   return (
     <header
-      className={`md:py-6 py-3 px bg-white border-b fixed w-full top-0 z-50 transition-transform duration-300 ${
+      className={`md:py-6 py-3 px-5 overflow-hidden bg-white border-b fixed w-full top-0 z-50 transition-transform duration-300 ${
         isVisible ? "translate-y-0" : "-translate-y-full"
       }`}
     >
-      <div className="mx-auto max-w-[1700px] px-5 md:px-10 flex items-center justify-between md:flex-row flex-col">
+      <div className="mx-auto max-w-[1700px] md:px-10 flex items-center justify-between md:flex-row flex-col">
         <div className="w-full flex items-center justify-between md:hidden mb-4">
           <Link href="/">
             <div className="text-[#3563E9] text-4xl font-semibold">MORENT</div>

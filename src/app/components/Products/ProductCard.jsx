@@ -67,7 +67,7 @@ const ProductCard = ({ product }) => {
       </Link>
 
       {/* Flex with Litres, Genre, and People */}
-      <div className="flex flex-wrap items-center justify-between mt-10 px-6 gap-3">
+      <div className="flex mobile:flex-wrap items-center justify-between mt-10 px-6 gap-3">
         {/* Litres */}
         <div className="flex items-center space-x-2 text-[#90A3BF]">
           <img
@@ -75,13 +75,13 @@ const ProductCard = ({ product }) => {
             alt="Litres Icon"
             className="w-7 h-7"
           />
-          <span className="text-sm">{product.fuelCapacity}L</span>
+          <span className="text-xs">{product.fuelCapacity}L</span>
         </div>
 
         {/* Genre */}
         <div className="flex items-center space-x-2 text-[#90A3BF]">
           <img src="/images/handle.svg" alt="Genre Icon" className="w-7 h-7" />
-          <span className="text-sm">{product.steering}</span>
+          <span className="text-xs">{product.steering}</span>
         </div>
 
         {/* People */}
@@ -91,7 +91,7 @@ const ProductCard = ({ product }) => {
             alt="People Icon"
             className="w-7 h-7"
           />
-          <span className="text-sm">{product.seatingCapacity} People</span>
+          <span className="text-xs">{product.seatingCapacity} People</span>
         </div>
       </div>
 
