@@ -569,7 +569,6 @@ const RentForm = ({ params }) => {
   }, []);
 
   const handlePaymentSuccess = (paymentIntent) => {
-    // Redirect to the success page
     window.location.href = `/payment-success?payment_intent=${paymentIntent.id}`;
   };
 
