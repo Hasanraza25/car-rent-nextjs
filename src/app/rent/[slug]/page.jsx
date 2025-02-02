@@ -33,10 +33,10 @@ const CheckoutForm = ({ car, days, onSuccess }) => {
     setLoading(true);
 
     try {
-      // Calculate the total amount in cents
+      // Calculate total amount in cents
       const amount = car.price * days * 100;
 
-      // Create a PaymentIntent on the server
+      // Create a PaymentIntent
       const response = await fetch("/api/create-payment-intent", {
         method: "POST",
         headers: {
@@ -47,7 +47,7 @@ const CheckoutForm = ({ car, days, onSuccess }) => {
 
       const { clientSecret } = await response.json();
 
-      // Confirm the payment on the client side
+      // Confirm the payment
       const { error: stripeError, paymentIntent } =
         await stripe.confirmCardPayment(clientSecret, {
           payment_method: {
@@ -62,10 +62,30 @@ const CheckoutForm = ({ car, days, onSuccess }) => {
         setError(stripeError.message);
         setLoading(false);
       } else {
-        onSuccess(paymentIntent);
+        // ✅ Call API to update stock after successful payment
+        const updateStockResponse = await fetch("/api/update-stock", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ carId: car._id }),
+        });
+
+        const updateStockData = await updateStockResponse.json();
+
+        console.log("Stock Update Response:", updateStockData); // 🔹 Debugging
+
+        if (updateStockData.success) {
+          onSuccess(paymentIntent);
+        } else {
+          setError(
+            `Stock update failed: ${updateStockData.error || "Unknown error"} ${car._id}`
+          );
+        }
       }
     } catch (err) {
-      setError("An error occurred while processing your payment.");
+      setError(`An error occurred: ${err.message}`);
+      console.error("Error:", err);
       setLoading(false);
     }
   };
@@ -545,6 +565,7 @@ const RentForm = ({ params }) => {
   const getCars = async () => {
     try {
       const query = `*[_type == 'car']{
+      _id,
             name,
             type,
             price,
