@@ -2,8 +2,6 @@
 import { useWishlist } from "@/app/Context/WishlistContext";
 import { urlFor } from "@/sanity/lib/client";
 import Link from "next/link";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
 const ProductCard = ({ product }) => {
   const { wishlistItems, addToWishlist, removeFromWishlist } = useWishlist();
@@ -21,10 +19,6 @@ const ProductCard = ({ product }) => {
       removeFromWishlist(product.currentSlug);
     } else {
       addToWishlist(product);
-      toast.success("Car added to Wishlist!", {
-        autoClose: 2000,
-        closeButton: false,
-      });
     }
   };
 

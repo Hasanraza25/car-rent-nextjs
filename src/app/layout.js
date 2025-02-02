@@ -3,6 +3,8 @@ import "./globals.css";
 import { WishlistProvider } from "./Context/WishlistContext";
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const jakartaSans = localFont({
   src: "./fonts/Plus_Jakarta_Sans/static/PlusJakartaSans-Medium.ttf",
@@ -33,6 +35,7 @@ export default function RootLayout({ children }) {
         className={`${jakartaSans.variable} ${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <WishlistProvider>
+          <ToastContainer />
           <Header />
           {children}
           <Footer />

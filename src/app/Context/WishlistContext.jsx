@@ -1,5 +1,7 @@
 "use client";
-const { createContext, useContext, useEffect, useState } = require("react");
+import { createContext, useContext, useEffect, useState } from "react";
+import { toast } from "react-toastify"; // ✅ Import React-Toastify
+import "react-toastify/dist/ReactToastify.css"; // ✅ Import Toastify CSS
 
 const WishlistContext = createContext();
 
@@ -28,6 +30,16 @@ export const WishlistProvider = ({ children }) => {
       );
 
       if (!isItemInWishlist) {
+        toast.success("Added to Wishlist!", {
+          toastId: "wishlist-toast", // ✅ Ensures only one toast appears
+          position: "top-right",
+          autoClose: 2000, // ✅ Ensures toast stays for 2 seconds
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        });
+
         return [item, ...prevItems];
       }
 
@@ -36,19 +48,33 @@ export const WishlistProvider = ({ children }) => {
   };
 
   const removeFromWishlist = (slug) => {
-    setWishlistItems((prevItems) =>
-      prevItems.filter((item) => item.currentSlug !== slug)
-    );
+    setWishlistItems((prevItems) => {
+      const updatedWishlist = prevItems.filter(
+        (item) => item.currentSlug !== slug
+      );
+
+      if (updatedWishlist.length !== prevItems.length) {
+        toast.error("Removed from Wishlist!", {
+          toastId: "wishlist-toast", // ✅ Ensures only one toast appears
+          position: "top-right",
+          autoClose: 2000, // ✅ Ensures toast stays for 2 seconds
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        });
+      }
+
+      return updatedWishlist;
+    });
   };
 
   return (
-    <>
-      <WishlistContext.Provider
-        value={{ wishlistItems, addToWishlist, removeFromWishlist }}
-      >
-        {children}
-      </WishlistContext.Provider>
-    </>
+    <WishlistContext.Provider
+      value={{ wishlistItems, addToWishlist, removeFromWishlist }}
+    >
+      {children}
+    </WishlistContext.Provider>
   );
 };
 

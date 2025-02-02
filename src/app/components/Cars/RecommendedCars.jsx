@@ -49,7 +49,7 @@ const RecommendedCars = () => {
             </div>
           </div>
         </div>
-        <div className="flex justify-center items-center h-screen">
+        <div className="flex justify-center items-center h-64">
           <div className="loader"></div>
         </div>
       </>
