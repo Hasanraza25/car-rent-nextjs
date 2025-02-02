@@ -30,17 +30,19 @@ const ProductCard = ({ product }) => {
 
   return (
     <div className="w-full h-full min-h-[28.2rem] mobile:min-h-[32rem] rounded-lg relative border-none bg-white shadow-md">
-      <Link href={`/cars/${product.currentSlug}`}>
-        {/* Title and Subtitle */}
-        <div className="p-6">
+      {/* Title and Subtitle */}
+      <div className="p-6">
+        <Link href={`/cars/${product.categorySlug}/${product.currentSlug}`}>
           <h3 className="text-xl font-semibold cursor-pointer">
             {product.name}
           </h3>
-          <p className="text-[#90A3BF] text-sm font-semibold mt-2">
+        </Link>
+        <Link href={`/cars/${product.categorySlug}`}>
+          <p className="text-[#90A3BF] text-sm font-semibold mt-2 hover:text-[#3563E9]">
             {product.category}
           </p>
-        </div>
-      </Link>
+        </Link>
+      </div>
 
       {/* Action Buttons (Heart) */}
       <div className="absolute top-4 right-2 flex flex-col space-y-2">
@@ -55,7 +57,7 @@ const ProductCard = ({ product }) => {
           />
         </button>
       </div>
-      <Link href={`/cars/${product.currentSlug}`}>
+      <Link href={`/cars/${product.categorySlug}/${product.currentSlug}`}>
         {/* Product Image */}
         <div className="w-full h-40 mt-4 flex items-center justify-center">
           <img

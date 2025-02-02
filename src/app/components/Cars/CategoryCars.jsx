@@ -35,6 +35,7 @@ const CategoryCars = ({ filters }) => {
         seatingCapacity,
         description,
         "currentSlug": slug.current,
+         "categorySlug": type->slug.current
       }`;
 
       console.log("Query:", query); // Log the query to see the final query
@@ -55,8 +56,7 @@ const CategoryCars = ({ filters }) => {
   if (loading) {
     return (
       <div className="flex justify-center items-center h-64">
-                <div className="loader"></div>
-
+        <div className="loader"></div>
       </div>
     );
   }

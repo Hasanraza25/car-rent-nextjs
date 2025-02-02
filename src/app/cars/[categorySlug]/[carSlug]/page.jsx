@@ -11,7 +11,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Image from "next/image";
 
 const CarDetail = ({ params }) => {
-  const slug = params.slug;
+  const slug = params.carSlug;
   const [car, setCar] = useState([]);
   const [isHeartClicked, setIsHeartClicked] = useState(false);
 
@@ -31,6 +31,7 @@ const CarDetail = ({ params }) => {
         seatingCapacity,
         description,
         "currentSlug": slug.current,
+        "categorySlug": type->slug.current,
       }`;
       const products = await client.fetch(query);
       setCar(products.find((car) => car.currentSlug === slug));

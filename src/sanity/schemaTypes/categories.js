@@ -12,6 +12,14 @@ export default defineType({
       validation: (Rule) => Rule.required().min(3).max(50),
     },
     {
+      name: "slug",
+      title: "Slug",
+      type: "slug",
+      options: {
+        source: "name",
+      },
+    },
+    {
       name: "description",
       type: "text",
       title: "Category Description",

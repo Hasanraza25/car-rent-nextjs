@@ -577,7 +577,8 @@ const RentForm = ({ params }) => {
             seatingCapacity,
             description,
             "currentSlug": slug.current,
-          }`;
+            "categorySlug": type->slug.current,          
+            }`;
       const products = await client.fetch(query);
       setCar(products.find((car) => car.currentSlug === slug));
     } catch (err) {

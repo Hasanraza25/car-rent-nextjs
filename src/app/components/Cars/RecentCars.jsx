@@ -27,6 +27,7 @@ const RecentCars = () => {
         seatingCapacity,
         description,
         "currentSlug": slug.current,
+         "categorySlug": type->slug.current
         }`;
       const products = await client.fetch(query);
       setRecentProducts(products);
@@ -55,6 +56,7 @@ const RecentCars = () => {
         seatingCapacity,
         description,
         "currentSlug": slug.current,
+         "categorySlug": type->slug.current
         }`;
       const products = await client.fetch(query);
       setRecommendedProducts(products);
@@ -111,7 +113,7 @@ const RecentCars = () => {
             </Link>
           </div>
         </div>
-        <div className="flex justify-center items-center h-64">
+        <div className="flex justify-center items-center h-screen">
           <div className="loader"></div>
         </div>
       </div>
@@ -131,7 +133,7 @@ const RecentCars = () => {
             </button>
           </div>
         </div>
-        <div className="flex justify-center items-center h-64">
+        <div className="flex justify-center items-center h-screen">
           <div className="loader"></div>
         </div>
       </div>

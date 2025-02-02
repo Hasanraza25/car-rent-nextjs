@@ -25,6 +25,7 @@ const PopularCars = () => {
         seatingCapacity,
         description,
         "currentSlug": slug.current,
+         "categorySlug": type->slug.current
       }`;
       const products = await client.fetch(query);
       setProducts(products);
@@ -79,7 +80,7 @@ const PopularCars = () => {
             </button>
           </div>
         </div>
-        <div className="flex justify-center items-center h-64">
+        <div className="flex justify-center items-center h-screen">
           <div className="loader"></div>
         </div>
       </div>
@@ -91,7 +92,10 @@ const PopularCars = () => {
       <div className="flex mt-10 items-center font-bold justify-between px-5">
         <h4 className="text-xl text-[#90A3BF] font-semibold">Popular Cars</h4>
         <div>
-          <Link href={"/cars"} className="py-4 text-[#3563E9] rounded-[5px] hover:underline">
+          <Link
+            href={"/cars"}
+            className="py-4 text-[#3563E9] rounded-[5px] hover:underline"
+          >
             View All
           </Link>
         </div>
