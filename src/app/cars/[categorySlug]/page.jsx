@@ -73,28 +73,22 @@ const CategoryPage = ({ params }) => {
   }
 
   return (
-    <div className="container mx-auto px-5 md:px-10 my-20">
-      <nav className="my-6 text-gray-600 text-xl">
+    <div className="container max-w-[1700px] mx-auto flex flex-col mb-20 my-5">
+      <nav className="my-6 px-5 text-gray-600 text-xl">
         <Link href="/cars">
           <span className="text-[#3563E9] cursor-pointer">Cars</span>
         </Link>{" "}
         / <span className=" font-semibold">{category.name}</span>
       </nav>
 
-      <h1 className="text-3xl font-bold mb-3">
+      <h1 className="text-3xl font-bold mb-3 px-5">
         {category.name}{" "}
         <span className=" text-gray-500">
           &#40;&nbsp;{cars.length}&nbsp;&#41;
         </span>
       </h1>
 
-      <div className="w-full my-6 relative mx-auto">
-        <div
-          className="grid mt-6 gap-6 px-5 md:grid md:grid-cols-2 lg:grid-cols-3
-      mobile:overflow-x-auto 
-      mobile:grid-cols-[auto] 
-      mobile:grid-flow-col"
-        >
+        <div className="grid mt-6 gap-6 px-5 sm:flex sm:flex-col sm:items-center md:grid md:grid-cols-2 lg:grid-cols-4">
           {cars.length === 0 ? (
             <p className="text-center text-lg col-span-full">
               No cars available in this category
@@ -103,7 +97,7 @@ const CategoryPage = ({ params }) => {
             cars.map((car, index) => <ProductCard key={index} product={car} />)
           )}
         </div>
-      </div>
+ 
     </div>
   );
 };
