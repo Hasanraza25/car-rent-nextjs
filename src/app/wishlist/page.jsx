@@ -36,7 +36,7 @@ const WishlistPage = () => {
             </div>
           </div>
         ) : (
-          <div className="flex flex-col items-center justify-center h-full pb-10 rounded-lg">
+          <div className="flex flex-col items-center justify-center h-screen pb-10 rounded-lg">
             <img
               src="/images/empty-wishlist.svg" // Use a relevant image for an empty wishlist
               alt="Empty Wishlist"

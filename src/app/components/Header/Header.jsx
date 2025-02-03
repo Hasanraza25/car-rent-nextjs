@@ -19,6 +19,7 @@ const Header = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [recentSearches, setRecentSearches] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const searchRef = useRef(null);
 
@@ -47,6 +48,35 @@ const Header = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, [lastScrollY]);
+
+  useEffect(() => {
+    const savedSearches = localStorage.getItem("recentSearches");
+    if (savedSearches) {
+      setRecentSearches(JSON.parse(savedSearches));
+    }
+  }, []);
+
+  const addToRecentSearches = (item) => {
+    const newItem = {
+      type: item.type,
+      name: item.name,
+      image: item.type === "car" ? item.image : item.lastCarImage,
+      category: item.type === "car" ? item.category : item.name,
+      slug: item.type === "car" ? item.currentSlug : item.categorySlug,
+      categorySlug: item.categorySlug,
+    };
+
+    const newRecent = [
+      newItem,
+      ...recentSearches.filter(
+        (search) =>
+          !(search.name === newItem.name && search.type === newItem.type)
+      ),
+    ].slice(0, 3);
+
+    setRecentSearches(newRecent);
+    localStorage.setItem("recentSearches", JSON.stringify(newRecent));
+  };
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -104,6 +134,18 @@ const Header = () => {
 
     fetchData();
   }, []);
+
+  const removeRecentSearch = (index) => {
+    const newRecentSearches = [...recentSearches];
+    newRecentSearches.splice(index, 1);
+    setRecentSearches(newRecentSearches);
+    localStorage.setItem("recentSearches", JSON.stringify(newRecentSearches));
+  };
+
+  const clearAllRecentSearches = () => {
+    setRecentSearches([]);
+    localStorage.removeItem("recentSearches");
+  };
 
   const matchFirstLetterOfWords = (query, text) => {
     const words = text.toLowerCase().split(" ");
@@ -264,52 +306,158 @@ const Header = () => {
 
             {isDropdownOpen && (
               <ul className="absolute top-14 w-full bg-white border rounded-lg shadow-lg z-50 max-h-[300px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100 hover:scrollbar-thumb-gray-500">
-                {/* Show Loader if Data is Loading */}
                 {isLoading ? (
                   <li className="p-4 flex justify-center">
                     <ClipLoader size={30} color={"#3563E9"} />
                   </li>
-                ) : searchResults.length > 0 ? (
-                  searchResults.map((item, index) => (
-                    <li key={index} className="border-b last:border-none">
-                      <Link
-                        href={
-                          item.type === "car"
-                            ? `/cars/${item.categorySlug}/${item.currentSlug}`
-                            : `/cars/${item.categorySlug}`
-                        }
-                        className="flex items-center p-3 hover:bg-gray-100"
-                        onClick={() => setIsDropdownOpen(false)}
-                      >
-                        {/* Image */}
-                        <Image
-                          src={
+                ) : searchQuery.trim() ? (
+                  searchResults.length > 0 ? (
+                    searchResults.map((item, index) => (
+                      <li key={index} className="border-b last:border-none">
+                        <Link
+                          href={
                             item.type === "car"
-                              ? urlFor(item.image).url()
-                              : item.lastCarImage
-                                ? urlFor(item.lastCarImage).url()
-                                : "/images/cars/car-3.svg"
+                              ? `/cars/${item.categorySlug}/${item.currentSlug}`
+                              : `/cars/${item.categorySlug}`
                           }
-                          alt={item.name}
-                          width={50}
-                          height={50}
-                          className="rounded-md object-cover"
-                        />
+                          className="flex items-center p-3 hover:bg-gray-100"
+                          onClick={() => {
+                            setIsDropdownOpen(false);
+                            addToRecentSearches(item);
+                          }}
+                        >
+                          {/* Image */}
+                          <Image
+                            src={
+                              item.type === "car"
+                                ? urlFor(item.image).url()
+                                : item.lastCarImage
+                                  ? urlFor(item.lastCarImage).url()
+                                  : "/images/cars/car-3.svg"
+                            }
+                            alt={item.name}
+                            width={50}
+                            height={50}
+                            className="rounded-md object-cover"
+                          />
 
-                        {/* Text Content */}
-                        <div className="ml-4">
-                          <p className="text-lg font-semibold">{item.name}</p>
-                          <p className="text-sm text-gray-500">
-                            {item.type === "car" ? item.category : "Category"}
-                          </p>
-                        </div>
-                      </Link>
+                          {/* Text Content */}
+                          <div className="ml-4">
+                            <p className="text-lg font-semibold">{item.name}</p>
+                            <p className="text-sm text-gray-500">
+                              {item.type === "car" ? item.category : "Category"}
+                            </p>
+                          </div>
+                        </Link>
+                      </li>
+                    ))
+                  ) : (
+                    <li className="p-4 text-gray-500 text-center">
+                      No results found!
                     </li>
-                  ))
+                  )
                 ) : (
-                  <li className="p-4 text-gray-500 text-center">
-                    No results found
-                  </li>
+                  <>
+                    {recentSearches.length > 0 && (
+                      <>
+                        <div className="p-3 text-base text-center flex justify-between">
+                          <h3 className="text-base text-gray-500 font-semibold pt-2 ">
+                            Recent Searches
+                          </h3>
+                          <button
+                            className="text-gray-500 text-sm hover:text-[#F87171] font-semibold "
+                            onClick={clearAllRecentSearches}
+                          >
+                            Clear All
+                          </button>
+                        </div>
+                        {recentSearches.map((item, index) => (
+                          <li
+                            key={index}
+                            className="flex items-center justify-between p-3 hover:bg-gray-100 border-b last:border-none"
+                          >
+                            <Link
+                              href={
+                                item.type === "car"
+                                  ? `/cars/${item.categorySlug}/${item.slug}`
+                                  : `/cars/${item.categorySlug}`
+                              }
+                              className="flex items-center"
+                              onClick={() => {
+                                setIsDropdownOpen(false);
+                                addToRecentSearches(item);
+                              }}
+                            >
+                              <Image
+                                src={
+                                  item.image
+                                    ? urlFor(item.image).url()
+                                    : "/images/cars/car-3.svg"
+                                }
+                                alt={item.name}
+                                width={50}
+                                height={50}
+                                className="rounded-md object-cover"
+                              />
+                              <div className="ml-4">
+                                <p className="text-lg font-semibold">
+                                  {item.name}
+                                </p>
+                                <p className="text-sm text-gray-500">
+                                  {item.type === "car"
+                                    ? item.category
+                                    : "Category"}
+                                </p>
+                              </div>
+                            </Link>
+
+                            {/* Close Button */}
+                            <button
+                              className="ml-4 text-gray-500 hover:text-[#F87171]"
+                              onClick={() => removeRecentSearch(index)}
+                            >
+                              ✖
+                            </button>
+                          </li>
+                        ))}
+                      </>
+                    )}
+
+                    <h3 className="text-base text-gray-500 font-semibold py-2 pl-3">
+                      Categories
+                    </h3>
+                    {categories.map((cat) => (
+                      <li key={cat._id} className=" last:border-none">
+                        <Link
+                          href={`/cars/${cat.categorySlug}`}
+                          className="flex items-center p-3 hover:bg-gray-100"
+                          onClick={() => {
+                            setIsDropdownOpen(false);
+                            addToRecentSearches({
+                              ...cat,
+                              type: "category",
+                            });
+                          }}
+                        >
+                          <Image
+                            src={
+                              cat.lastCarImage
+                                ? urlFor(cat.lastCarImage).url()
+                                : "/images/cars/car-3.svg"
+                            }
+                            alt={cat.name}
+                            width={50}
+                            height={50}
+                            className="rounded-md object-cover"
+                          />
+                          <div className="ml-4">
+                            <p className="text-lg font-semibold">{cat.name}</p>
+                            <p className="text-sm text-gray-500">Category</p>
+                          </div>
+                        </Link>
+                      </li>
+                    ))}
+                  </>
                 )}
               </ul>
             )}
