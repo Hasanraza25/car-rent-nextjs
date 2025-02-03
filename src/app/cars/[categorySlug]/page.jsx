@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { client, urlFor } from "@/sanity/lib/client";
 import ProductCard from "@/app/components/Products/ProductCard";
+import Image from "next/image";
 
 const CategoryPage = ({ params }) => {
   const { categorySlug } = params;
@@ -88,16 +89,37 @@ const CategoryPage = ({ params }) => {
         </span>
       </h1>
 
-        <div className="grid mt-6 gap-6 px-5 sm:flex sm:flex-col sm:items-center md:grid md:grid-cols-2 lg:grid-cols-4">
-          {cars.length === 0 ? (
-            <p className="text-center text-lg col-span-full">
-              No cars available in this category
-            </p>
-          ) : (
-            cars.map((car, index) => <ProductCard key={index} product={car} />)
-          )}
+      {cars.length === 0 ? (
+        <div className="flex flex-col items-center justify-center mx-auto text-center px-3 my-10">
+          <Image
+            src="/images/no-cars-found.png" 
+            alt="No cars found"
+            width={400}
+            height={300}
+            className="w-full max-w-md h-auto mb-6"
+          />
+          <h2 className="text-2xl font-bold text-gray-700 mb-2">
+            No cars available in this category
+          </h2>
+          <p className="text-gray-500 mb-4">
+            There are no cars available in this category at the moment. Please
+            check back later or explore other categories.
+          </p>
+
+          <Link
+            href={"/"}
+            className="bg-[#3563E9] hover:bg-[#54A6FF] py-3 px-6 text-white text-center rounded-md"
+          >
+            Return Home
+          </Link>
         </div>
- 
+      ) : (
+        <div className="grid mt-6 gap-6 px-5 sm:flex sm:flex-col sm:items-center md:grid md:grid-cols-2 lg:grid-cols-4">
+          {cars.map((car, index) => (
+            <ProductCard key={index} product={car} /> 
+          ))}
+        </div>
+      )}
     </div>
   );
 };

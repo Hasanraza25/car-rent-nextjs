@@ -14,13 +14,14 @@ const Header = () => {
   const [lastScrollY, setLastScrollY] = useState(0);
 
   // Search Functionality States
-  const [cars, setCars] = useState([]); // Stores all fetched cars
+  const [cars, setCars] = useState([]); 
   const [categories, setCategories] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [recentSearches, setRecentSearches] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [lastSearchQuery, setLastSearchQuery] = useState("");
   const searchRef = useRef(null);
 
   const profileRef = useRef(null);
@@ -313,7 +314,17 @@ const Header = () => {
                 ) : searchQuery.trim() ? (
                   searchResults.length > 0 ? (
                     searchResults.map((item, index) => (
-                      <li key={index} className="border-b last:border-none">
+                      <li
+                        key={index}
+                        className="border-b last:border-none"
+                        onMouseEnter={() => {
+                          setLastSearchQuery(searchQuery); // Save the previous input value
+                          setSearchQuery(item.name); // Show hovered item name
+                        }}
+                        onMouseLeave={() => {
+                          setSearchQuery(lastSearchQuery); // Revert back to previous value when unhovered
+                        }}
+                      >
                         <Link
                           href={
                             item.type === "car"
@@ -322,8 +333,9 @@ const Header = () => {
                           }
                           className="flex items-center p-3 hover:bg-gray-100"
                           onClick={() => {
-                            setIsDropdownOpen(false);
-                            addToRecentSearches(item);
+                            setSearchQuery(item.name); // Set input value permanently
+                            setIsDropdownOpen(false); // Close the dropdown
+                            addToRecentSearches(item); // Add to recent searches
                           }}
                         >
                           {/* Image */}
@@ -372,22 +384,25 @@ const Header = () => {
                           </button>
                         </div>
                         {recentSearches.map((item, index) => (
+                           <Link
+                           href={
+                             item.type === "car"
+                               ? `/cars/${item.categorySlug}/${item.slug}`
+                               : `/cars/${item.categorySlug}`
+                           }
+                           key={index}
+                           className="flex items-center justify-between p-3 hover:bg-gray-100 border-b last:border-none"
+                         >
                           <li
-                            key={index}
-                            className="flex items-center justify-between p-3 hover:bg-gray-100 border-b last:border-none"
+                            
+                            className="flex items-center"
+                            onClick={() => {
+                              setSearchQuery(item.name);
+                              setIsDropdownOpen(false);
+                              addToRecentSearches(item);
+                            }}
                           >
-                            <Link
-                              href={
-                                item.type === "car"
-                                  ? `/cars/${item.categorySlug}/${item.slug}`
-                                  : `/cars/${item.categorySlug}`
-                              }
-                              className="flex items-center"
-                              onClick={() => {
-                                setIsDropdownOpen(false);
-                                addToRecentSearches(item);
-                              }}
-                            >
+                           
                               <Image
                                 src={
                                   item.image
@@ -409,16 +424,21 @@ const Header = () => {
                                     : "Category"}
                                 </p>
                               </div>
-                            </Link>
 
+                           
                             {/* Close Button */}
+                          </li>
                             <button
                               className="ml-4 text-gray-500 hover:text-[#F87171]"
-                              onClick={() => removeRecentSearch(index)}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                e.preventDefault();
+                                removeRecentSearch(index);
+                              }}
                             >
                               ✖
                             </button>
-                          </li>
+                          </Link>
                         ))}
                       </>
                     )}
@@ -427,7 +447,11 @@ const Header = () => {
                       Categories
                     </h3>
                     {categories.map((cat) => (
-                      <li key={cat._id} className=" last:border-none">
+                      <li
+                        key={cat._id}
+                        className=" last:border-none"
+                        onClick={() => setSearchQuery(cat.name)}
+                      >
                         <Link
                           href={`/cars/${cat.categorySlug}`}
                           className="flex items-center p-3 hover:bg-gray-100"
