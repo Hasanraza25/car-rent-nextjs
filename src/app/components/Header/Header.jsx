@@ -4,12 +4,24 @@ import { useWishlist } from "@/app/Context/WishlistContext";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { client, urlFor } from "@/sanity/lib/client";
+import { ClipLoader } from "react-spinners";
 
 const Header = () => {
   const { wishlistItems } = useWishlist();
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
+
+  // Search Functionality States
+  const [cars, setCars] = useState([]); // Stores all fetched cars
+  const [categories, setCategories] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const searchRef = useRef(null);
+
   const profileRef = useRef(null);
   const pathname = usePathname();
 
@@ -49,11 +61,103 @@ const Header = () => {
     };
   }, []);
 
-
-
   useEffect(() => {
     closeProfileDropdown();
   }, [pathname]);
+
+  // Search Functionality useEffect
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setIsLoading(true);
+
+        const categoriesQuery = `*[_type == 'categories']{
+          name,
+          "categorySlug": slug.current,
+          "lastCarImage": *[_type == 'car' && references(^._id)] | order(_createdAt desc)[0].image
+        }`;
+        const fetchedCategories = await client.fetch(categoriesQuery);
+
+        const carsQuery = `*[_type == 'car'] | order(_createdAt desc){
+          name,
+          "category": type->name,
+          price,
+          stock,
+          image,
+          discount,
+          "categorySlug": type->slug.current,
+          "currentSlug": slug.current
+        }`;
+        const fetchedCars = await client.fetch(carsQuery);
+
+        setCategories(fetchedCategories);
+        setCars(fetchedCars);
+        setIsLoading(false); // Stop loading after fetching
+        setSearchResults(
+          fetchedCategories.map((cat) => ({ ...cat, type: "category" }))
+        );
+      } catch (err) {
+        console.error("Error fetching data:", err);
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const matchFirstLetterOfWords = (query, text) => {
+    const words = text.toLowerCase().split(" ");
+    return words.some((word) => word.startsWith(query.toLowerCase()));
+  };
+
+  const handleSearch = (event) => {
+    const query = event.target.value.toLowerCase();
+    setSearchQuery(query);
+
+    if (query.trim() === "") {
+      setSearchResults(categories.map((cat) => ({ ...cat, type: "category" }))); // Show all categories when empty
+      setIsDropdownOpen(true);
+      return;
+    }
+
+    // Filter cars (match first letter of any word)
+    const filteredCars = cars.filter((car) =>
+      matchFirstLetterOfWords(query, car.name)
+    );
+
+    // Filter categories (match first letter of any word)
+    const filteredCategories = categories.filter((cat) =>
+      matchFirstLetterOfWords(query, cat.name)
+    );
+
+    // Prioritize cars first, then categories
+    const results = [
+      ...filteredCars.map((car) => ({ ...car, type: "car" })),
+      ...filteredCategories.map((cat) => ({ ...cat, type: "category" })),
+    ];
+
+    setSearchResults(results);
+    setIsDropdownOpen(true);
+  };
+
+  const handleInputClick = () => {
+    setIsDropdownOpen(true); // Always open dropdown immediately
+    if (isLoading) return; // If still loading, don't change results
+    setSearchResults(categories.map((cat) => ({ ...cat, type: "category" })));
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (searchRef.current && !searchRef.current.contains(e.target)) {
+        setIsDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
     <header
@@ -134,20 +238,81 @@ const Header = () => {
             </div>
           </Link>
 
-          <div className="header-searchbar relative w-full md:w-[300px] xl:w-[550px] ml-0 lg:ml-28 md:ml-7  flex flex-col md:flex-row items-center">
-            <div className="absolute top-0 left-5 flex items-center h-full text-gray-500">
-              <Image
-                src="/images/search-icon.svg"
-                alt="Search Logo"
-                width={25}
-                height={25}
+          <div
+            className="relative w-full md:w-[300px] xl:w-[550px] ml-5 flex flex-col"
+            ref={searchRef}
+          >
+            <div className="relative">
+              <input
+                type="text"
+                placeholder="Search for cars or categories..."
+                className="w-full h-12 pl-14 pr-5 rounded-full bg-white border text-[#596780] focus:outline-none tracking-wider"
+                value={searchQuery}
+                onClick={handleInputClick}
+                onChange={handleSearch}
               />
+
+              <div className="absolute top-0 left-5 flex items-center h-full text-gray-500">
+                <Image
+                  src="/images/search-icon.svg"
+                  alt="Search Icon"
+                  width={25}
+                  height={25}
+                />
+              </div>
             </div>
-            <input
-              type="text"
-              placeholder="Search something here"
-              className="w-full h-12 pl-14 sm:text-sm pr-5 rounded-full bg-white text-[#596780] border focus:outline-none tracking-wider font-[400]"
-            />
+
+            {isDropdownOpen && (
+              <ul className="absolute top-14 w-full bg-white border rounded-lg shadow-lg z-50 max-h-[300px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100 hover:scrollbar-thumb-gray-500">
+                {/* Show Loader if Data is Loading */}
+                {isLoading ? (
+                  <li className="p-4 flex justify-center">
+                    <ClipLoader size={30} color={"#3563E9"} />
+                  </li>
+                ) : searchResults.length > 0 ? (
+                  searchResults.map((item, index) => (
+                    <li key={index} className="border-b last:border-none">
+                      <Link
+                        href={
+                          item.type === "car"
+                            ? `/cars/${item.categorySlug}/${item.currentSlug}`
+                            : `/cars/${item.categorySlug}`
+                        }
+                        className="flex items-center p-3 hover:bg-gray-100"
+                        onClick={() => setIsDropdownOpen(false)}
+                      >
+                        {/* Image */}
+                        <Image
+                          src={
+                            item.type === "car"
+                              ? urlFor(item.image).url()
+                              : item.lastCarImage
+                                ? urlFor(item.lastCarImage).url()
+                                : "/images/cars/car-3.svg"
+                          }
+                          alt={item.name}
+                          width={50}
+                          height={50}
+                          className="rounded-md object-cover"
+                        />
+
+                        {/* Text Content */}
+                        <div className="ml-4">
+                          <p className="text-lg font-semibold">{item.name}</p>
+                          <p className="text-sm text-gray-500">
+                            {item.type === "car" ? item.category : "Category"}
+                          </p>
+                        </div>
+                      </Link>
+                    </li>
+                  ))
+                ) : (
+                  <li className="p-4 text-gray-500 text-center">
+                    No results found
+                  </li>
+                )}
+              </ul>
+            )}
           </div>
         </div>
 
@@ -222,7 +387,6 @@ const Header = () => {
       </div>
     </header>
   );
-
 };
 
 export default Header;
