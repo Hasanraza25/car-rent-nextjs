@@ -25,7 +25,7 @@ const PickUpDropOff = () => {
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ country: "United States" }),
+          body: JSON.stringify({ country: "Pakistan" }),
         }
       );
       const data = await response.json();
