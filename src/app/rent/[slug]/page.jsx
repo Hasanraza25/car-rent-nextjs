@@ -556,7 +556,8 @@ const RentForm = ({ params }) => {
   const slug = params.slug;
   const [car, setCar] = useState(null);
   const [days, setDays] = useState(1);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+
   const handleDaysChange = (value) => {
     const newDays = Math.max(1, Math.min(5, value));
     setDays(newDays);
@@ -564,28 +565,31 @@ const RentForm = ({ params }) => {
 
   const getCars = async () => {
     try {
-      setLoading(true);
+      setLoading(true); // ✅ Set loading true before fetching data
       const query = `*[_type == 'car']{
-      _id,
-            name,
-            type,
-            price,
-            stock,
-            image,
-            discount,
-            steering,
-            fuelCapacity,
-            seatingCapacity,
-            description,
-            "currentSlug": slug.current,
-            "categorySlug": type->slug.current,          
-            }`;
+        _id,
+        name,
+        type,
+        price,
+        stock,
+        image,
+        discount,
+        steering,
+        fuelCapacity,
+        seatingCapacity,
+        description,
+        "currentSlug": slug.current,
+        "categorySlug": type->slug.current,          
+      }`;
+
       const products = await client.fetch(query);
-      setCar(products.find((car) => car.currentSlug === slug));
+      const foundCar = products.find((car) => car.currentSlug === slug);
+
+      setCar(foundCar || null); // ✅ If no car found, set to null
     } catch (err) {
       console.error("Error fetching cars:", err);
     } finally {
-      setLoading(false);
+      setLoading(false); // ✅ Stop loading after fetching
     }
   };
 
@@ -593,21 +597,27 @@ const RentForm = ({ params }) => {
     getCars();
   }, []);
 
-  const handlePaymentSuccess = (paymentIntent) => {
-    window.location.href = `/payment-success?payment_intent=${paymentIntent.id}`;
-  };
-
-  if (!car) {
-    return <div>Car not found</div>;
-  }
-
+  // ✅ Show Loader while fetching
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
-        <div className="loader"></div>
+        <div className="loader"></div> {/* Replace with actual loader */}
       </div>
     );
   }
+
+  // ✅ If car is still null after loading, show "Car Not Found"
+  if (!car) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <p className="text-red-500 text-lg font-semibold">Car not found</p>
+      </div>
+    );
+  }
+
+  const handlePaymentSuccess = (paymentIntent) => {
+    window.location.href = `/payment-success?payment_intent=${paymentIntent.id}`;
+  };
 
   return (
     <>
