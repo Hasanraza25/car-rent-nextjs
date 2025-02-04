@@ -61,7 +61,23 @@ p {
   background-color: transparent;
 }
 
+.animated-button {
+  background: linear-gradient(90deg, #3563e9, #54a6ff, #3563e9);
+  background-size: 300% 300%;
+  background-position: 0% 50%;
+  transition:
+    background-position 0.5s ease-in-out,
+    transform 0.3s ease-in-out;
+}
 
+.animated-button:hover {
+  background-position: 100% 50%;
+  transform: scale(1.05);
+}
+
+.animated-button:not(:hover) {
+  background-position: 0% 50%;
+}
 /* HTML: <div class="loader"></div> */
 .loader {
   width: 60px;

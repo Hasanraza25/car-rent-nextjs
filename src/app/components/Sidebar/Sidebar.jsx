@@ -191,7 +191,7 @@ const Sidebar = ({ onFilterChange }) => {
         <div className="mt-8">
           <button
             onClick={handleFilterCars}
-            className="bg-blue-500 text-white px-4 py-2 rounded-md shadow-md hover:bg-blue-600 transition duration-300"
+            className="animated-button text-white text-lg w-40 px-4 py-3 rounded-md shadow-md transition duration-300"
           >
             Filter Cars
           </button>

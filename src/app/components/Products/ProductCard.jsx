@@ -106,7 +106,7 @@ const ProductCard = ({ product }) => {
             </span>
           </span>
           <Link href={`/rent/${product.currentSlug}`}>
-            <button className="bg-[#3563E9] hover:bg-[#54A6FF] py-3 px-5 mobile:px-3 text-white rounded-[5px]">
+            <button className="animated-button py-3 px-5 mobile:px-3 text-white rounded-[5px]">
               Rent Now
             </button>
           </Link>

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import ProductCard from "../Products/ProductCard";
 import { client } from "@/sanity/lib/client";
 import Image from "next/image";
+import Link from "next/link";
 
 const CategoryCars = ({ filters }) => {
   const [products, setProducts] = useState([]);
@@ -96,9 +97,11 @@ const CategoryCars = ({ filters }) => {
         ))}
       </div>
       <div className="flex items-center">
-        <button className="bg-[#3563E9] hover:bg-[#54A6FF] w-40 mt-20 py-3 mx-auto text-white text-center rounded-[5px]">
-          Show more cars
-        </button>
+        <Link href="/cars" className="mx-auto">
+          <button className="animated-button text-lg w-60 mt-10 py-4 mx-auto text-white text-center rounded-[5px]">
+            Show more cars
+          </button>
+        </Link>
       </div>
     </div>
   );

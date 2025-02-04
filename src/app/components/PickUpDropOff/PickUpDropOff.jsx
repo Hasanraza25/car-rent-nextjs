@@ -223,6 +223,13 @@ const PickUpDropOff = () => {
           </div>
         </div>
       </div>
+      <div className="flex items-center">
+        <Link href="/cars" className="mx-auto">
+          <button className="animated-button text-lg w-60 mt-10 py-4 mx-auto text-white text-center rounded-[5px]">
+            Check Available Cars
+          </button>
+        </Link>
+      </div>
     </section>
   );
 };
