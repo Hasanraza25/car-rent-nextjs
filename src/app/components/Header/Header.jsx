@@ -14,7 +14,7 @@ const Header = () => {
   const [lastScrollY, setLastScrollY] = useState(0);
 
   // Search Functionality States
-  const [cars, setCars] = useState([]); 
+  const [cars, setCars] = useState([]);
   const [categories, setCategories] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
@@ -34,21 +34,6 @@ const Header = () => {
   const closeProfileDropdown = () => {
     setIsProfileOpen(false);
   };
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      if (currentScrollY > lastScrollY) {
-        setIsVisible(false);
-      } else {
-        setIsVisible(true);
-      }
-      setLastScrollY(currentScrollY);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [lastScrollY]);
 
   useEffect(() => {
     const savedSearches = localStorage.getItem("recentSearches");
@@ -101,7 +86,6 @@ const Header = () => {
     const fetchData = async () => {
       try {
         setIsLoading(true);
-
         const categoriesQuery = `*[_type == 'categories']{
           name,
           "categorySlug": slug.current,
@@ -204,8 +188,7 @@ const Header = () => {
 
   return (
     <header
-      className={`md:py-6 py-3 bg-white border-b fixed w-full top-0 z-50 transition-transform duration-300 ${
-        isVisible ? "translate-y-0" : "-translate-y-full"
+      className={`md:py-6 py-3 bg-white border-b w-full z-50 transition-transform duration-300 
       }`}
     >
       <div className="mx-auto max-w-[1700px] px-5 md:px-10 flex items-center justify-between md:flex-row flex-col">
@@ -282,20 +265,21 @@ const Header = () => {
           </Link>
 
           <div
-            className="relative w-full md:w-[300px] xl:w-[550px] ml-5 flex flex-col"
+            className="relative w-full md:mx-10  flex flex-col"
             ref={searchRef}
           >
             <div className="relative">
               <input
                 type="text"
                 placeholder="Search for cars or categories..."
-                className="w-full h-12 pl-14 pr-5 rounded-full bg-white border text-[#596780] focus:outline-none tracking-wider"
+                className="w-full h-12 md:pl-14 pl-12 md:pr-14 pr-12 text-[12px] md:text-sm lg:text-base rounded-full bg-white border text-[#596780] focus:outline-none tracking-wider"
                 value={searchQuery}
                 onClick={handleInputClick}
                 onChange={handleSearch}
               />
 
-              <div className="absolute top-0 left-5 flex items-center h-full text-gray-500">
+              {/* Search Icon (Left Side) */}
+              <div className="absolute top-0 md:left-5 left-3 flex items-center h-full text-gray-500">
                 <Image
                   src="/images/search-icon.svg"
                   alt="Search Icon"
@@ -303,10 +287,30 @@ const Header = () => {
                   height={25}
                 />
               </div>
+
+              {/* Volume Icon (Right Side) */}
+              <Link href={"/cars"}>
+                <div className="absolute top-0 md:right-5 right-3 flex items-center h-full text-gray-500 cursor-pointer">
+                  <Image
+                    src="/images/volume-icon.svg"
+                    alt="Volume Icon"
+                    width={25}
+                    height={25}
+                  />
+                </div>
+              </Link>
             </div>
 
             {isDropdownOpen && (
-              <ul className="absolute top-14 w-full bg-white border rounded-lg shadow-lg z-50 max-h-[300px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100 hover:scrollbar-thumb-gray-500">
+              <ul
+                className={`absolute top-14 w-full bg-white border rounded-lg shadow-lg z-50 max-h-[300px] overflow-y-auto 
+             scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100 hover:scrollbar-thumb-gray-500 
+             transition-transform duration-300 ease-in-out transform ${
+               isDropdownOpen
+                 ? "opacity-100 translate-y-0 scale-100"
+                 : "opacity-0 translate-y-[-20px] scale-95"
+             }`}
+              >
                 {isLoading ? (
                   <li className="p-4 flex justify-center">
                     <ClipLoader size={30} color={"#3563E9"} />
@@ -384,25 +388,24 @@ const Header = () => {
                           </button>
                         </div>
                         {recentSearches.map((item, index) => (
-                           <Link
-                           href={
-                             item.type === "car"
-                               ? `/cars/${item.categorySlug}/${item.slug}`
-                               : `/cars/${item.categorySlug}`
-                           }
-                           key={index}
-                           className="flex items-center justify-between p-3 hover:bg-gray-100 border-b last:border-none"
-                         >
-                          <li
-                            
-                            className="flex items-center"
-                            onClick={() => {
-                              setSearchQuery(item.name);
-                              setIsDropdownOpen(false);
-                              addToRecentSearches(item);
-                            }}
+                          <Link
+                            href={
+                              item.type === "car"
+                                ? `/cars/${item.categorySlug}/${item.slug}`
+                                : `/cars/${item.categorySlug}`
+                            }
+                            key={index}
+                            className="flex items-center justify-between p-3 hover:bg-gray-100 border-b last:border-none"
                           >
-                           
+                            <li
+                              key={index}
+                              className="flex items-center"
+                              onClick={() => {
+                                setSearchQuery(item.name);
+                                setIsDropdownOpen(false);
+                                addToRecentSearches(item);
+                              }}
+                            >
                               <Image
                                 src={
                                   item.image
@@ -425,9 +428,8 @@ const Header = () => {
                                 </p>
                               </div>
 
-                           
-                            {/* Close Button */}
-                          </li>
+                              {/* Close Button */}
+                            </li>
                             <button
                               className="ml-4 text-gray-500 hover:text-[#F87171]"
                               onClick={(e) => {

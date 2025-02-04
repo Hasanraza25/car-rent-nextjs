@@ -12,11 +12,13 @@ const CarDetail = ({ params }) => {
   const slug = params.carSlug;
   const [car, setCar] = useState([]);
   const [isHeartClicked, setIsHeartClicked] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const { wishlistItems, addToWishlist, removeFromWishlist } = useWishlist();
 
   const getCars = async () => {
     try {
+      setLoading(true);
       const query = `*[_type == 'car']{
         name,
         "category": type->name,
@@ -35,6 +37,8 @@ const CarDetail = ({ params }) => {
       setCar(products.find((car) => car.currentSlug === slug));
     } catch (err) {
       console.error("Error fetching cars:", err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -63,6 +67,14 @@ const CarDetail = ({ params }) => {
 
   if (!car) {
     return <div>Car not found</div>;
+  }
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="loader"></div>
+      </div>
+    );
   }
 
   return (

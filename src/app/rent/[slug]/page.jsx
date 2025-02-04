@@ -556,7 +556,7 @@ const RentForm = ({ params }) => {
   const slug = params.slug;
   const [car, setCar] = useState(null);
   const [days, setDays] = useState(1);
-
+  const [loading, setLoading] = useState(false);
   const handleDaysChange = (value) => {
     const newDays = Math.max(1, Math.min(5, value));
     setDays(newDays);
@@ -564,6 +564,7 @@ const RentForm = ({ params }) => {
 
   const getCars = async () => {
     try {
+      setLoading(true);
       const query = `*[_type == 'car']{
       _id,
             name,
@@ -583,6 +584,8 @@ const RentForm = ({ params }) => {
       setCar(products.find((car) => car.currentSlug === slug));
     } catch (err) {
       console.error("Error fetching cars:", err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -596,6 +599,14 @@ const RentForm = ({ params }) => {
 
   if (!car) {
     return <div>Car not found</div>;
+  }
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="loader"></div>
+      </div>
+    );
   }
 
   return (
