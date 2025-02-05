@@ -1,7 +1,7 @@
 "use client";
 import { useUser, useClerk, useAuth } from "@clerk/nextjs";
 import { useState, useEffect, useRef } from "react";
-import { useProfile } from "@/app/context/ProfileContext";
+import { useProfile } from "@/app/context/ProfileCOntext";
 import { toast } from "react-toastify";
 import {
   ArrowLeftOnRectangleIcon,

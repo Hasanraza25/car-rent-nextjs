@@ -6,7 +6,7 @@ import Footer from "./components/Footer/Footer";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { ClerkProvider } from "@clerk/nextjs";
-import { ProfileProvider } from "./context/ProfileContext";
+import { ProfileProvider } from "./context/ProfileCOntext";
 
 const jakartaSans = localFont({
   src: "./fonts/Plus_Jakarta_Sans/static/PlusJakartaSans-Medium.ttf",
