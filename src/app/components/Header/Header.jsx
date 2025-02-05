@@ -16,7 +16,7 @@ import {
   Cog6ToothIcon,
   ArrowLeftOnRectangleIcon,
 } from "@heroicons/react/24/outline";
-import { useProfile } from "@/app/context/ProfileCOntext";
+import { useProfile } from "@/app/Context/ProfileCOntext";
 
 const Header = () => {
   const { wishlistItems } = useWishlist();

@@ -1,13 +1,13 @@
 "use client";
 import { useUser, useClerk, useAuth } from "@clerk/nextjs";
 import { useState, useEffect, useRef } from "react";
-import { useProfile } from "@/app/context/ProfileCOntext";
 import { toast } from "react-toastify";
 import {
   ArrowLeftOnRectangleIcon,
   LockClosedIcon,
 } from "@heroicons/react/24/outline";
 import Image from "next/image";
+import { useProfile } from "../Context/ProfileCOntext";
 
 export default function ProfilePage() {
   const { user, isSignedIn, isLoaded } = useUser();
