@@ -23,7 +23,7 @@ const ProductCard = ({ product }) => {
   };
 
   return (
-    <div className="w-full h-full min-h-[28.2rem] mobile:min-h-[32rem] rounded-lg relative border-none bg-white shadow-md">
+    <div className="w-full min-h-[28.2rem] mobile:min-h-[32rem] rounded-lg relative border-none bg-white shadow-md">
       {/* Title and Subtitle */}
       <div className="p-6">
         <Link href={`/cars/${product.categorySlug}/${product.currentSlug}`}>

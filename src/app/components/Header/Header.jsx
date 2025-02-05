@@ -16,12 +16,12 @@ import {
   Cog6ToothIcon,
   ArrowLeftOnRectangleIcon,
 } from "@heroicons/react/24/outline";
+import { useProfile } from "@/app/context/ProfileCOntext";
 
 const Header = () => {
   const { wishlistItems } = useWishlist();
   const { user, isSignedIn } = useUser(); // Clerk Authentication
   const { signOut, openSignIn } = useClerk(); // Clerk Functions
-  const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
 
@@ -37,19 +37,7 @@ const Header = () => {
   const searchRef = useRef(null);
 
   const pathname = usePathname();
-
-  useEffect(() => {
-    if (isProfileOpen) {
-      document.body.style.position = "fixed"; // Prevents scrolling
-      document.body.style.width = "100%"; // Prevents horizontal shift
-    } else {
-      document.body.style.position = ""; // Restore scrolling
-    }
-
-    return () => {
-      document.body.style.position = ""; // Cleanup on unmount
-    };
-  }, [isProfileOpen]);
+  const { profileImage } = useProfile();
 
   useEffect(() => {
     const savedSearches = localStorage.getItem("recentSearches");
@@ -185,6 +173,7 @@ const Header = () => {
     };
   }, []);
 
+
   return (
     <header
       className={`md:py-6 py-3 bg-white border-b w-full z-50 transition-transform duration-300 
@@ -199,7 +188,7 @@ const Header = () => {
             {/* Profile Button */}
             <MenuButton className="flex items-center focus:outline-none">
               <Image
-                src="/images/profile.svg"
+                src={profileImage} // Dynamically use the latest profile image
                 alt="Profile"
                 width={50}
                 height={50}
@@ -534,14 +523,23 @@ const Header = () => {
         <div className="hidden md:flex space-x-5 items-center">
           <Link href={"/wishlist"}>
             <div className="relative p-3 sm:w-[50px] border border-gray-300 rounded-full">
-              <Image
-                src="/images/heart.svg"
-                alt="Heart Logo"
-                width={50}
-                height={50}
-              />
+              {pathname === "/wishlist" ? (
+                <Image
+                  src="/images/heart-red.svg"
+                  alt="Heart Logo"
+                  width={50}
+                  height={50}
+                />
+              ) : (
+                <Image
+                  src="/images/heart.svg"
+                  alt="Heart Logo"
+                  width={50}
+                  height={50}
+                />
+              )}
               {wishlistItems?.length > 0 && (
-                <span className="absolute top-0 right-0 text-[10px] font-bold text-white bg-red-400 rounded-full w-4 h-4 flex items-center justify-center">
+                <span className="absolute top-0 right-0 text-[10px] font-bold text-white bg-[#ED3F3F] rounded-full w-4 h-4 flex items-center justify-center">
                   {wishlistItems.length}
                 </span>
               )}
@@ -555,7 +553,7 @@ const Header = () => {
               width={40}
               height={40}
             />
-            <div className="absolute top-0 right-0 w-4 h-4 bg-red-400 rounded-full border border-white"></div>
+            <div className="absolute top-0 right-0 w-4 h-4 bg-[#ED3F3F] rounded-full border border-white"></div>
           </div>
 
           <div className="p-3 border border-gray-300 sm:w-[70px] rounded-full">
@@ -569,13 +567,13 @@ const Header = () => {
 
           <Menu as="div" className="relative">
             {/* Profile Button */}
-            <MenuButton className="flex items-center focus:outline-none">
+            <MenuButton className="flex items-center focus:outline-none border-gray-900">
               <Image
-                src="/images/profile.svg"
+                src="/images/no-profile.png"
                 alt="Profile"
-                width={70}
-                height={70}
-                className="rounded-full"
+                width={75}
+                height={75}
+                className="rounded-full border-gray-900"
               />
             </MenuButton>
             {/* Dropdown Menu */}
