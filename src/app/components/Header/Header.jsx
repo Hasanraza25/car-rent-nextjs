@@ -6,9 +6,21 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { client, urlFor } from "@/sanity/lib/client";
 import { ClipLoader } from "react-spinners";
+import { useClerk, useUser } from "@clerk/nextjs";
+import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
+
+import {
+  HeartIcon,
+  BellIcon,
+  UserIcon,
+  Cog6ToothIcon,
+  ArrowLeftOnRectangleIcon,
+} from "@heroicons/react/24/outline";
 
 const Header = () => {
   const { wishlistItems } = useWishlist();
+  const { user, isSignedIn } = useUser(); // Clerk Authentication
+  const { signOut, openSignIn } = useClerk(); // Clerk Functions
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
@@ -24,16 +36,20 @@ const Header = () => {
   const [lastSearchQuery, setLastSearchQuery] = useState("");
   const searchRef = useRef(null);
 
-  const profileRef = useRef(null);
   const pathname = usePathname();
 
-  const toggleProfileDropdown = () => {
-    setIsProfileOpen((prev) => !prev);
-  };
+  useEffect(() => {
+    if (isProfileOpen) {
+      document.body.style.position = "fixed"; // Prevents scrolling
+      document.body.style.width = "100%"; // Prevents horizontal shift
+    } else {
+      document.body.style.position = ""; // Restore scrolling
+    }
 
-  const closeProfileDropdown = () => {
-    setIsProfileOpen(false);
-  };
+    return () => {
+      document.body.style.position = ""; // Cleanup on unmount
+    };
+  }, [isProfileOpen]);
 
   useEffect(() => {
     const savedSearches = localStorage.getItem("recentSearches");
@@ -63,23 +79,6 @@ const Header = () => {
     setRecentSearches(newRecent);
     localStorage.setItem("recentSearches", JSON.stringify(newRecent));
   };
-
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (profileRef.current && !profileRef.current.contains(event.target)) {
-        closeProfileDropdown();
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-
-  useEffect(() => {
-    closeProfileDropdown();
-  }, [pathname]);
 
   // Search Functionality useEffect
   useEffect(() => {
@@ -196,65 +195,107 @@ const Header = () => {
           <Link href="/">
             <div className="text-[#3563E9] text-4xl font-semibold">MORENT</div>
           </Link>
-          <div className="relative" ref={profileRef}>
-            <Image
-              src="/images/profile.svg"
-              alt="Profile Logo"
-              width={50}
-              height={50}
-              className="rounded-full cursor-pointer"
-              onClick={toggleProfileDropdown}
-            />
-            {isProfileOpen && (
-              <div className="absolute right-0 top-12 bg-white shadow-lg rounded-md p-5 z-50 w-[200px]">
-                <ul className="space-y-4 text-lg">
-                  <li>
-                    <Link href="/profile">
-                      <div className="block text-gray-700 hover:text-blue-500">
-                        My Profile
-                      </div>
-                    </Link>
-                  </li>
-                  <li className="md:hidden">
-                    <Link href="/settings">
-                      <div className="block text-gray-700 hover:text-blue-500">
-                        Settings
-                      </div>
-                    </Link>
-                  </li>
+          <Menu as="div" className="relative">
+            {/* Profile Button */}
+            <MenuButton className="flex items-center focus:outline-none">
+              <Image
+                src="/images/profile.svg"
+                alt="Profile"
+                width={50}
+                height={50}
+                className="rounded-full cursor-pointer"
+              />
+            </MenuButton>
 
-                  <li className="md:hidden relative">
-                    <Link href="/wishlist">
-                      <div className="block text-gray-700 hover:text-blue-500">
-                        Your Wishlists
-                      </div>
-                    </Link>
-                    {wishlistItems?.length > 0 && (
-                      <span className="absolute top-0 right-0 text-[10px] font-bold text-white bg-red-400 rounded-full w-4 h-4 flex items-center justify-center">
-                        {wishlistItems.length}
-                      </span>
-                    )}
-                  </li>
-                  <li className="md:hidden relative">
-                    <Link href="/notifications">
-                      <div className="block text-gray-700 hover:text-blue-500">
-                        Notifications
-                      </div>
-                    </Link>
-                    <div className="absolute top-0 right-0 w-4 h-4 bg-red-400 rounded-full border border-white"></div>
-                  </li>
-                  <li>
-                    <button
-                      onClick={() => console.log("Logout clicked")}
-                      className="block text-gray-700 hover:text-red-500 w-full text-left"
+            {/* Dropdown Menu */}
+            <MenuItems
+              as="div"
+              className="absolute right-0 mt-2 w-56 z-50 bg-white shadow-lg rounded-md py-2 ring-1 ring-black ring-opacity-5 focus:outline-none"
+            >
+              {/* Wishlist */}
+              <MenuItem as="div">
+                <Link
+                  href="/wishlist"
+                  className={`flex items-center gap-2 px-4 py-2 cursor-pointer 
+                ${pathname === "/wishlist" ? "text-blue-500" : "text-gray-700 hover:text-blue-500"}
+              `}
+                >
+                  <HeartIcon className="w-5 h-5" />
+                  Your Wishlists
+                  {wishlistItems?.length > 0 && (
+                    <span className="ml-auto text-[10px] font-bold text-white bg-red-400 rounded-full w-5 h-5 flex items-center justify-center">
+                      {wishlistItems.length}
+                    </span>
+                  )}
+                </Link>
+              </MenuItem>
+
+              {/* Notifications */}
+              <MenuItem as="div">
+                <Link
+                  href="/notifications"
+                  className={`flex items-center gap-2 px-4 py-2 cursor-pointer 
+                ${pathname === "/notifications" ? "text-blue-500" : "text-gray-700 hover:text-blue-500"}
+              `}
+                >
+                  <BellIcon className="w-5 h-5" />
+                  Notifications
+                </Link>
+              </MenuItem>
+
+              {/* Sign In / Profile + Logout */}
+              {!isSignedIn ? (
+                <MenuItem as="div">
+                  <button
+                    onClick={() => openSignIn()}
+                    className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:text-blue-500 w-full text-left"
+                  >
+                    <ArrowLeftOnRectangleIcon className="w-5 h-5" />
+                    Sign In
+                  </button>
+                </MenuItem>
+              ) : (
+                <>
+                  {/* Profile */}
+                  <MenuItem as="div">
+                    <Link
+                      href="/profile"
+                      className={`flex items-center gap-2 px-4 py-2 cursor-pointer 
+                    ${pathname === "/profile" ? "text-blue-500" : "text-gray-700 hover:text-blue-500"}
+                  `}
                     >
+                      <UserIcon className="w-5 h-5" />
+                      My Profile
+                    </Link>
+                  </MenuItem>
+
+                  {/* Settings (Only visible on mobile) */}
+                  <MenuItem as="div">
+                    <Link
+                      href="/settings"
+                      className={`flex items-center gap-2 px-4 py-2 md:hidden cursor-pointer 
+                    ${pathname === "/settings" ? "text-blue-500" : "text-gray-700 hover:text-blue-500"}
+                  `}
+                    >
+                      <Cog6ToothIcon className="w-5 h-5" />
+                      Settings
+                    </Link>
+                  </MenuItem>
+
+                  {/* Logout */}
+                  <MenuItem as="div">
+                    <button
+                      onClick={() => signOut()}
+                      className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:text-red-500 w-full text-left"
+                    >
+                      <ArrowLeftOnRectangleIcon className="w-5 h-5" />
                       Logout
                     </button>
-                  </li>
-                </ul>
-              </div>
-            )}
-          </div>
+                  </MenuItem>
+                </>
+              )}
+            </MenuItems>
+          </Menu>
         </div>
 
         <div className="w-full flex items-center justify-between md:justify-start">
@@ -526,37 +567,67 @@ const Header = () => {
             />
           </div>
 
-          <div className="relative" ref={profileRef}>
-            <Image
-              src="/images/profile.svg"
-              alt="Profile Logo"
-              width={75}
-              height={75}
-              className="rounded-full cursor-pointer"
-              onClick={toggleProfileDropdown}
-            />
-            {isProfileOpen && (
-              <div className="absolute right-0 top-16 bg-white shadow-lg rounded-md p-5 z-50 w-[220px]">
-                <ul className="space-y-4 text-lg">
-                  <li>
-                    <Link href="/profile">
-                      <div className="block text-gray-700 hover:text-blue-500">
-                        My Profile
-                      </div>
-                    </Link>
-                  </li>
-                  <li>
-                    <button
-                      onClick={() => console.log("Logout clicked")}
-                      className="block text-gray-700 hover:text-red-500 w-full text-left"
+          <Menu as="div" className="relative">
+            {/* Profile Button */}
+            <MenuButton className="flex items-center focus:outline-none">
+              <Image
+                src="/images/profile.svg"
+                alt="Profile"
+                width={70}
+                height={70}
+                className="rounded-full"
+              />
+            </MenuButton>
+            {/* Dropdown Menu */}
+            <MenuItems className="absolute right-0 mt-2 w-48 z-50 bg-white shadow-lg rounded-md py-2 ring-1 ring-black ring-opacity-5 focus:outline-none">
+              {isSignedIn ? (
+                <>
+                  {/* Profile */}
+                  <MenuItem
+                    as="div"
+                    className={`flex items-center gap-2 px-4 py-2 cursor-pointer 
+              ${pathname === "/profile" ? "text-blue-500 bg-gray-100" : "text-gray-700 hover:bg-gray-100"}
+            `}
+                  >
+                    <Link
+                      href="/profile"
+                      className="flex items-center gap-2 w-full"
                     >
+                      <UserIcon className="w-5 h-5" />
+                      My Profile
+                    </Link>
+                  </MenuItem>
+
+                  {/* Logout */}
+                  <MenuItem
+                    as="div"
+                    className="flex items-center gap-2 px-4 py-2 text-left w-full text-gray-700 hover:bg-gray-100 cursor-pointer"
+                  >
+                    <button
+                      onClick={() => signOut()}
+                      className="flex items-center gap-2 w-full"
+                    >
+                      <ArrowLeftOnRectangleIcon className="w-5 h-5" />
                       Logout
                     </button>
-                  </li>
-                </ul>
-              </div>
-            )}
-          </div>
+                  </MenuItem>
+                </>
+              ) : (
+                <MenuItem
+                  as="div"
+                  className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer"
+                >
+                  <button
+                    onClick={() => openSignIn()}
+                    className="flex items-center gap-2 w-full"
+                  >
+                    <ArrowLeftOnRectangleIcon className="w-5 h-5" />
+                    Sign In
+                  </button>
+                </MenuItem>
+              )}
+            </MenuItems>
+          </Menu>
         </div>
       </div>
     </header>

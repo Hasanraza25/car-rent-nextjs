@@ -11,6 +11,7 @@ import {
   useStripe,
 } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
+import { useClerk, useUser } from "@clerk/nextjs";
 
 const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
@@ -19,12 +20,27 @@ const stripePromise = loadStripe(
 const CheckoutForm = ({ car, days, onSuccess }) => {
   const stripe = useStripe();
   const elements = useElements();
+  const { user, isSignedIn } = useUser(); // Get User Auth Status
+  const { openSignIn } = useClerk();
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [name, setName] = useState("");
+  const [isReadyToPay, setIsReadyToPay] = useState(false);
+
+  useEffect(() => {
+    if (isSignedIn && isReadyToPay) {
+      handleSubmit(); // Auto-trigger payment if user just signed in
+    }
+  }, [isSignedIn, isReadyToPay]);
 
   const handleSubmit = async (event) => {
-    event.preventDefault();
+    if (event) event.preventDefault();
+
+    if (!isSignedIn) {
+      setIsReadyToPay(true); // Set flag to continue payment after login
+      openSignIn(); // Open Clerk Sign-In Modal
+      return;
+    }
 
     if (!stripe || !elements) {
       return;
@@ -546,7 +562,7 @@ const CheckoutForm = ({ car, days, onSuccess }) => {
           </button>
         </div>
 
-        {error && <div className="text-red-500 mb-4">{error}</div>}
+        {error && <div className="text-red-500 mt-4">{error}</div>}
       </form>
     </div>
   );
@@ -622,6 +638,7 @@ const RentForm = ({ params }) => {
   return (
     <>
       <div className="mx-auto max-w-[1700px] px-4 flex flex-col lg:flex-row lg:my-10 space-y-6 lg:space-y-0 lg:space-x-10">
+        
         <Elements stripe={stripePromise}>
           <CheckoutForm
             car={car}
