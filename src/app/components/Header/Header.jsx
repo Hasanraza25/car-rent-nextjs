@@ -16,7 +16,7 @@ import {
   Cog6ToothIcon,
   ArrowLeftOnRectangleIcon,
 } from "@heroicons/react/24/outline";
-import { useProfile } from "@/app/context/ProfileCOntext";
+import { useProfile } from "@/app/context/ProfileContext";
 
 const Header = () => {
   const { wishlistItems } = useWishlist();
@@ -569,7 +569,7 @@ const Header = () => {
             {/* Profile Button */}
             <MenuButton className="flex items-center focus:outline-none border-gray-900">
               <Image
-                src="/images/no-profile.png"
+                src={profileImage}
                 alt="Profile"
                 width={75}
                 height={75}
