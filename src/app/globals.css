@@ -78,7 +78,40 @@ p {
 .animated-button:not(:hover) {
   background-position: 0% 50%;
 }
-/* HTML: <div class="loader"></div> */
+
+@keyframes fadeInSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-fadeInSlideUp {
+  animation: fadeInSlideUp 0.8s ease-out;
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.8s ease-out forwards;
+}
+
+.animate-bounce {
+  animation: bounce 1.5s infinite;
+}
+
+
 .loader {
   width: 60px;
   aspect-ratio: 4;
