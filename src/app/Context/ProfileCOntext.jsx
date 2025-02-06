@@ -5,15 +5,15 @@ import { useUser } from "@clerk/nextjs";
 const ProfileContext = createContext();
 
 export const ProfileProvider = ({ children }) => {
-  const { user } = useUser();
+  const { user, isLoaded } = useUser();
   const [profileImage, setProfileImage] = useState("/images/no-profile.png");
 
-  // Load Clerk profile image when user is signed in
+  // Load Clerk profile image when user is signed in and data is loaded
   useEffect(() => {
-    if (user?.imageUrl) {
+    if (isLoaded && user?.imageUrl) {
       setProfileImage(user.imageUrl);
     }
-  }, [user]);
+  }, [isLoaded, user]);
 
   return (
     <ProfileContext.Provider value={{ profileImage, setProfileImage }}>

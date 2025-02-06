@@ -6,7 +6,6 @@ import {
   ArrowLeftOnRectangleIcon,
   LockClosedIcon,
 } from "@heroicons/react/24/outline";
-import Image from "next/image";
 import { useProfile } from "../Context/ProfileCOntext";
 
 export default function ProfilePage() {
@@ -18,6 +17,9 @@ export default function ProfilePage() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
+  const [oldPassword, setOldPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [previewImage, setPreviewImage] = useState(profileImage);
   const [imageUploading, setImageUploading] = useState(false);
   const [updatingProfile, setUpdatingProfile] = useState(false);
@@ -25,20 +27,12 @@ export default function ProfilePage() {
   const fileInputRef = useRef(null);
 
   useEffect(() => {
-    const fetchToken = async () => {
-      const token = await getToken();
-      console.log("🔍 Clerk Token:", token);
-    };
-
-    fetchToken();
-  }, []);
-
-  useEffect(() => {
     if (user && isLoaded) {
       setFirstName(user.firstName || "");
       setLastName(user.lastName || "");
       setEmail(user.emailAddresses[0]?.emailAddress || "");
       setProfileImage(user.imageUrl || "/images/no-profile.png");
+      setPreviewImage(user.imageUrl || "/images/no-profile.png");
     }
   }, [user, isLoaded]);
 
@@ -54,16 +48,10 @@ export default function ProfilePage() {
 
   const handleImageUpload = async () => {
     const file = fileInputRef.current.files[0];
-    if (!file) {
-      toast.error("No file selected!");
-      return;
-    }
-
     setImageUploading(true);
 
     try {
       const token = await getToken();
-      console.log("🔍 Clerk Token:", token);
 
       if (!token) {
         throw new Error("No authentication token found");
@@ -100,23 +88,105 @@ export default function ProfilePage() {
     }
   };
 
+  const handleChangePassword = async () => {
+    if (newPassword !== confirmPassword) {
+      throw new Error("New password and confirm password do not match.");
+    }
+
+    try {
+      if (!clerkUser) {
+        throw new Error("User not found.");
+      }
+
+      // Update password using Clerk API
+      await clerkUser.updatePassword({
+        currentPassword: oldPassword,
+        newPassword,
+      });
+
+      // Clear password fields on success
+      setOldPassword("");
+      setNewPassword("");
+      setConfirmPassword("");
+
+      // ✅ No success toast here, handle it in `handleUpdateProfile`
+    } catch (error) {
+      throw new Error(error.message || "Failed to change password.");
+    }
+  };
+
   const handleUpdateProfile = async () => {
     setUpdatingProfile(true);
 
     try {
-      await clerkUser?.update({ firstName, lastName });
-      await handleImageUpload();
+      if (!clerkUser) {
+        throw new Error("User not found.");
+      }
 
-      await clerkUser?.reload();
-      setProfileImage(clerkUser?.imageUrl || "/images/no-profile.png");
+      let updateSuccess = true;
+      let hasChanges = false; // Track if anything was actually changed
 
-      toast.success("Profile updated successfully!", { position: "top-right" });
+      // Update Name (Only if changed)
+      if (firstName !== user?.firstName || lastName !== user?.lastName) {
+        hasChanges = true;
+        try {
+          await clerkUser.update({ firstName, lastName });
+        } catch (error) {
+          toast.error("Failed to update name.");
+          console.error("Error updating name:", error);
+          updateSuccess = false;
+        }
+      }
+
+      // Update Profile Image (Only if a new image is selected)
+      if (fileInputRef.current?.files[0]) {
+        hasChanges = true;
+        try {
+          await handleImageUpload();
+        } catch (error) {
+          toast.error("Failed to update profile image.");
+          console.error("Error updating image:", error);
+          updateSuccess = false;
+        }
+      }
+
+      // Update Password (Only if a new password is provided)
+      if (oldPassword || newPassword || confirmPassword) {
+        hasChanges = true;
+        try {
+          await handleChangePassword(); // This function needs to properly throw errors
+        } catch (error) {
+          toast.error("Failed to update password: " + error.message);
+          console.error("Error updating password:", error);
+          updateSuccess = false;
+        }
+      }
+
+      // ✅ Show success toast only if at least one thing was changed & everything was successful
+      if (hasChanges && updateSuccess) {
+        await clerkUser.reload();
+        setProfileImage(clerkUser?.imageUrl || "/images/no-profile.png");
+        toast.success("Profile updated successfully!", {
+          position: "top-right",
+        });
+      } else if (!hasChanges) {
+        toast.info("No changes were made.");
+      }
     } catch (error) {
       console.error("Error updating profile:", error);
+      toast.error(error.message || "Failed to update profile.");
     } finally {
       setUpdatingProfile(false);
     }
   };
+
+  if (!isLoaded) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="loader"></div>
+      </div>
+    );
+  }
 
   if (!isSignedIn)
     return (
@@ -153,74 +223,108 @@ export default function ProfilePage() {
     );
 
   return (
-    <div className="container mx-auto my-10 px-5 animate-fadeInSlideUp">
-      <h1 className="text-2xl font-bold mb-5">Edit Profile</h1>
+    <div className="container h-screen mx-auto my-10 px-5 animate-fadeInSlideUp">
+      <h1 className="text-3xl font-bold mb-8 text-center">Edit Profile</h1>
+      <div className="flex flex-col items-center">
+        {/* Profile Picture Upload */}
+        <div className="relative mb-6">
+          <input
+            type="file"
+            accept="image/*"
+            ref={fileInputRef}
+            className="hidden"
+            onChange={handleImageChange}
+          />
+          <img
+            src={previewImage}
+            alt="Profile"
+            className="w-32 h-32 rounded-full border border-gray-300 cursor-pointer transition-transform duration-300 hover:scale-110"
+            onClick={() => fileInputRef.current.click()}
+          />
+          {imageUploading && (
+            <p className="text-sm text-gray-500 absolute top-0 left-0 w-full h-full flex items-center justify-center bg-white bg-opacity-75">
+              Uploading...
+            </p>
+          )}
+        </div>
 
-      {/* Profile Picture Upload */}
-      <div className="mb-5 text-center">
-        <input
-          type="file"
-          accept="image/*"
-          ref={fileInputRef}
-          className="hidden"
-          onChange={handleImageChange}
-        />
-        <img
-          src={previewImage}
-          alt="Profile"
-          className="w-32 h-32 rounded-full mx-auto border border-gray-300 cursor-pointer transition-transform duration-300 hover:scale-110"
-          onClick={() => fileInputRef.current.click()}
-        />
-        {imageUploading && (
-          <p className="text-sm text-gray-500">Uploading...</p>
-        )}
+        <div className="w-full max-w-md space-y-4">
+          <div>
+            <label className="block text-sm font-medium mb-1">First Name</label>
+            <input
+              type="text"
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
+              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-1">Last Name</label>
+            <input
+              type="text"
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
+              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-1">Email</label>
+            <input
+              type="email"
+              value={email}
+              disabled
+              className="w-full px-4 py-2 border bg-gray-100 rounded-lg cursor-not-allowed"
+            />
+          </div>
+
+          {/* Password Fields */}
+          <div>
+            <label className="block text-sm font-medium mb-1">
+              Old Password
+            </label>
+            <input
+              type="password"
+              value={oldPassword}
+              onChange={(e) => setOldPassword(e.target.value)}
+              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-1">
+              New Password
+            </label>
+            <input
+              type="password"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-1">
+              Confirm Password
+            </label>
+            <input
+              type="password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+            />
+          </div>
+
+          <button
+            onClick={handleUpdateProfile}
+            className="animated-button w-full text-lg mt-20 py-3 mx-auto text-white text-center rounded-[5px] transition-transform transform hover:scale-105 duration-300"
+            disabled={updatingProfile}
+          >
+            {updatingProfile ? "Updating..." : "Update Profile"}
+          </button>
+        </div>
       </div>
-
-      <button
-        onClick={handleImageUpload}
-        className="px-6 py-3 bg-[#db4444] hover:bg-[#fa4545] text-white font-semibold rounded-full transition-transform transform hover:scale-105 duration-300"
-        disabled={imageUploading}
-      >
-        {imageUploading ? "Uploading..." : "Upload Image"}
-      </button>
-
-      <div className="mb-5">
-        <label className="block text-sm font-medium">First Name</label>
-        <input
-          type="text"
-          value={firstName}
-          onChange={(e) => setFirstName(e.target.value)}
-          className="w-full px-4 py-2 border rounded-lg"
-        />
-      </div>
-
-      <div className="mb-5">
-        <label className="block text-sm font-medium">Last Name</label>
-        <input
-          type="text"
-          value={lastName}
-          onChange={(e) => setLastName(e.target.value)}
-          className="w-full px-4 py-2 border rounded-lg"
-        />
-      </div>
-
-      <div className="mb-5">
-        <label className="block text-sm font-medium">Email</label>
-        <input
-          type="email"
-          value={email}
-          disabled
-          className="w-full px-4 py-2 border bg-gray-100 rounded-lg cursor-not-allowed"
-        />
-      </div>
-
-      <button
-        onClick={handleUpdateProfile}
-        className="px-6 py-3 bg-[#db4444] hover:bg-[#fa4545] text-white font-semibold rounded-full transition-transform transform hover:scale-105 duration-300"
-        disabled={updatingProfile}
-      >
-        {updatingProfile ? "Updating..." : "Update Profile"}
-      </button>
     </div>
   );
 }

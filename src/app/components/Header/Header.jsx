@@ -173,7 +173,6 @@ const Header = () => {
     };
   }, []);
 
-
   return (
     <header
       className={`md:py-6 py-3 bg-white border-b w-full z-50 transition-transform duration-300 
@@ -188,11 +187,11 @@ const Header = () => {
             {/* Profile Button */}
             <MenuButton className="flex items-center focus:outline-none">
               <Image
-                src={profileImage} // Dynamically use the latest profile image
+                src={profileImage}
                 alt="Profile"
-                width={50}
-                height={50}
-                className="rounded-full cursor-pointer"
+                width={50} // Explicit width
+                height={50} // Explicit height
+                className="rounded-full cursor-pointer object-cover w-[50px] h-[50px] min-w-[50px] min-h-[50px]"
               />
             </MenuButton>
 
@@ -522,20 +521,22 @@ const Header = () => {
 
         <div className="hidden md:flex space-x-5 items-center">
           <Link href={"/wishlist"}>
-            <div className="relative p-3 sm:w-[50px] border border-gray-300 rounded-full">
+            <div className="relative p-3 w-[55px] h-[55px] border border-gray-300 rounded-full flex items-center justify-center">
               {pathname === "/wishlist" ? (
                 <Image
                   src="/images/heart-red.svg"
                   alt="Heart Logo"
-                  width={50}
-                  height={50}
+                  width={30} // Explicitly set width
+                  height={30} // Explicitly set height
+                  className="object-cover w-[30px] h-[30px] min-w-[30px] min-h-[30px]"
                 />
               ) : (
                 <Image
                   src="/images/heart.svg"
                   alt="Heart Logo"
-                  width={50}
-                  height={50}
+                  width={30}
+                  height={30}
+                  className="object-cover w-[30px] h-[30px] min-w-[30px] min-h-[30px]"
                 />
               )}
               {wishlistItems?.length > 0 && (
@@ -546,22 +547,24 @@ const Header = () => {
             </div>
           </Link>
 
-          <div className="relative p-3 border sm:w-[70px] border-gray-300 rounded-full">
+          <div className="relative p-3 w-[55px] h-[55px] border border-gray-300 rounded-full flex items-center justify-center">
             <Image
               src="/images/notification.svg"
               alt="Notification Logo"
-              width={40}
-              height={40}
+              width={30}
+              height={30}
+              className="object-cover w-[30px] h-[30px] min-w-[30px] min-h-[30px]"
             />
             <div className="absolute top-0 right-0 w-4 h-4 bg-[#ED3F3F] rounded-full border border-white"></div>
           </div>
 
-          <div className="p-3 border border-gray-300 sm:w-[70px] rounded-full">
+          <div className="p-3 w-[55px] h-[55px] border border-gray-300 rounded-full flex items-center justify-center">
             <Image
               src="/images/setting.svg"
               alt="Settings Logo"
-              width={40}
-              height={40}
+              width={30}
+              height={30}
+              className="object-cover w-[30px] h-[30px] min-w-[30px] min-h-[30px]"
             />
           </div>
 
@@ -571,9 +574,9 @@ const Header = () => {
               <Image
                 src={profileImage}
                 alt="Profile"
-                width={75}
-                height={75}
-                className="rounded-full border-gray-900"
+                width={55} // Explicit width
+                height={55} // Explicit height
+                className="rounded-full cursor-pointer object-cover w-[55px] h-[55px] min-w-[55px] min-h-[55px]"
               />
             </MenuButton>
             {/* Dropdown Menu */}
