@@ -5,6 +5,7 @@ import PickUpDropOff from "../components/PickUpDropOff/PickUpDropOff";
 import CategoryCars from "../components/Cars/CategoryCars";
 
 const CategoryCar = () => {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [filters, setFilters] = useState({
     categories: [],
     capacities: [],
@@ -19,7 +20,7 @@ const CategoryCar = () => {
     <div className="min-h-screen flex flex-row">
       {/* Sidebar */}
       <div className="flex flex-col">
-      <Sidebar onFilterChange={handleFilterChange} />
+      <Sidebar onFilterChange={handleFilterChange} setIsOpen={setIsSidebarOpen} isOpen={isSidebarOpen} />
     <span className="bg-white h-screen"></span>
       </div>
       {/* Main Content */}

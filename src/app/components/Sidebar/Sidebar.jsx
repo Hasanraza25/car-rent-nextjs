@@ -4,13 +4,12 @@ import { client } from "@/sanity/lib/client";
 import { FiArrowRight, FiArrowLeft } from "react-icons/fi";
 import { ClipLoader } from "react-spinners";
 
-const Sidebar = ({ onFilterChange }) => {
+const Sidebar = ({ onFilterChange, setIsOpen, isOpen }) => {
   const [categories, setCategories] = useState([]);
   const [seatingCapacities, setSeatingCapacities] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [selectedCapacities, setSelectedCapacities] = useState([]);
   const [price, setPrice] = useState(100);
-  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     getCategories();
@@ -72,15 +71,20 @@ const Sidebar = ({ onFilterChange }) => {
   };
 
   const handleFilterCars = () => {
-    const formattedCapacities = selectedCapacities.map((capacity) =>
-      Number(capacity)
-    );
+    const formattedCapacities = selectedCapacities.map((capacity) => Number(capacity));
+  
     onFilterChange({
       categories: selectedCategories,
       capacities: formattedCapacities,
       price,
     });
+  
+    // ✅ Close the sidebar after filtering (Only for Mobile & Tablet)
+    if (window.innerWidth <= 1024) {
+      setIsOpen(false);
+    }
   };
+  
 
   return (
     <>
