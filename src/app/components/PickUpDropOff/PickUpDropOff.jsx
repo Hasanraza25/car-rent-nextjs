@@ -2,11 +2,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import TimePicker from "react-time-picker";
-import "react-time-picker/dist/TimePicker.css";
-import "react-clock/dist/Clock.css";
+import Flatpickr from "react-flatpickr";
+import "flatpickr/dist/flatpickr.min.css";
+
 const PickUpDropOff = () => {
   const [cities, setCities] = useState([]);
   const [pickupCity, setPickupCity] = useState("");
@@ -15,21 +13,29 @@ const PickUpDropOff = () => {
   const [dropoffDate, setDropoffDate] = useState(new Date());
   const [pickupTime, setPickupTime] = useState("10:00 AM");
   const [dropoffTime, setDropoffTime] = useState("10:00 AM");
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchCities = async () => {
-      const response = await fetch("/api/fetchCities", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      setIsLoading(true); // Start loading
+      try {
+        const response = await fetch("/api/fetchCities", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
 
-      const data = await response.json();
-      if (response.ok) {
-        setCities(data);
-      } else {
-        console.error("Error fetching cities:", data.error);
+        const data = await response.json();
+        if (response.ok) {
+          setCities(data);
+        } else {
+          console.error("Error fetching cities:", data.error);
+        }
+      } catch (error) {
+        console.error("Network error:", error);
+      } finally {
+        setIsLoading(false); // Stop loading after fetch
       }
     };
 
@@ -94,16 +100,24 @@ const PickUpDropOff = () => {
                 Locations
               </label>
               <select
-                className="w-full py-2 px-3 mt-2 text-sm  text-gray-600 rounded-md focus:outline-none appearance-none bg-[url('/images/arrow-down.svg')] bg-no-repeat bg-right bg-[length:1rem]"
+                id="pickupCity"
+                className="w-full py-2 px-3 mt-2 text-sm  text-gray-600 rounded-md focus:outline-none cursor-pointer appearance-none bg-[url('/images/arrow-down.svg')] bg-no-repeat bg-right bg-[length:1rem]"
                 value={pickupCity}
                 onChange={(e) => setPickupCity(e.target.value)}
+                disabled={isLoading} // Disable dropdown while loading
               >
-                <option>Select your city</option>
-                {cities.map((city, index) => (
-                  <option key={index} value={city} className="text-gray-600">
-                    {city}
-                  </option>
-                ))}
+                {isLoading ? (
+                  <option>Loading cities...</option> // Show loading text
+                ) : (
+                  <>
+                    <option value="">Select your city</option>
+                    {cities.map((city, index) => (
+                      <option key={index} value={city}>
+                        {city}
+                      </option>
+                    ))}
+                  </>
+                )}
               </select>
             </div>
             <div className="mb-4 md:mb-0 w-full relative border-r sm:border-none pr-5">
@@ -113,23 +127,40 @@ const PickUpDropOff = () => {
               >
                 Date
               </label>
-              <DatePicker
-                selected={pickupDate}
-                onChange={handlePickupDateChange}
-                minDate={new Date()}
-                placeholderText="Select your Date"
+              <Flatpickr
+                options={{
+                  enableTime: false, // Only date selection
+                  dateFormat: "Y-m-d", // Format: YYYY-MM-DD
+                  minDate: "today", // Prevent past dates
+                  clickOpens: true, // Open only when clicked
+                }}
                 className="lg:w-32 w-full py-2 mt-2 text-sm text-gray-600 sm:p-4 rounded-md focus:outline-none appearance-none bg-[url('/images/arrow-down.svg')] bg-no-repeat bg-right bg-[length:1rem]"
+                placeholder="Select your Date"
+                value={pickupDate}
+                onChange={handlePickupDateChange}
               />
             </div>
             <div className="w-full relative pr-5">
               <label className="block text-lg font-bold text-black">Time</label>
-              <TimePicker
-                onChange={handlePickupTimeChange}
-                value={pickupTime}
-                format="h:mm a"
-                disableClock={true}
-                clearIcon={null}
+              <Flatpickr
+                options={{
+                  enableTime: true,
+                  noCalendar: true,
+                  dateFormat: "h:i K", // 12-hour format with AM/PM
+                  time_24hr: false,
+                  minuteIncrement: 5, // Adjust for smooth scrolling
+                }}
                 className="w-full py-2 px-3 mt-2 text-sm text-gray-600 rounded-md focus:outline-none"
+                value={pickupTime}
+                onChange={(selectedDates) =>
+                  setPickupTime(
+                    selectedDates[0].toLocaleTimeString([], {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                      hour12: true,
+                    })
+                  )
+                }
               />
             </div>
           </div>
@@ -184,16 +215,22 @@ const PickUpDropOff = () => {
                 Locations
               </label>
               <select
-                className="w-full py-2 px-3 mt-2 text-sm  text-gray-600 rounded-md focus:outline-none appearance-none bg-[url('/images/arrow-down.svg')] bg-no-repeat bg-right bg-[length:1rem]"
+                className="w-full py-2 px-3 mt-2 text-sm  text-gray-600 rounded-md focus:outline-none cursor-pointer appearance-none bg-[url('/images/arrow-down.svg')] bg-no-repeat bg-right bg-[length:1rem]"
                 value={dropoffCity}
                 onChange={(e) => setDropoffCity(e.target.value)}
               >
-                <option value="">Select your city</option>
-                {cities.map((city, index) => (
-                  <option key={index} value={city}>
-                    {city}
-                  </option>
-                ))}
+                {isLoading ? (
+                  <option>Loading cities...</option> // Show loading text
+                ) : (
+                  <>
+                    <option value="">Select your city</option>
+                    {cities.map((city, index) => (
+                      <option key={index} value={city}>
+                        {city}
+                      </option>
+                    ))}
+                  </>
+                )}
               </select>
             </div>
             <div className="mb-4 md:mb-0 w-full relative border-r sm:border-none pr-5">
@@ -203,23 +240,32 @@ const PickUpDropOff = () => {
               >
                 Date
               </label>
-              <DatePicker
-                selected={dropoffDate}
+              <Flatpickr
+                options={{
+                  enableTime: false, // Only date selection
+                  dateFormat: "Y-m-d", // Format: YYYY-MM-DD
+                  minDate: calculateMinDropoffDate(pickupDate, pickupTime), // Prevent past dates
+                  clickOpens: true, // Open only when clicked
+                }}
+                className="lg:w-32 w-full py-2 mt-2 text-sm text-gray-600 sm:p-4 rounded-md focus:outline-none appearance-none bg-[url('/images/arrow-down.svg')] bg-no-repeat bg-right bg-[length:1rem]"
+                placeholder="Select your Date"
+                value={dropoffDate}
                 onChange={handleDropoffDateChange}
-                minDate={calculateMinDropoffDate(pickupDate, pickupTime)}
-                placeholderText="Select your Date"
-                className="lg:w-32 w-full py-2 mt-2 text-sm z-40 text-gray-600 sm:p-4 rounded-md focus:outline-none appearance-none bg-[url('/images/arrow-down.svg')] bg-no-repeat bg-right bg-[length:1rem]"
               />
             </div>
             <div className="w-full relative pr-5">
               <label className="block text-lg font-bold text-black">Time</label>
-              <TimePicker
+              <Flatpickr
+                options={{
+                  enableTime: true,
+                  noCalendar: true,
+                  dateFormat: "h:i K", // 12-hour format with AM/PM
+                  time_24hr: false,
+                  minuteIncrement: 5, // Adjust for smooth scrolling
+                }}
+                className="w-full py-2 px-3 mt-2 text-sm text-gray-600 rounded-md focus:outline-none "
                 onChange={handleDropoffTimeChange}
                 value={dropoffTime}
-                format="h:mm a"
-                disableClock={true}
-                clearIcon={null}
-                className="w-full py-2 px-3 mt-2 text-sm text-gray-600 rounded-md focus:outline-none"
               />
             </div>
           </div>
