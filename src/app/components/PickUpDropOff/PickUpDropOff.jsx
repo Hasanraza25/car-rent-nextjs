@@ -15,25 +15,27 @@ const PickUpDropOff = () => {
   const [dropoffDate, setDropoffDate] = useState(new Date());
   const [pickupTime, setPickupTime] = useState("10:00 AM");
   const [dropoffTime, setDropoffTime] = useState("10:00 AM");
+
   useEffect(() => {
-    fetchPakistanCities();
-  }, []);
-  const fetchPakistanCities = async () => {
-    try {
-      const response = await fetch(
-        "https://countriesnow.space/api/v0.1/countries/cities",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ country: "Pakistan" }),
-        }
-      );
+    const fetchCities = async () => {
+      const response = await fetch("/api/fetchCities", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
       const data = await response.json();
-      setCities(data.data || []);
-    } catch (error) {
-      console.error("Error fetching cities:", error);
-    }
-  };
+      if (response.ok) {
+        setCities(data);
+      } else {
+        console.error("Error fetching cities:", data.error);
+      }
+    };
+
+    fetchCities();
+  }, []);
+
   const calculateMinDropoffDate = (pickupDate, pickupTime) => {
     const [time, modifier] = pickupTime.split(" ");
     let [hours, minutes] = time.split(":");
@@ -92,7 +94,7 @@ const PickUpDropOff = () => {
                 Locations
               </label>
               <select
-                className="w-full py-2 px-3 mt-2 text-sm  text-[#90A3BF] rounded-md focus:outline-none appearance-none bg-[url('/images/arrow-down.svg')] bg-no-repeat bg-right bg-[length:1rem]"
+                className="w-full py-2 px-3 mt-2 text-sm  text-gray-600 rounded-md focus:outline-none appearance-none bg-[url('/images/arrow-down.svg')] bg-no-repeat bg-right bg-[length:1rem]"
                 value={pickupCity}
                 onChange={(e) => setPickupCity(e.target.value)}
               >
@@ -116,7 +118,7 @@ const PickUpDropOff = () => {
                 onChange={handlePickupDateChange}
                 minDate={new Date()}
                 placeholderText="Select your Date"
-                className="lg:w-32 w-full py-2 mt-2 text-sm text-[#90A3BF] sm:p-4 rounded-md focus:outline-none appearance-none bg-[url('/images/arrow-down.svg')] bg-no-repeat bg-right bg-[length:1rem]"
+                className="lg:w-32 w-full py-2 mt-2 text-sm text-gray-600 sm:p-4 rounded-md focus:outline-none appearance-none bg-[url('/images/arrow-down.svg')] bg-no-repeat bg-right bg-[length:1rem]"
               />
             </div>
             <div className="w-full relative pr-5">
@@ -127,7 +129,7 @@ const PickUpDropOff = () => {
                 format="h:mm a"
                 disableClock={true}
                 clearIcon={null}
-                className="w-full py-2 px-3 mt-2 text-sm text-[#90A3BF] rounded-md focus:outline-none"
+                className="w-full py-2 px-3 mt-2 text-sm text-gray-600 rounded-md focus:outline-none"
               />
             </div>
           </div>
@@ -182,7 +184,7 @@ const PickUpDropOff = () => {
                 Locations
               </label>
               <select
-                className="w-full py-2 px-3 mt-2 text-sm  text-[#90A3BF] rounded-md focus:outline-none appearance-none bg-[url('/images/arrow-down.svg')] bg-no-repeat bg-right bg-[length:1rem]"
+                className="w-full py-2 px-3 mt-2 text-sm  text-gray-600 rounded-md focus:outline-none appearance-none bg-[url('/images/arrow-down.svg')] bg-no-repeat bg-right bg-[length:1rem]"
                 value={dropoffCity}
                 onChange={(e) => setDropoffCity(e.target.value)}
               >
@@ -206,7 +208,7 @@ const PickUpDropOff = () => {
                 onChange={handleDropoffDateChange}
                 minDate={calculateMinDropoffDate(pickupDate, pickupTime)}
                 placeholderText="Select your Date"
-                className="lg:w-32 w-full py-2 mt-2 text-sm z-40 text-[#90A3BF] sm:p-4 rounded-md focus:outline-none appearance-none bg-[url('/images/arrow-down.svg')] bg-no-repeat bg-right bg-[length:1rem]"
+                className="lg:w-32 w-full py-2 mt-2 text-sm z-40 text-gray-600 sm:p-4 rounded-md focus:outline-none appearance-none bg-[url('/images/arrow-down.svg')] bg-no-repeat bg-right bg-[length:1rem]"
               />
             </div>
             <div className="w-full relative pr-5">
@@ -217,7 +219,7 @@ const PickUpDropOff = () => {
                 format="h:mm a"
                 disableClock={true}
                 clearIcon={null}
-                className="w-full py-2 px-3 mt-2 text-sm text-[#90A3BF] rounded-md focus:outline-none"
+                className="w-full py-2 px-3 mt-2 text-sm text-gray-600 rounded-md focus:outline-none"
               />
             </div>
           </div>
