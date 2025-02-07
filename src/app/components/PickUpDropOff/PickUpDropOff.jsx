@@ -1,4 +1,4 @@
-"use client";
+"use client"
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -56,16 +56,19 @@ const PickUpDropOff = () => {
     minDropoffDate.setHours(minDropoffDate.getHours() + 24);
     return minDropoffDate;
   };
+
   const handlePickupDateChange = (date) => {
     setPickupDate(date);
     const minDropoffDate = calculateMinDropoffDate(date, pickupTime);
     setDropoffDate(minDropoffDate);
   };
+
   const handlePickupTimeChange = (time) => {
     setPickupTime(time);
     const minDropoffDate = calculateMinDropoffDate(pickupDate, time);
     setDropoffDate(minDropoffDate);
   };
+
   const handleDropoffDateChange = (date) => {
     const minDropoffDate = calculateMinDropoffDate(pickupDate, pickupTime);
     if (date < minDropoffDate) {
@@ -74,9 +77,11 @@ const PickUpDropOff = () => {
       setDropoffDate(date);
     }
   };
+
   const handleDropoffTimeChange = (time) => {
     setDropoffTime(time);
   };
+
   return (
     <section className="py-10">
       <div className="mx-auto max-w-[1750px] px-4 md:px-8 flex flex-col items-center justify-center w-full xl:flex-row mt-5 xl:space-x-6">
@@ -97,7 +102,7 @@ const PickUpDropOff = () => {
                 htmlFor="location"
                 className="block text-lg font-bold text-black"
               >
-                Locations
+                Location
               </label>
               <select
                 id="pickupCity"
@@ -195,14 +200,14 @@ const PickUpDropOff = () => {
             height={40}
           />
         </div>
-        <div className="bg-white py-10 px-7 sm:p-6 rounded-lg shadow-md w-full xl:w-[45%] mx-auto  sm:mt-10">
+        <div className="bg-white py-10 px-7 sm:p-6 rounded-lg shadow-md w-full xl:w-[45%] mx-auto sm:mt-10">
           <div className="flex items-center mb-4">
             <input
               type="checkbox"
-              id="pickup"
+              id="dropoff"
               className="mr-2 w-4 sm:w-6 h-4 sm:h-6 rounded-full border-2 border-gray-300 appearance-none checked:bg-blue-500 checked:ring-2 checked:ring-blue-500 focus:outline-none"
             />
-            <label htmlFor="pickup" className="text-lg font-medium">
+            <label htmlFor="dropoff" className="text-lg font-medium">
               Drop - Off
             </label>
           </div>
@@ -212,7 +217,7 @@ const PickUpDropOff = () => {
                 htmlFor="location"
                 className="block text-lg font-bold text-black"
               >
-                Locations
+                Location
               </label>
               <select
                 className="w-full py-2 px-3 mt-2 text-sm  text-gray-600 rounded-md focus:outline-none cursor-pointer appearance-none bg-[url('/images/arrow-down.svg')] bg-no-repeat bg-right bg-[length:1rem]"
@@ -281,4 +286,5 @@ const PickUpDropOff = () => {
     </section>
   );
 };
+
 export default PickUpDropOff;

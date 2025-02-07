@@ -5,7 +5,7 @@ import { client } from "@/sanity/lib/client";
 import Image from "next/image";
 import Link from "next/link";
 
-const CategoryCars = ({ filters }) => {
+const CategoryCars = ({ filters, carsSectionRef }) => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -36,7 +36,7 @@ const CategoryCars = ({ filters }) => {
         seatingCapacity,
         description,
         "currentSlug": slug.current,
-         "categorySlug": type->slug.current
+        "categorySlug": type->slug.current
       }`;
 
       console.log("Query:", query); // Log the query to see the final query
@@ -90,7 +90,7 @@ const CategoryCars = ({ filters }) => {
   }
 
   return (
-    <div className="container mx-auto flex flex-col mb-20">
+    <div className="container mx-auto flex flex-col mb-20" ref={carsSectionRef}>
       <div className="grid mt-6 gap-8 px-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 sm:justify-items-center">
         {products.map((product, index) => (
           <ProductCard key={index} product={product} />

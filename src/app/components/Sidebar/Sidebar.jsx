@@ -4,7 +4,7 @@ import { client } from "@/sanity/lib/client";
 import { FiArrowRight, FiArrowLeft } from "react-icons/fi";
 import { ClipLoader } from "react-spinners";
 
-const Sidebar = ({ onFilterChange, setIsOpen, isOpen }) => {
+const Sidebar = ({ onFilterChange, setIsOpen, isOpen, carsSectionRef }) => {
   const [categories, setCategories] = useState([]);
   const [seatingCapacities, setSeatingCapacities] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
@@ -71,20 +71,31 @@ const Sidebar = ({ onFilterChange, setIsOpen, isOpen }) => {
   };
 
   const handleFilterCars = () => {
-    const formattedCapacities = selectedCapacities.map((capacity) => Number(capacity));
-  
+    const formattedCapacities = selectedCapacities.map((capacity) =>
+      Number(capacity)
+    );
+
     onFilterChange({
       categories: selectedCategories,
       capacities: formattedCapacities,
       price,
     });
-  
-    // ✅ Close the sidebar after filtering (Only for Mobile & Tablet)
+
+    // ✅ Close sidebar on mobile & tablet
     if (window.innerWidth <= 1024) {
       setIsOpen(false);
     }
+
+    // ✅ Scroll to CategoryCars section
+    if (carsSectionRef && carsSectionRef.current) {
+      setTimeout(() => {
+        carsSectionRef.current.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      }, 300); // Small delay to ensure smooth transition
+    }
   };
-  
 
   return (
     <>
@@ -108,10 +119,18 @@ const Sidebar = ({ onFilterChange, setIsOpen, isOpen }) => {
             TYPE
           </h3>
 
-          <Suspense fallback={<ClipLoader color="#3563E9" size={50} className="mx-auto mt-6" />}>
+          <Suspense
+            fallback={
+              <ClipLoader color="#3563E9" size={50} className="mx-auto mt-6" />
+            }
+          >
             <div className="space-y-4">
               {categories.length === 0 ? (
-                <ClipLoader color="#3563E9" size={50} className="mx-auto mt-6" />
+                <ClipLoader
+                  color="#3563E9"
+                  size={50}
+                  className="mx-auto mt-6"
+                />
               ) : (
                 categories.map((category) => (
                   <label
@@ -142,10 +161,18 @@ const Sidebar = ({ onFilterChange, setIsOpen, isOpen }) => {
             CAPACITY
           </h3>
 
-          <Suspense fallback={<ClipLoader color="#3563E9" size={50} className="mx-auto mt-6" />}>
+          <Suspense
+            fallback={
+              <ClipLoader color="#3563E9" size={50} className="mx-auto mt-6" />
+            }
+          >
             <div className="space-y-4">
               {seatingCapacities.length === 0 ? (
-                <ClipLoader color="#3563E9" size={50} className="mx-auto mt-6" />
+                <ClipLoader
+                  color="#3563E9"
+                  size={50}
+                  className="mx-auto mt-6"
+                />
               ) : (
                 seatingCapacities.map((capacity) => (
                   <label
