@@ -47,20 +47,6 @@ const CheckoutForm = ({ car, days, onSuccess }) => {
     };
 
     fetchCities();
-
-    const savedPickupCity = localStorage.getItem("pickupCity");
-    const savedDropoffCity = localStorage.getItem("dropoffCity");
-    const savedPickupDate = localStorage.getItem("pickupDate");
-    const savedDropoffDate = localStorage.getItem("dropoffDate");
-    const savedPickupTime = localStorage.getItem("pickupTime");
-    const savedDropoffTime = localStorage.getItem("dropoffTime");
-
-    if (savedPickupCity) setPickupCity(savedPickupCity);
-    if (savedDropoffCity) setDropoffCity(savedDropoffCity);
-    if (savedPickupDate) setPickupDate(new Date(savedPickupDate));
-    if (savedDropoffDate) setDropoffDate(new Date(savedDropoffDate));
-    if (savedPickupTime) setPickupTime(savedPickupTime);
-    if (savedDropoffTime) setDropoffTime(savedDropoffTime);
   }, []);
 
   const calculateMinDropoffDate = (pickupDate, pickupTime) => {
@@ -127,21 +113,29 @@ const CheckoutForm = ({ car, days, onSuccess }) => {
     try {
       // Calculate total amount in cents
       const amount = car.price * days * 100;
-
+      const userId = user.id;
       // Create a PaymentIntent
       const response = await fetch("/api/create-payment-intent", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ amount }),
+        body: JSON.stringify({
+          amount,
+          userId,
+          carId: car._id,
+          pickupLocation: pickupCity,
+          dropoffLocation: dropoffCity,
+          pickupDate,
+          dropoffDate,
+        }),
       });
 
-      const { clientSecret } = await response.json();
+      const { paymentIntent, reservation } = await response.json();
 
       // Confirm the payment
-      const { error: stripeError, paymentIntent } =
-        await stripe.confirmCardPayment(clientSecret, {
+      const { error: stripeError, paymentIntent: confirmedIntent } =
+        await stripe.confirmCardPayment(paymentIntent.client_secret, {
           payment_method: {
             card: elements.getElement(CardNumberElement),
             billing_details: {
@@ -168,12 +162,13 @@ const CheckoutForm = ({ car, days, onSuccess }) => {
         console.log("Stock Update Response:", updateStockData); // 🔹 Debugging
 
         if (updateStockData.success) {
-          onSuccess(paymentIntent);
+          onSuccess(confirmedIntent);
         } else {
           setError(
             `Stock update failed: ${updateStockData.error || "Unknown error"} ${car._id}`
           );
         }
+        window.location.href = `/reservation/dashboard`;
       }
     } catch (err) {
       setError(`An error occurred: ${err.message}`);
