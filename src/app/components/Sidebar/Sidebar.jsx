@@ -111,7 +111,7 @@ const Sidebar = ({ onFilterChange, setIsOpen, isOpen, carsSectionRef }) => {
       <div
         className={`bg-white h-full p-6 md:pl-20 pl-10 pt-10 transform transition-transform ${
           isOpen ? "translate-x-0" : "-translate-x-full"
-        } desktop:translate-x-0 tablet:fixed mobile:fixed desktop:static top-0 left-0 z-40 mobile:z-50 desktop:w-[320px] w-[300px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100 hover:scrollbar-thumb-gray-500`}
+        } desktop:translate-x-0 tablet:fixed mobile:fixed desktop:static top-0 left-0 z-40 mobile:z-50 tablet:z-50 desktop:w-[320px] w-[300px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100 hover:scrollbar-thumb-gray-500`}
       >
         {/* Type Section */}
         <div className="mb-8">

@@ -1,9 +1,9 @@
-"use client";
+"use client"
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import Flatpickr from "react-flatpickr";
 import "flatpickr/dist/flatpickr.min.css";
-import { usePathname } from 'next/navigation';
 
 const PickUpDropOff = () => {
   const [cities, setCities] = useState([]);
@@ -14,8 +14,6 @@ const PickUpDropOff = () => {
   const [pickupTime, setPickupTime] = useState("10:00 AM");
   const [dropoffTime, setDropoffTime] = useState("10:00 AM");
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState("");
-  const pathname = usePathname();
 
   useEffect(() => {
     const fetchCities = async () => {
@@ -42,21 +40,7 @@ const PickUpDropOff = () => {
     };
 
     fetchCities();
-
-    // Load saved details from localStorage
-    const savedPickupCity = localStorage.getItem("pickupCity");
-    const savedDropoffCity = localStorage.getItem("dropoffCity");
-    const savedPickupDate = localStorage.getItem("pickupDate");
-    const savedDropoffDate = localStorage.getItem("dropoffDate");
-    const savedPickupTime = localStorage.getItem("pickupTime");
-    const savedDropoffTime = localStorage.getItem("dropoffTime");
-
-    if (savedPickupCity) setPickupCity(savedPickupCity);
-    if (savedDropoffCity) setDropoffCity(savedDropoffCity);
-    if (savedPickupDate) setPickupDate(new Date(savedPickupDate));
-    if (savedDropoffDate) setDropoffDate(new Date(savedDropoffDate));
-    if (savedPickupTime) setPickupTime(savedPickupTime);
-    if (savedDropoffTime) setDropoffTime(savedDropoffTime);
+    
   }, []);
 
   const calculateMinDropoffDate = (pickupDate, pickupTime) => {
@@ -75,56 +59,28 @@ const PickUpDropOff = () => {
   };
 
   const handlePickupDateChange = (date) => {
-    const newDate = new Date(date);
-    setPickupDate(newDate);
-    const minDropoffDate = calculateMinDropoffDate(newDate, pickupTime);
+    setPickupDate(date);
+    const minDropoffDate = calculateMinDropoffDate(date, pickupTime);
     setDropoffDate(minDropoffDate);
-    localStorage.setItem("pickupDate", newDate.toISOString());
-    localStorage.setItem("dropoffDate", minDropoffDate.toISOString());
   };
 
   const handlePickupTimeChange = (time) => {
     setPickupTime(time);
     const minDropoffDate = calculateMinDropoffDate(pickupDate, time);
     setDropoffDate(minDropoffDate);
-    localStorage.setItem("pickupTime", time);
-    localStorage.setItem("dropoffDate", minDropoffDate.toISOString());
   };
 
   const handleDropoffDateChange = (date) => {
-    const newDate = new Date(date);
     const minDropoffDate = calculateMinDropoffDate(pickupDate, pickupTime);
-    if (newDate < minDropoffDate) {
+    if (date < minDropoffDate) {
       setDropoffDate(minDropoffDate);
-      localStorage.setItem("dropoffDate", minDropoffDate.toISOString());
     } else {
-      setDropoffDate(newDate);
-      localStorage.setItem("dropoffDate", newDate.toISOString());
+      setDropoffDate(date);
     }
   };
 
   const handleDropoffTimeChange = (time) => {
     setDropoffTime(time);
-    localStorage.setItem("dropoffTime", time);
-  };
-
-  const handlePickupCityChange = (e) => {
-    setPickupCity(e.target.value);
-    localStorage.setItem("pickupCity", e.target.value);
-  };
-
-  const handleDropoffCityChange = (e) => {
-    setDropoffCity(e.target.value);
-    localStorage.setItem("dropoffCity", e.target.value);
-  };
-
-  const handleSubmit = () => {
-    if (!pickupCity || !dropoffCity) {
-      setError("Please select both pickup and dropoff locations.");
-      return;
-    }
-    setError("");
-    window.location.href = "/cars";
   };
 
   return (
@@ -151,9 +107,9 @@ const PickUpDropOff = () => {
               </label>
               <select
                 id="pickupCity"
-                className="w-full py-2 px-3 mt-2 text-sm text-gray-600 rounded-md focus:outline-none cursor-pointer appearance-none bg-[url('/images/arrow-down.svg')] bg-no-repeat bg-right bg-[length:1rem]"
+                className="w-full py-2 px-3 mt-2 text-sm  text-gray-600 rounded-md focus:outline-none cursor-pointer appearance-none bg-[url('/images/arrow-down.svg')] bg-no-repeat bg-right bg-[length:1rem]"
                 value={pickupCity}
-                onChange={handlePickupCityChange}
+                onChange={(e) => setPickupCity(e.target.value)}
                 disabled={isLoading} // Disable dropdown while loading
               >
                 {isLoading ? (
@@ -203,7 +159,7 @@ const PickUpDropOff = () => {
                 className="w-full py-2 px-3 mt-2 text-sm text-gray-600 rounded-md focus:outline-none"
                 value={pickupTime}
                 onChange={(selectedDates) =>
-                  handlePickupTimeChange(
+                  setPickupTime(
                     selectedDates[0].toLocaleTimeString([], {
                       hour: "2-digit",
                       minute: "2-digit",
@@ -221,8 +177,6 @@ const PickUpDropOff = () => {
             // Swap the pickup and dropoff locations
             setPickupCity(dropoffCity);
             setDropoffCity(pickupCity);
-            localStorage.setItem("pickupCity", dropoffCity);
-            localStorage.setItem("dropoffCity", pickupCity);
           }}
         >
           <Image
@@ -238,8 +192,6 @@ const PickUpDropOff = () => {
             // Swap the pickup and dropoff locations
             setPickupCity(dropoffCity);
             setDropoffCity(pickupCity);
-            localStorage.setItem("pickupCity", dropoffCity);
-            localStorage.setItem("dropoffCity", pickupCity);
           }}
         >
           <Image
@@ -269,10 +221,9 @@ const PickUpDropOff = () => {
                 Location
               </label>
               <select
-                className="w-full py-2 px-3 mt-2 text-sm text-gray-600 rounded-md focus:outline-none cursor-pointer appearance-none bg-[url('/images/arrow-down.svg')] bg-no-repeat bg-right bg-[length:1rem]"
+                className="w-full py-2 px-3 mt-2 text-sm  text-gray-600 rounded-md focus:outline-none cursor-pointer appearance-none bg-[url('/images/arrow-down.svg')] bg-no-repeat bg-right bg-[length:1rem]"
                 value={dropoffCity}
-                onChange={handleDropoffCityChange}
-                disabled={isLoading} // Disable dropdown while loading
+                onChange={(e) => setDropoffCity(e.target.value)}
               >
                 {isLoading ? (
                   <option>Loading cities...</option> // Show loading text
@@ -326,14 +277,12 @@ const PickUpDropOff = () => {
           </div>
         </div>
       </div>
-      {error && <div className="text-red-500 text-center mt-4">{error}</div>}
       <div className="flex items-center">
-        <button
-          onClick={handleSubmit}
-          className="animated-button text-lg w-60 mt-10 py-4 mx-auto text-white text-center rounded-[5px]"
-        >
-          Check Available Cars
-        </button>
+        <Link href="/cars" className="mx-auto">
+          <button className="animated-button text-lg w-60 mt-10 py-4 mx-auto text-white text-center rounded-[5px]">
+            Check Available Cars
+          </button>
+        </Link>
       </div>
     </section>
   );

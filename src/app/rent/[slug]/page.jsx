@@ -19,7 +19,7 @@ const RentForm = ({ params }) => {
   const [loading, setLoading] = useState(true);
 
   const handleDaysChange = (value) => {
-    const newDays = Math.max(1, Math.min(5, value));
+    const newDays = Math.max(1, Math.min(10, value));
     setDays(newDays);
   };
 
@@ -137,7 +137,7 @@ const RentForm = ({ params }) => {
             {/* Number of Days Selection */}
             <div className="mt-6">
               <label className="text-base font-medium text-gray-700">
-                Number of Days (Max 5)
+                Number of Days (Max 10)
               </label>
               <div className="flex items-center space-x-4 mt-2">
                 <button
@@ -151,7 +151,7 @@ const RentForm = ({ params }) => {
                 <button
                   onClick={() => handleDaysChange(days + 1)}
                   className="px-3 py-2 bg-gray-200 rounded-lg text-black"
-                  disabled={days >= 5}
+                  disabled={days >= 10}
                 >
                   +
                 </button>
