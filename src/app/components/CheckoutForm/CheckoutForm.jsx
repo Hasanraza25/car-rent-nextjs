@@ -47,6 +47,20 @@ const CheckoutForm = ({ car, days, onSuccess }) => {
     };
 
     fetchCities();
+
+    const savedPickupCity = localStorage.getItem("pickupCity");
+    const savedDropoffCity = localStorage.getItem("dropoffCity");
+    const savedPickupDate = localStorage.getItem("pickupDate");
+    const savedDropoffDate = localStorage.getItem("dropoffDate");
+    const savedPickupTime = localStorage.getItem("pickupTime");
+    const savedDropoffTime = localStorage.getItem("dropoffTime");
+
+    if (savedPickupCity) setPickupCity(savedPickupCity);
+    if (savedDropoffCity) setDropoffCity(savedDropoffCity);
+    if (savedPickupDate) setPickupDate(new Date(savedPickupDate));
+    if (savedDropoffDate) setDropoffDate(new Date(savedDropoffDate));
+    if (savedPickupTime) setPickupTime(savedPickupTime);
+    if (savedDropoffTime) setDropoffTime(savedDropoffTime);
   }, []);
 
   const calculateMinDropoffDate = (pickupDate, pickupTime) => {
@@ -669,7 +683,7 @@ const CheckoutForm = ({ car, days, onSuccess }) => {
           <button
             type="submit"
             disabled={!stripe || loading}
-            className="p-4 px-7 bg-blue-500 text-white py-4 rounded-lg text-lg font-semibold hover:bg-blue-600"
+            className="animated-button p-4 px-7 text-white py-4 rounded-lg text-lg font-semibold"
           >
             {loading ? "Processing..." : "Rent Now"}
           </button>
