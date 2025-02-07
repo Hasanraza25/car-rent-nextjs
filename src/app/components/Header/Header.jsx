@@ -40,6 +40,21 @@ const Header = () => {
   const { profileImage } = useProfile();
 
   useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      if (currentScrollY > lastScrollY) {
+        setIsVisible(false);
+      } else {
+        setIsVisible(true);
+      }
+      setLastScrollY(currentScrollY);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [lastScrollY]);
+
+  useEffect(() => {
     const savedSearches = localStorage.getItem("recentSearches");
     if (savedSearches) {
       setRecentSearches(JSON.parse(savedSearches));
@@ -175,7 +190,8 @@ const Header = () => {
 
   return (
     <header
-      className={`md:py-6 py-3 bg-white border-b w-full z-50 transition-transform duration-300 
+      className={`md:py-6 py-3 bg-white border-b fixed w-full top-0 z-50 transition-transform duration-300 ${
+        isVisible ? "translate-y-0" : "-translate-y-full"
       }`}
     >
       <div className="mx-auto max-w-[1700px] px-5 md:px-10 flex items-center justify-between md:flex-row flex-col">

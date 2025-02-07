@@ -102,16 +102,16 @@ const Sidebar = ({ onFilterChange, setIsOpen, isOpen, carsSectionRef }) => {
       {/* Sidebar Toggle Button (Mobile and Tablet Only) */}
       <button
         onClick={toggleSidebar}
-        className="fixed top-5 left-5 z-50 p-2 bg-white shadow-md rounded-full focus:outline-none tablet:block mobile:block hidden"
+        className="fixed top-5 left-5 z-[99999] p-2 bg-white shadow-md rounded-full focus:outline-none tablet:block mobile:block hidden"
       >
         {isOpen ? <FiArrowLeft size={24} /> : <FiArrowRight size={24} />}
       </button>
 
       {/* Sidebar */}
       <div
-        className={`bg-white h-full p-6 pl-20 transform transition-transform ${
+        className={`bg-white h-full p-6 md:pl-20 pl-10 pt-10 transform transition-transform ${
           isOpen ? "translate-x-0" : "-translate-x-full"
-        } desktop:translate-x-0 tablet:fixed mobile:fixed desktop:static top-0 left-0 z-40 desktop:w-[320px] w-[300px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100 hover:scrollbar-thumb-gray-500`}
+        } desktop:translate-x-0 tablet:fixed mobile:fixed desktop:static top-0 left-0 z-40 mobile:z-50 desktop:w-[320px] w-[300px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100 hover:scrollbar-thumb-gray-500`}
       >
         {/* Type Section */}
         <div className="mb-8">

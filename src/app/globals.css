@@ -8,6 +8,7 @@ body {
   font-family: var(--font-jakarata-sans), monospace;
   background-color: #f6f7f9;
   overflow-x: hidden !important;
+  padding-top: 100px;
 }
 
 h1,
@@ -111,24 +112,37 @@ p {
   animation: bounce 1.5s infinite;
 }
 
-
 .loader {
   width: 60px;
   aspect-ratio: 4;
-  --_g: no-repeat radial-gradient(circle closest-side,#3563E9 90%,#0000);
-  background: 
-    var(--_g) 0%   50%,
-    var(--_g) 50%  50%,
+  --_g: no-repeat radial-gradient(circle closest-side, #3563e9 90%, #0000);
+  background:
+    var(--_g) 0% 50%,
+    var(--_g) 50% 50%,
     var(--_g) 100% 50%;
-  background-size: calc(100%/3) 100%;
+  background-size: calc(100% / 3) 100%;
   animation: l7 1s infinite linear;
 }
 @keyframes l7 {
-    33%{background-size:calc(100%/3) 0%  ,calc(100%/3) 100%,calc(100%/3) 100%}
-    50%{background-size:calc(100%/3) 100%,calc(100%/3) 0%  ,calc(100%/3) 100%}
-    66%{background-size:calc(100%/3) 100%,calc(100%/3) 100%,calc(100%/3) 0%  }
+  33% {
+    background-size:
+      calc(100% / 3) 0%,
+      calc(100% / 3) 100%,
+      calc(100% / 3) 100%;
+  }
+  50% {
+    background-size:
+      calc(100% / 3) 100%,
+      calc(100% / 3) 0%,
+      calc(100% / 3) 100%;
+  }
+  66% {
+    background-size:
+      calc(100% / 3) 100%,
+      calc(100% / 3) 100%,
+      calc(100% / 3) 0%;
+  }
 }
-
 
 @media (min-width: 1000px) and (max-width: 1250px) {
   .grid-three-cards {
@@ -137,8 +151,8 @@ p {
   }
 }
 
-@media(min-width: 750px) and (max-width: 850px){
-  .header-searchbar{
+@media (min-width: 750px) and (max-width: 850px) {
+  .header-searchbar {
     width: 250px !important;
   }
 }

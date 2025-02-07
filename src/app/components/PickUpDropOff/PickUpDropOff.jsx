@@ -1,8 +1,9 @@
-"use client"
+"use client";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import Flatpickr from "react-flatpickr";
 import "flatpickr/dist/flatpickr.min.css";
+import { usePathname } from 'next/navigation';
 
 const PickUpDropOff = () => {
   const [cities, setCities] = useState([]);
@@ -14,6 +15,7 @@ const PickUpDropOff = () => {
   const [dropoffTime, setDropoffTime] = useState("10:00 AM");
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
+  const pathname = usePathname();
 
   useEffect(() => {
     const fetchCities = async () => {
@@ -21,7 +23,7 @@ const PickUpDropOff = () => {
       try {
         const response = await fetch("/api/fetchCities", {
           method: "POST",
-          headers: { 
+          headers: {
             "Content-Type": "application/json",
           },
         });
