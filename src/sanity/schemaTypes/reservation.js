@@ -16,6 +16,11 @@ export default defineType({
       type: "string",
     },
     {
+      name: "carName",
+      title: "Car Name",
+      type: "string",
+    },
+    {
       name: "pickupLocation",
       title: "Pick-Up Location",
       type: "string",
@@ -46,6 +51,26 @@ export default defineType({
           { title: "Cancelled", value: "cancelled" },
         ],
       },
+    },
+    {
+      name: "userName",
+      title: "User Name",
+      type: "string",
+    },
+    {
+      name: "userPhone",
+      title: "User Phone",
+      type: "string",
+    },
+    {
+      name: "userAddress",
+      title: "User Address",
+      type: "string",
+    },
+    {
+      name: "userCity",
+      title: "User City",
+      type: "string",
     },
   ],
 });

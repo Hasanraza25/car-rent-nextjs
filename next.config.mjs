@@ -12,6 +12,15 @@ const nextConfig = {
       },
     ],
   },
+  async redirects() {
+    return [
+      {
+        source: "/reservations",
+        destination: "/reservations/dashboard",
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;

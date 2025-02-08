@@ -20,6 +20,9 @@ const CheckoutForm = ({ car, days, onSuccess }) => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [address, setAddress] = useState("");
+  const [city, setCity] = useState("");
   const [isReadyToPay, setIsReadyToPay] = useState(false);
   const [cities, setCities] = useState([]);
   const [pickupCity, setPickupCity] = useState("");
@@ -128,6 +131,10 @@ const CheckoutForm = ({ car, days, onSuccess }) => {
           dropoffLocation: dropoffCity,
           pickupDate,
           dropoffDate,
+          userName: name,
+          userPhone: phone,
+          userAddress: address,
+          userCity: city,
         }),
       });
 
@@ -168,7 +175,6 @@ const CheckoutForm = ({ car, days, onSuccess }) => {
             `Stock update failed: ${updateStockData.error || "Unknown error"} ${car._id}`
           );
         }
-        window.location.href = `/reservation/dashboard`;
       }
     } catch (err) {
       setError(`An error occurred: ${err.message}`);
@@ -220,7 +226,10 @@ const CheckoutForm = ({ car, days, onSuccess }) => {
                 type="text"
                 id="phone"
                 placeholder="Phone number"
-                className="mt-4 block w-full p-5 pl-7 rounded-md bg-gray-100 text-gray-300 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                className="mt-4 block w-full p-5 pl-7 rounded-md bg-gray-100 text-black border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                required
               />
             </div>
             <div>
@@ -234,7 +243,10 @@ const CheckoutForm = ({ car, days, onSuccess }) => {
                 type="text"
                 id="address"
                 placeholder="Address"
-                className="mt-4 block w-full p-5 pl-7 rounded-md bg-gray-100 text-gray-300 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
+                className="mt-4 block w-full p-5 pl-7 rounded-md bg-gray-100 text-black border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                required
               />
             </div>
             <div>
@@ -248,7 +260,10 @@ const CheckoutForm = ({ car, days, onSuccess }) => {
                 type="text"
                 id="city"
                 placeholder="Town or city"
-                className="mt-4 block w-full p-5 pl-7 rounded-md bg-gray-100 text-gray-300 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                value={city}
+                onChange={(e) => setCity(e.target.value)}
+                className="mt-4 block w-full p-5 pl-7 rounded-md bg-gray-100 text-black border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                required
               />
             </div>
           </div>

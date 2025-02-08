@@ -15,6 +15,7 @@ import {
   UserIcon,
   Cog6ToothIcon,
   ArrowLeftOnRectangleIcon,
+  CalendarIcon,
 } from "@heroicons/react/24/outline";
 import { useProfile } from "@/app/Context/ProfileCOntext";
 
@@ -22,6 +23,7 @@ const Header = () => {
   const { wishlistItems } = useWishlist();
   const { user, isSignedIn } = useUser(); // Clerk Authentication
   const { signOut, openSignIn } = useClerk(); // Clerk Functions
+  const { profileImage, setProfileImage } = useProfile();
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
 
@@ -37,7 +39,6 @@ const Header = () => {
   const searchRef = useRef(null);
 
   const pathname = usePathname();
-  const { profileImage } = useProfile();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -88,34 +89,33 @@ const Header = () => {
     const fetchData = async () => {
       try {
         setIsLoading(true);
-        const categoriesQuery = `*[_type == 'categories']{
-          name,
-          "categorySlug": slug.current,
-          "lastCarImage": *[_type == 'car' && references(^._id)] | order(_createdAt desc)[0].image
-        }`;
-        const fetchedCategories = await client.fetch(categoriesQuery);
-
-        const carsQuery = `*[_type == 'car'] | order(_createdAt desc){
-          name,
-          "category": type->name,
-          price,
-          stock,
-          image,
-          discount,
-          "categorySlug": type->slug.current,
-          "currentSlug": slug.current
-        }`;
-        const fetchedCars = await client.fetch(carsQuery);
+        const [fetchedCategories, fetchedCars] = await Promise.all([
+          client.fetch(`*[_type == 'categories']{
+            name,
+            "categorySlug": slug.current,
+            "lastCarImage": *[_type == 'car' && references(^._id)] | order(_createdAt desc)[0].image
+          }`),
+          client.fetch(`*[_type == 'car'] | order(_createdAt desc){
+            name,
+            "category": type->name,
+            price,
+            stock,
+            image,
+            discount,
+            "categorySlug": type->slug.current,
+            "currentSlug": slug.current
+          }`),
+        ]);
 
         setCategories(fetchedCategories);
         setCars(fetchedCars);
-        setIsLoading(false); // Stop loading after fetching
         setSearchResults(
           fetchedCategories.map((cat) => ({ ...cat, type: "category" }))
         );
       } catch (err) {
         console.error("Error fetching data:", err);
-        setIsLoading(false);
+      } finally {
+        setIsLoading(false); // Stop loading after fetching
       }
     };
 
@@ -187,6 +187,11 @@ const Header = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
+  const handleLogout = async () => {
+    await signOut(); // Sign out user
+    setProfileImage("/images/no-profile.png"); // Reset profile image
+  };
 
   return (
     <header
@@ -273,7 +278,18 @@ const Header = () => {
                     </Link>
                   </MenuItem>
 
-                  {/* Settings (Only visible on mobile) */}
+                  <MenuItem as="div">
+                    <Link
+                      href="/reservations/dashboard"
+                      className={`flex items-center gap-2 px-4 py-2 cursor-pointer 
+                  ${pathname === "/reservations/dashboard" ? "text-blue-500" : "text-gray-700 hover:text-blue-500"}
+                `}
+                    >
+                      <CalendarIcon className="w-5 h-5" />
+                      Reservations
+                    </Link>
+                  </MenuItem>
+
                   <MenuItem as="div">
                     <Link
                       href="/settings"
@@ -289,7 +305,7 @@ const Header = () => {
                   {/* Logout */}
                   <MenuItem as="div">
                     <button
-                      onClick={() => signOut()}
+                      onClick={handleLogout}
                       className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:text-red-500 w-full text-left"
                     >
                       <ArrowLeftOnRectangleIcon className="w-5 h-5" />
@@ -603,7 +619,7 @@ const Header = () => {
                   <MenuItem
                     as="div"
                     className={`flex items-center gap-2 px-4 py-2 cursor-pointer 
-              ${pathname === "/profile" ? "text-blue-500 bg-gray-100" : "text-gray-700 hover:bg-gray-100"}
+              ${pathname === "/profile" ? "text-blue-500 bg-gray-100" : "text-gray-700 hover:bg-gray-100 hover:text-blue-500"}
             `}
                   >
                     <Link
@@ -615,14 +631,24 @@ const Header = () => {
                     </Link>
                   </MenuItem>
 
-                  {/* Logout */}
+                  <MenuItem as="div">
+                    <Link
+                      href="/reservations/dashboard"
+                      className={`flex items-center gap-2 px-4 py-2 cursor-pointer  hover:bg-gray-100
+                  ${pathname === "/reservations/dashboard" ? "text-blue-500" : "text-gray-700 hover:text-blue-500"}
+                `}
+                    >
+                      <CalendarIcon className="w-5 h-5" />
+                      Reservations
+                    </Link>
+                  </MenuItem>
                   <MenuItem
                     as="div"
                     className="flex items-center gap-2 px-4 py-2 text-left w-full text-gray-700 hover:bg-gray-100 cursor-pointer"
                   >
                     <button
-                      onClick={() => signOut()}
-                      className="flex items-center gap-2 w-full"
+                      onClick={handleLogout}
+                      className="flex items-center gap-2 w-full hover:text-blue-500" 
                     >
                       <ArrowLeftOnRectangleIcon className="w-5 h-5" />
                       Logout

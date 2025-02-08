@@ -4,6 +4,38 @@
 
 @import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap");
 
+:root {
+  --clerk-primary-color: #3563E9; /* Primary color */
+  --clerk-secondary-color: #db4444; /* Secondary color */
+  --clerk-background-color: #f0f0f0; /* Background color */
+  --clerk-border-color: #e6e6e6; /* Border color */
+  --clerk-input-background-color: #f9f9f9; /* Input background color */
+  --clerk-input-border-color: #cccccc; /* Input border color */
+  --clerk-input-text-color: #333333; /* Input text color */
+  --clerk-button-background-color: #3563E9; /* Button background color */
+  --clerk-button-hover-background-color: #274bb5; /* Button hover background color */
+  --clerk-button-text-color: #ffffff; /* Button text color */
+  --clerk-link-color: #3563E9; /* Link color */
+  --clerk-link-hover-color: #274bb5; /* Link hover color */
+}
+
+/* Additional custom styles */
+.clerk .clerk-modal {
+  border-radius: 10px; /* Rounded corners for the modal */
+}
+
+.clerk .clerk-button {
+  border-radius: 5px; /* Rounded corners for buttons */
+}
+
+.clerk .clerk-input {
+  border-radius: 5px; /* Rounded corners for input fields */
+}
+
+.clerk .clerk-sign-in-page {
+  background-color: var(--clerk-background-color); /* Apply background color */
+}
+
 body {
   font-family: var(--font-jakarata-sans), monospace;
   background-color: #f6f7f9;
