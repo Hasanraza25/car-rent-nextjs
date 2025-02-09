@@ -27,8 +27,16 @@ const CheckoutForm = ({ car, days, onSuccess }) => {
   const [cities, setCities] = useState([]);
   const [pickupCity, setPickupCity] = useState("");
   const [dropoffCity, setDropoffCity] = useState("");
-  const [pickupDate, setPickupDate] = useState(new Date());
-  const [dropoffDate, setDropoffDate] = useState(new Date());
+  const [pickupDate, setPickupDate] = useState(() => {
+    const initialPickupDate = new Date();
+    initialPickupDate.setHours(initialPickupDate.getHours() + 24);
+    return initialPickupDate;
+  });
+  const [dropoffDate, setDropoffDate] = useState(() => {
+    const initialDropoffDate = new Date();
+    initialDropoffDate.setHours(initialDropoffDate.getHours() + 48);
+    return initialDropoffDate;
+  });
   const [pickupTime, setPickupTime] = useState("10:00 AM");
   const [dropoffTime, setDropoffTime] = useState("10:00 AM");
 
@@ -67,6 +75,11 @@ const CheckoutForm = ({ car, days, onSuccess }) => {
     return minDropoffDate;
   };
 
+  useEffect(() => {
+    const minDropoffDate = calculateMinDropoffDate(pickupDate, pickupTime);
+    setDropoffDate(minDropoffDate);
+  }, [pickupDate, pickupTime]);
+
   const handlePickupDateChange = (date) => {
     setPickupDate(date);
     const minDropoffDate = calculateMinDropoffDate(date, pickupTime);
@@ -100,6 +113,23 @@ const CheckoutForm = ({ car, days, onSuccess }) => {
 
   const handleSubmit = async (event) => {
     if (event) event.preventDefault();
+
+    // Check if required fields are filled
+    if (
+      !pickupCity ||
+      pickupCity === "Select your city" ||
+      !dropoffCity ||
+      dropoffCity === "Select your city" ||
+      !pickupDate ||
+      !dropoffDate ||
+      !pickupTime ||
+      !dropoffTime
+    ) {
+      setError(
+        "Please fill in all required fields (pickup and dropoff locations, dates, and times)."
+      );
+      return;
+    }
 
     if (!isSignedIn) {
       setIsReadyToPay(true); // Set flag to continue payment after login
@@ -146,7 +176,7 @@ const CheckoutForm = ({ car, days, onSuccess }) => {
           payment_method: {
             card: elements.getElement(CardNumberElement),
             billing_details: {
-              name: name, // Replace with actual name from form
+              name: name,
             },
           },
         });
@@ -166,7 +196,7 @@ const CheckoutForm = ({ car, days, onSuccess }) => {
 
         const updateStockData = await updateStockResponse.json();
 
-        console.log("Stock Update Response:", updateStockData); // 🔹 Debugging
+        console.log("Stock Update Response:", updateStockData);
 
         if (updateStockData.success) {
           onSuccess(confirmedIntent);
@@ -343,7 +373,7 @@ const CheckoutForm = ({ car, days, onSuccess }) => {
                     options={{
                       enableTime: false, // Only date selection
                       dateFormat: "Y-m-d", // Format: YYYY-MM-DD
-                      minDate: "today", // Prevent past dates
+                      minDate: new Date().fp_incr(1), // Prevent selecting today's date
                       clickOpens: true, // Open only when clicked
                     }}
                     className="block w-full p-5 pl-7 pr-10 rounded-md bg-gray-100 text-gray-500 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm appearance-none"
