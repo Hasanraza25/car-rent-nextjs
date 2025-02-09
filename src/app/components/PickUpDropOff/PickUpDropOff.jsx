@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -9,8 +9,16 @@ const PickUpDropOff = () => {
   const [cities, setCities] = useState([]);
   const [pickupCity, setPickupCity] = useState("");
   const [dropoffCity, setDropoffCity] = useState("");
-  const [pickupDate, setPickupDate] = useState(new Date());
-  const [dropoffDate, setDropoffDate] = useState(new Date());
+  const [pickupDate, setPickupDate] = useState(() => {
+    const initialPickupDate = new Date();
+    initialPickupDate.setHours(initialPickupDate.getHours() + 24);
+    return initialPickupDate;
+  });
+  const [dropoffDate, setDropoffDate] = useState(() => {
+    const initialDropoffDate = new Date();
+    initialDropoffDate.setHours(initialDropoffDate.getHours() + 48);
+    return initialDropoffDate;
+  });
   const [pickupTime, setPickupTime] = useState("10:00 AM");
   const [dropoffTime, setDropoffTime] = useState("10:00 AM");
   const [isLoading, setIsLoading] = useState(true);
@@ -40,7 +48,6 @@ const PickUpDropOff = () => {
     };
 
     fetchCities();
-    
   }, []);
 
   const calculateMinDropoffDate = (pickupDate, pickupTime) => {
@@ -57,6 +64,11 @@ const PickUpDropOff = () => {
     minDropoffDate.setHours(minDropoffDate.getHours() + 24);
     return minDropoffDate;
   };
+
+  useEffect(() => {
+    const minDropoffDate = calculateMinDropoffDate(pickupDate, pickupTime);
+    setDropoffDate(minDropoffDate);
+  }, [pickupDate, pickupTime]);
 
   const handlePickupDateChange = (date) => {
     setPickupDate(date);

@@ -1,10 +1,14 @@
 "use client";
 import { useEffect, useRef } from "react";
 import { Howl } from "howler";
+import { useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 
-export default function PaymentSuccess({ searchParams }) {
-  const { payment_intent } = searchParams;
+export default function PaymentSuccess() {
+  const searchParams = useSearchParams();
+  const reservation_id = searchParams.get('reservation_id');
   const soundRef = useRef(null);
+  const router = useRouter();
 
   useEffect(() => {
     soundRef.current = new Howl({
@@ -30,6 +34,10 @@ export default function PaymentSuccess({ searchParams }) {
     };
   }, []);
 
+  const handleViewReservation = () => {
+    router.push(`/reservations/${reservation_id}`);
+  };
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-green-50 to-green-100 p-6">
       <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full text-center transform transition-all duration-500 hover:scale-105">
@@ -48,18 +56,18 @@ export default function PaymentSuccess({ searchParams }) {
         </p>
 
         <div className="bg-green-50 p-4 rounded-lg mb-6">
-          <p className="text-sm text-gray-600">Payment Intent ID:</p>
+          <p className="text-sm text-gray-600">Reservation ID:</p>
           <p className="text-lg font-mono text-green-700 break-all">
-            {payment_intent}
+            {reservation_id}
           </p>
         </div>
 
-        <a
-          href="/"
+        <button
+          onClick={handleViewReservation}
           className="inline-block px-8 py-3 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition-all duration-300 hover:shadow-lg"
         >
-          Return Home
-        </a>
+          View Reservation
+        </button>
 
         <p className="text-sm text-gray-500 mt-6">
           Need help?{" "}
