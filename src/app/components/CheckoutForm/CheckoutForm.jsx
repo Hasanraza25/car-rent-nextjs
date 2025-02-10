@@ -376,6 +376,7 @@ const CheckoutForm = ({ car, days, onSuccess }) => {
                       dateFormat: "Y-m-d", // Format: YYYY-MM-DD
                       minDate: new Date().fp_incr(1), // Prevent selecting today's date
                       clickOpens: true, // Open only when clicked
+                      disableMobile: true,
                     }}
                     className="block w-full p-5 pl-7 pr-10 rounded-md bg-gray-100 text-gray-500 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm appearance-none"
                     style={{
@@ -406,7 +407,8 @@ const CheckoutForm = ({ car, days, onSuccess }) => {
                       noCalendar: true,
                       dateFormat: "h:i K", // 12-hour format with AM/PM
                       time_24hr: false,
-                      minuteIncrement: 5, // Adjust for smooth scrolling
+                      minuteIncrement: 5, 
+                      disableMobile: true,
                     }}
                     id="pickup-time"
                     className="block w-full p-5 pl-7 pr-10 rounded-md bg-gray-100 text-gray-500 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm appearance-none"
@@ -495,6 +497,7 @@ const CheckoutForm = ({ car, days, onSuccess }) => {
                       dateFormat: "Y-m-d", // Format: YYYY-MM-DD
                       minDate: calculateMinDropoffDate(pickupDate, pickupTime), // Prevent past dates
                       clickOpens: true, // Open only when clicked
+                      disableMobile: true,
                     }}
                     id="dropoff-date"
                     className="block w-full p-5 pl-7 pr-10 rounded-md bg-gray-100 text-gray-500 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm appearance-none"
@@ -527,6 +530,7 @@ const CheckoutForm = ({ car, days, onSuccess }) => {
                       dateFormat: "h:i K", // 12-hour format with AM/PM
                       time_24hr: false,
                       minuteIncrement: 5, // Adjust for smooth scrolling
+                      disableMobile: true,
                     }}
                     id="dropoff-time"
                     className="block w-full p-5 pl-7 pr-10 rounded-md bg-gray-100 text-gray-500 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm appearance-none"

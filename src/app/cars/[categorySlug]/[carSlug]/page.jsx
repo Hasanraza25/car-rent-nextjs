@@ -247,9 +247,7 @@ const CarDetail = ({ params }) => {
                   <p className="ml-3 text-gray-400 text-sm">440+ Reviewier</p>
                 </div>
                 <p className="text-gray-500 mt-5 text-[1.3rem] leading-10 font-normal">
-                  NISMO has become the embodiment of Nissan&#39;s outstanding
-                  performance, inspired by the most unforgiving proving ground,
-                  the &quot;race track&quot;.
+                 {car.description}
                 </p>
               </div>
 

@@ -151,6 +151,7 @@ const PickUpDropOff = () => {
                   dateFormat: "Y-m-d", // Format: YYYY-MM-DD
                   minDate: new Date().fp_incr(1), // Prevent past dates
                   clickOpens: true, // Open only when clicked
+                  disableMobile: true, // Disable native mobile pickers
                 }}
                 className="lg:w-32 w-full py-2 mt-2 text-sm text-gray-600 sm:p-4 rounded-md focus:outline-none appearance-none bg-[url('/images/arrow-down.svg')] bg-no-repeat bg-right bg-[length:1rem]"
                 placeholder="Select your Date"
@@ -167,6 +168,7 @@ const PickUpDropOff = () => {
                   dateFormat: "h:i K", // 12-hour format with AM/PM
                   time_24hr: false,
                   minuteIncrement: 5, // Adjust for smooth scrolling
+                  disableMobile: true, // Disable native mobile pickers
                 }}
                 className="w-full py-2 px-3 mt-2 text-sm text-gray-600 rounded-md focus:outline-none"
                 value={pickupTime}
@@ -264,6 +266,7 @@ const PickUpDropOff = () => {
                   dateFormat: "Y-m-d", // Format: YYYY-MM-DD
                   minDate: calculateMinDropoffDate(pickupDate, pickupTime), // Prevent past dates
                   clickOpens: true, // Open only when clicked
+                  disableMobile: true, // Disable native mobile pickers
                 }}
                 className="lg:w-32 w-full py-2 mt-2 text-sm text-gray-600 sm:p-4 rounded-md focus:outline-none appearance-none bg-[url('/images/arrow-down.svg')] bg-no-repeat bg-right bg-[length:1rem]"
                 placeholder="Select your Date"
@@ -280,6 +283,7 @@ const PickUpDropOff = () => {
                   dateFormat: "h:i K", // 12-hour format with AM/PM
                   time_24hr: false,
                   minuteIncrement: 5, // Adjust for smooth scrolling
+                  disableMobile: true, // Disable native mobile pickers
                 }}
                 className="w-full py-2 px-3 mt-2 text-sm text-gray-600 rounded-md focus:outline-none "
                 onChange={handleDropoffTimeChange}
