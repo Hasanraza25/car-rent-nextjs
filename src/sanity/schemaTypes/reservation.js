@@ -46,9 +46,9 @@ export default defineType({
       type: "string",
       options: {
         list: [
-          { title: "Pending", value: "pending" },
           { title: "Confirmed", value: "confirmed" },
-          { title: "Cancelled", value: "cancelled" },
+          { title: "In Progress", value: "in_progress" },
+          { title: "Completed", value: "completed" },
         ],
       },
     },

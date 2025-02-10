@@ -75,8 +75,8 @@ const RentForm = ({ params }) => {
     );
   }
 
-  const handlePaymentSuccess = (paymentIntent) => {
-    window.location.href = `/payment-success?payment_intent=${paymentIntent.id}`;
+  const handleSuccess = (reservation) => {
+    window.location.href = `/payment-success?reservation_id=${reservation._id}`;
   };
 
   return (
@@ -86,7 +86,7 @@ const RentForm = ({ params }) => {
           <CheckoutForm
             car={car}
             days={days}
-            onSuccess={handlePaymentSuccess}
+            onSuccess={handleSuccess}
           />
         </Elements>
 

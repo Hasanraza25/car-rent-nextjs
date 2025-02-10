@@ -11,6 +11,8 @@ import {
   FaTimesCircle,
   FaClipboardList,
   FaCarSide,
+  FaHourglassHalf,
+  FaFlagCheckered,
 } from "react-icons/fa";
 import {
   ArrowLeftOnRectangleIcon,
@@ -204,17 +206,28 @@ const ReservationDashboard = () => {
                     </div>
                   </td>
                   <td className="py-4 px-6 whitespace-nowrap">
-                    <div className="flex items-center">
-                      {reservation.status === "confirmed" ? (
-                        <FaCheckCircle className="text-lg text-green-500 mr-2" />
-                      ) : (
-                        <FaTimesCircle className="text-lg text-yellow-500 mr-2" />
-                      )}
-                      <span className="text-gray-900">
-                        {reservation.status.charAt(0).toUpperCase() +
-                          reservation.status.slice(1)}
-                      </span>
-                    </div>
+                    <td className="py-4 px-6 whitespace-nowrap">
+                      <div className="flex items-center">
+                        {reservation.status === "confirmed" && (
+                          <>
+                            <FaCheckCircle className="text-lg text-green-500 mr-2" />
+                            <span className="text-gray-900">Confirmed</span>
+                          </>
+                        )}
+                        {reservation.status === "in_progress" && (
+                          <>
+                            <FaHourglassHalf className="text-lg text-blue-500 mr-2" />
+                            <span className="text-gray-900">In Progress</span>
+                          </>
+                        )}
+                        {reservation.status === "completed" && (
+                          <>
+                            <FaFlagCheckered className="text-lg text-purple-500 mr-2" />
+                            <span className="text-gray-900">Completed</span>
+                          </>
+                        )}
+                      </div>
+                    </td>
                   </td>
                 </tr>
               ))}

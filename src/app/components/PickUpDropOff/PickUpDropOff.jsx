@@ -149,7 +149,7 @@ const PickUpDropOff = () => {
                 options={{
                   enableTime: false, // Only date selection
                   dateFormat: "Y-m-d", // Format: YYYY-MM-DD
-                  minDate: "today", // Prevent past dates
+                  minDate: new Date().fp_incr(1), // Prevent past dates
                   clickOpens: true, // Open only when clicked
                 }}
                 className="lg:w-32 w-full py-2 mt-2 text-sm text-gray-600 sm:p-4 rounded-md focus:outline-none appearance-none bg-[url('/images/arrow-down.svg')] bg-no-repeat bg-right bg-[length:1rem]"

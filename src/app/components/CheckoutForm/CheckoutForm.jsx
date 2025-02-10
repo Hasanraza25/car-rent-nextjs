@@ -157,6 +157,7 @@ const CheckoutForm = ({ car, days, onSuccess }) => {
           amount,
           userId,
           carId: car._id,
+          carName: car.name,
           pickupLocation: pickupCity,
           dropoffLocation: dropoffCity,
           pickupDate,
@@ -199,9 +200,7 @@ const CheckoutForm = ({ car, days, onSuccess }) => {
         console.log("Stock Update Response:", updateStockData);
 
         if (updateStockData.success) {
-          onSuccess(confirmedIntent);
-          // Redirect to payment success page with reservation ID
-          router.push(`/payment-success?reservation_id=${reservation._id}`);
+          onSuccess(reservation);
         } else {
           setError(
             `Stock update failed: ${updateStockData.error || "Unknown error"} ${car._id}`

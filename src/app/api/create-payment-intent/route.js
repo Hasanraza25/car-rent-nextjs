@@ -7,7 +7,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
 });
 
 export async function POST(req) {
-  const { amount, userId, carId, pickupLocation, dropoffLocation, pickupDate, dropoffDate, userName, userPhone, userAddress, userCity } = await req.json();
+  const { amount, userId, carId, carName, pickupLocation, dropoffLocation, pickupDate, dropoffDate, userName, userPhone, userAddress, userCity } = await req.json();
   try {
 
     const paymentIntent = await stripe.paymentIntents.create({
@@ -20,6 +20,7 @@ export async function POST(req) {
       _type: 'reservation',
       userId,
       carId,
+      carName,
       pickupLocation,
       dropoffLocation,
       pickupDate,
@@ -28,7 +29,7 @@ export async function POST(req) {
       userPhone,
       userAddress,
       userCity,
-      status: 'pending',
+      status: 'confirmed',
     };
 
     const result = await client.create(reservation);

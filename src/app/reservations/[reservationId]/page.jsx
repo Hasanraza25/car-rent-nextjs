@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { ClipLoader } from "react-spinners";
 import { urlFor } from "@/sanity/lib/client";
 import Image from "next/image";
 import {
@@ -14,6 +13,8 @@ import {
   FaPhone,
   FaHome,
   FaCity,
+  FaHourglassHalf,
+  FaFlagCheckered,
 } from "react-icons/fa";
 
 const ReservationDetail = ({ params }) => {
@@ -174,19 +175,19 @@ const ReservationDetail = ({ params }) => {
             <div className="flex items-center mt-3">
               {status === "confirmed" ? (
                 <FaCheckCircle className="text-green-500 mr-3" />
-              ) : status === "pending" ? (
-                <FaTimesCircle className="text-yellow-500 mr-3" />
+              ) : status === "in_progress" ? (
+                <FaHourglassHalf className="text-lg text-blue-500 mr-3" />
               ) : (
-                <FaTimesCircle className="text-red-500 mr-3" />
+                <FaFlagCheckered className="text-lg text-purple-500 mr-2" />
               )}
               <select
                 value={status}
                 onChange={(e) => handleStatusChange(e.target.value)}
                 className="ml-2 border border-gray-300 rounded p-2 w-full bg-gray-100"
               >
-                <option value="pending">Pending</option>
                 <option value="confirmed">Confirmed</option>
-                <option value="cancelled">Cancelled</option>
+                <option value="in_progress">In Progress</option>
+                <option value="completed">Completed</option>
               </select>
             </div>
           </div>
