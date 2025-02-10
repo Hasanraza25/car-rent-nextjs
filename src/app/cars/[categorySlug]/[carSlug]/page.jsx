@@ -7,12 +7,20 @@ import RecentCars from "@/app/components/Cars/RecentCars";
 import { client, urlFor } from "@/sanity/lib/client";
 import { useWishlist } from "@/app/Context/WishlistContext";
 import Image from "next/image";
+import { useUser } from "@clerk/nextjs";
+import Swal from "sweetalert2";
 
 const CarDetail = ({ params }) => {
   const slug = params.carSlug;
   const [car, setCar] = useState([]);
   const [isHeartClicked, setIsHeartClicked] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [rating, setRating] = useState(0);
+  const [reviewText, setReviewText] = useState("");
+  const [reviews, setReviews] = useState([]);
+  const [submitting, setSubmitting] = useState(false);
+
+  const { user, isSignedIn } = useUser();
 
   const { wishlistItems, addToWishlist, removeFromWishlist } = useWishlist();
 
@@ -20,19 +28,20 @@ const CarDetail = ({ params }) => {
     try {
       setLoading(true);
       const query = `*[_type == 'car']{
-        name,
-        "category": type->name,
-        price,
-        stock,
-        image,
-        discount,
-        steering,
-        fuelCapacity,
-        seatingCapacity,
-        description,
-        "currentSlug": slug.current,
-        "categorySlug": type->slug.current,
-      }`;
+      _id,
+          name,
+          "category": type->name,
+          price,
+          stock,
+          image,
+          discount,
+          steering,
+          fuelCapacity,
+          seatingCapacity,
+          description,
+          "currentSlug": slug.current,
+          "categorySlug": type->slug.current,
+        }`;
       const products = await client.fetch(query);
       setCar(products.find((car) => car.currentSlug === slug));
     } catch (err) {
@@ -42,9 +51,25 @@ const CarDetail = ({ params }) => {
     }
   };
 
+  const fetchReviews = async () => {
+    try {
+      const query = `*[_type == "review" && carId == "${car._id}"] | order(date desc)`;
+      const data = await client.fetch(query);
+      setReviews(data);
+    } catch (err) {
+      console.error("Error fetching reviews:", err);
+    }
+  };
+
   useEffect(() => {
     getCars();
   }, []);
+
+  useEffect(() => {
+    if (car._id) {
+      fetchReviews();
+    }
+  }, [car._id]);
 
   useEffect(() => {
     if (wishlistItems.some((item) => item.currentSlug === car.currentSlug)) {
@@ -65,6 +90,63 @@ const CarDetail = ({ params }) => {
     }
   };
 
+  const handleReviewSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!isSignedIn) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "You need to Sign in!",
+      });
+      return;
+    }
+
+    if (rating === 0) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Please select at least one star!",
+      });
+      return;
+    }
+
+    setSubmitting(true);
+
+    const review = {
+      _type: "review",
+      carId: car._id,
+      userId: user.id,
+      userName: user.fullName,
+      userImage: user.imageUrl,
+      rating,
+      reviewText,
+      date: new Date().toISOString(),
+    };
+
+    try {
+      await client.create(review);
+      setReviewText("");
+      setRating(0);
+      fetchReviews();
+      Swal.fire({
+        icon: "success",
+        title: "Review Submitted Successfully!",
+        showConfirmButton: true,
+      }).then(() => {
+        window.location.reload();
+      });
+    } catch (err) {
+      console.error("Error Occured:", err);
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Something went wrong!',
+      });
+    } finally {
+      setSubmitting(false);
+    }
+  };
   if (!car) {
     return <div>Car not found</div>;
   }
@@ -229,7 +311,51 @@ const CarDetail = ({ params }) => {
             </div>
           </div>
 
-          <ReviewsSection />
+          {isSignedIn && (
+            <div className="container mt-10  px-10 py-8 rounded-lg w-full max-w-[1700px] mx-auto">
+              <h3 className="text-3xl font-semibold mb-6 text-center">
+                Leave a Review
+              </h3>
+              <p className="text-center text-gray-600 mb-6">
+                Your feedback is valuable to us. Please leave your review and
+                rating below.
+              </p>
+              <form onSubmit={handleReviewSubmit} className="space-y-6">
+                <div className="flex items-center justify-center mb-6">
+                  <label className="mr-4 text-lg">Rating:</label>
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <button
+                      key={star}
+                      type="button"
+                      onClick={() => setRating(star)}
+                      className={`text-3xl transition-colors duration-200 ${
+                        rating >= star ? "text-yellow-500" : "text-gray-300"
+                      } hover:text-yellow-500 focus:outline-none`}
+                    >
+                      ★
+                    </button>
+                  ))}
+                </div>
+                <textarea
+                  value={reviewText}
+                  onChange={(e) => setReviewText(e.target.value)}
+                  rows="5"
+                  className="w-full p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="Write your review here..."
+                  required
+                ></textarea>
+                <button
+                  type="submit"
+                  className="animated-button text-lg w-60 mt-10 py-4 mx-auto text-white text-center rounded-[5px]"
+                  disabled={submitting}
+                >
+                   {submitting ? "Submitting..." : "Submit Review"}
+                </button>
+              </form>
+            </div>
+          )}
+
+          <ReviewsSection reviews={reviews} />
           <RecentCars />
         </div>
       </div>

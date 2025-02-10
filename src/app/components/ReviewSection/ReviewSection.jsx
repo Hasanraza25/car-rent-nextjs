@@ -2,51 +2,16 @@
 import Image from "next/image";
 import { useState } from "react";
 
-const ReviewsSection = () => {
+const ReviewsSection = ({ reviews }) => {
   const [visibleReviews, setVisibleReviews] = useState(2);
-
-  const reviews = [
-    {
-      id: 1,
-      name: "Alex Stanton",
-      date: "21 July 2022",
-      role: "CEO at Bukalapak",
-      text: "We are very happy with the service from the MORENT App. Morent has a low price and also a large variety of cars with good and comfortable facilities. In addition, the service provided by the officers is also very friendly and very polite.",
-      image: "/images/review-1.svg",
-    },
-    {
-      id: 2,
-      name: "Skylar Dias",
-      date: "20 July 2022",
-      role: "CEO at Amazon",
-      text: "We are greatly helped by the services of the MORENT Application. Morent has low prices and also a wide variety of cars with good and comfortable facilities. In addition, the service provided by the officers is also very friendly and very polite.",
-      image: "/images/review-2.svg",
-    },
-    {
-      id: 3,
-      name: "Emma Watson",
-      date: "19 July 2022",
-      role: "Marketing Manager at Google",
-      text: "Morent App offers fantastic services with excellent car options. Their support team is responsive and very professional.",
-      image: "/images/review-1.svg",
-    },
-    {
-      id: 4,
-      name: "John Doe",
-      date: "18 July 2022",
-      role: "CTO at Microsoft",
-      text: "Using Morent App has been a wonderful experience. Affordable prices and excellent car variety are their strong points.",
-      image: "/images/review-2.svg",
-    },
-  ];
 
   const handleShowMore = () => {
     setVisibleReviews((prev) => prev + 2);
   };
 
   return (
-    <div className="py-12 max-w-[1700px] mx-auto">
-      <div className="container mx-auto px-4">
+    <div className="py-12 max-w-[1700px] mx-auto w-full">
+      <div className="px-4">
         <div className="flex items-center space-x-6 mb-5 ml-5">
           <h2 className="text-2xl font-semibold">Reviews</h2>
           <span className="text-white bg-[#3563E9] px-4 py-2 rounded-lg">
@@ -54,42 +19,59 @@ const ReviewsSection = () => {
           </span>
         </div>
 
-        <div className="flex flex-col bg-white shadow-md w-full">
-          {reviews.slice(0, visibleReviews).map((review) => (
-            <div
-              key={review.id}
-              className="p-6 rounded-lg flex flex-col md:flex-row space-y-5 md:space-y-0 md:space-x-7 w-full"
-            >
-              <div className="flex-shrink-0 mx-auto md:mx-0">
-                <Image
-                  src={review.image}
-                  alt={review.name}
-                  width={70}
-                  height={70}
-                  className="w-[70px] h-[70px] rounded-full"
-                  priority
-                />
-              </div>
-              <div className="flex-1 text-center md:text-center">
-                <div className="flex flex-wrap gap-2 justify-between">
-                  <h3 className="text-xl font-bold">{review.name}</h3>
-                  <p className="text-gray-500 text-sm">{review.date}</p>
-                </div>
-                <div className="flex flex-wrap gap-2 justify-between">
-                  <p className="text-gray-400 mt-2">{review.role}</p>
+        <div className="flex flex-col bg-white rounded-lg shadow-md w-full">
+          {reviews.slice(0, visibleReviews).map((review, index) => (
+            <>
+              <div
+                key={review._id}
+                className="p-6 rounded-lg flex flex-col md:flex-row space-y-5 md:space-y-0 md:space-x-7 w-full animate-slideIn"
+              >
+                <div className="flex-shrink-0 mx-auto md:mx-0">
                   <Image
-                    src="/images/review-stars.svg"
-                    alt="Rating"
-                    width={100}
-                    height={20}
+                    src={
+                      review.userImage
+                        ? review.userImage
+                        : "/images/no-profile.png"
+                    }
+                    alt={review.userName}
+                    width={70}
+                    height={70}
+                    className="w-[70px] h-[70px] rounded-full"
                     priority
                   />
                 </div>
-                <p className="mt-4 text-gray-600 leading-8 text-base text-center md:text-left">
-                  {review.text}
-                </p>
+                <div className="flex-1 text-center md:text-left">
+                  <div className="flex flex-wrap gap-2 justify-between">
+                    <h3 className="text-xl font-bold">{review.userName}</h3>
+                    <p className="text-gray-500 text-sm">
+                      {new Date(review.date).toLocaleDateString()}
+                    </p>
+                  </div>
+                  <div className="flex flex-wrap gap-2 justify-between">
+                    <div className="flex items-center">
+                      {[...Array(5)].map((_, i) => (
+                        <span
+                          key={i}
+                          className={`text-xl ${
+                            i < review.rating ? "text-yellow-500" : "text-gray-300"
+                          }`}
+                        >
+                          ★
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                  <p className="mt-4 text-gray-600 leading-8 text-base">
+                    {review.reviewText}
+                  </p>
+                </div>
               </div>
-            </div>
+              {index < reviews.slice(0, visibleReviews).length - 1 && (
+                <div className="flex justify-center my-4">
+                  <div className="w-11/12 border-t border-dashed border-gray-300"></div>
+                </div>
+              )}
+            </>
           ))}
 
           {visibleReviews < reviews.length && (
