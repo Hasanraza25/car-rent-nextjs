@@ -12,7 +12,13 @@ import { useClerk, useUser } from "@clerk/nextjs";
 import Flatpickr from "react-flatpickr";
 import "flatpickr/dist/flatpickr.min.css";
 
-const CheckoutForm = ({ car, days, onSuccess }) => {
+const CheckoutForm = ({
+  car,
+  days,
+  onSuccess,
+  pickupDate: initialPickUpDate,
+  dropoffDate: initialDropoffDate,
+}) => {
   const stripe = useStripe();
   const elements = useElements();
   const { user, isSignedIn } = useUser(); // Get User Auth Status
@@ -27,16 +33,8 @@ const CheckoutForm = ({ car, days, onSuccess }) => {
   const [cities, setCities] = useState([]);
   const [pickupCity, setPickupCity] = useState("");
   const [dropoffCity, setDropoffCity] = useState("");
-  const [pickupDate, setPickupDate] = useState(() => {
-    const initialPickupDate = new Date();
-    initialPickupDate.setHours(initialPickupDate.getHours() + 24);
-    return initialPickupDate;
-  });
-  const [dropoffDate, setDropoffDate] = useState(() => {
-    const initialDropoffDate = new Date();
-    initialDropoffDate.setHours(initialDropoffDate.getHours() + 48);
-    return initialDropoffDate;
-  });
+  const [pickupDate, setPickupDate] = useState(initialPickUpDate);
+  const [dropoffDate, setDropoffDate] = useState(initialDropoffDate);
   const [pickupTime, setPickupTime] = useState("10:00 AM");
   const [dropoffTime, setDropoffTime] = useState("10:00 AM");
 
@@ -77,19 +75,25 @@ const CheckoutForm = ({ car, days, onSuccess }) => {
 
   useEffect(() => {
     const minDropoffDate = calculateMinDropoffDate(pickupDate, pickupTime);
-    setDropoffDate(minDropoffDate);
-  }, [pickupDate, pickupTime]);
+    setDropoffDate(
+      new Date(minDropoffDate.getTime() + (days - 1) * 24 * 60 * 60 * 1000) // ✅ Fix
+    );
+  }, [pickupDate, pickupTime, days]);
 
   const handlePickupDateChange = (date) => {
     setPickupDate(date);
     const minDropoffDate = calculateMinDropoffDate(date, pickupTime);
-    setDropoffDate(minDropoffDate);
+    setDropoffDate(
+      new Date(minDropoffDate.getTime() + days * 24 * 60 * 60 * 1000)
+    );
   };
 
   const handlePickupTimeChange = (time) => {
     setPickupTime(time);
     const minDropoffDate = calculateMinDropoffDate(pickupDate, time);
-    setDropoffDate(minDropoffDate);
+    setDropoffDate(
+      new Date(minDropoffDate.getTime() + days * 24 * 60 * 60 * 1000)
+    );
   };
 
   const handleDropoffDateChange = (date) => {
@@ -99,6 +103,8 @@ const CheckoutForm = ({ car, days, onSuccess }) => {
     } else {
       setDropoffDate(date);
     }
+    const newDays = Math.min(10, Math.ceil((date - pickupDate) / (1000 * 60 * 60 * 24)) + 1); // Convert difference from milliseconds to days
+    onDropoffDateChange(date); // Update RentForm
   };
 
   const handleDropoffTimeChange = (time) => {
@@ -407,7 +413,7 @@ const CheckoutForm = ({ car, days, onSuccess }) => {
                       noCalendar: true,
                       dateFormat: "h:i K", // 12-hour format with AM/PM
                       time_24hr: false,
-                      minuteIncrement: 5, 
+                      minuteIncrement: 5,
                       disableMobile: true,
                     }}
                     id="pickup-time"
@@ -421,7 +427,7 @@ const CheckoutForm = ({ car, days, onSuccess }) => {
                     }}
                     value={pickupTime}
                     onChange={(selectedDates) =>
-                      setPickupTime(
+                      handlePickupTimeChange(
                         selectedDates[0].toLocaleTimeString([], {
                           hour: "2-digit",
                           minute: "2-digit",

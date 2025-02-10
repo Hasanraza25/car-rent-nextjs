@@ -2,9 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { client, urlFor } from "@/sanity/lib/client";
 import Image from "next/image";
-import {
-  Elements,
-} from "@stripe/react-stripe-js";
+import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import CheckoutForm from "@/app/components/CheckoutForm/CheckoutForm";
 
@@ -17,15 +15,31 @@ const RentForm = ({ params }) => {
   const [car, setCar] = useState(null);
   const [days, setDays] = useState(1);
   const [loading, setLoading] = useState(true);
+  const [pickupDate, setPickupDate] = useState(() => {
+    const initialPickupDate = new Date();
+    initialPickupDate.setHours(initialPickupDate.getHours() + 24); // Pickup date is 1 day ahead
+    return initialPickupDate;
+  });
+  
+  const [dropoffDate, setDropoffDate] = useState(() => {
+    const initialDropoffDate = new Date();
+    initialDropoffDate.setDate(initialDropoffDate.getDate() + 1); // ✅ Now only 1 day ahead
+    return initialDropoffDate;
+  });
+  
 
-  const handleDaysChange = (value) => {
-    const newDays = Math.max(1, Math.min(10, value));
-    setDays(newDays);
-  };
+    const handleDaysChange = (value) => {
+      const newDays = Math.max(1, Math.min(10, value));
+      setDays(newDays);
+
+      const newDropoffDate = new Date(pickupDate);
+      newDropoffDate.setDate(newDropoffDate.getDate() + newDays);
+      setDropoffDate(newDropoffDate);
+    };
 
   const getCars = async () => {
     try {
-      setLoading(true); // ✅ Set loading true before fetching data
+      setLoading(true);
       const query = `*[_type == 'car']{
         _id,
         name,
@@ -45,11 +59,11 @@ const RentForm = ({ params }) => {
       const products = await client.fetch(query);
       const foundCar = products.find((car) => car.currentSlug === slug);
 
-      setCar(foundCar || null); // ✅ If no car found, set to null
+      setCar(foundCar || null);
     } catch (err) {
       console.error("Error fetching cars:", err);
     } finally {
-      setLoading(false); // ✅ Stop loading after fetching
+      setLoading(false);
     }
   };
 
@@ -57,16 +71,14 @@ const RentForm = ({ params }) => {
     getCars();
   }, []);
 
-  // ✅ Show Loader while fetching
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
-        <div className="loader"></div> {/* Replace with actual loader */}
+        <div className="loader"></div>
       </div>
     );
   }
 
-  // ✅ If car is still null after loading, show "Car Not Found"
   if (!car) {
     return (
       <div className="flex justify-center items-center h-screen">
@@ -86,6 +98,8 @@ const RentForm = ({ params }) => {
           <CheckoutForm
             car={car}
             days={days}
+            pickupDate={pickupDate}
+            dropoffDate={dropoffDate} // Pass the updated dropoffDate
             onSuccess={handleSuccess}
           />
         </Elements>
@@ -134,7 +148,6 @@ const RentForm = ({ params }) => {
               </div>
             </div>
 
-            {/* Number of Days Selection */}
             <div className="mt-6">
               <label className="text-base font-medium text-gray-700">
                 Number of Days (Max 10)
