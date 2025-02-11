@@ -19,7 +19,6 @@ const CheckoutForm = ({
   pickupDate: initialPickUpDate,
   dropoffDate: initialDropoffDate,
   onDropoffDateChange,
-  setDays,
 }) => {
   const stripe = useStripe();
   const elements = useElements();
@@ -78,21 +77,16 @@ const CheckoutForm = ({
   useEffect(() => {
     const minDropoffDate = calculateMinDropoffDate(pickupDate, pickupTime);
     setDropoffDate(
-      new Date(minDropoffDate.getTime() + (days - 1) * 24 * 60 * 60 * 1000)
+      new Date(minDropoffDate.getTime() + (days - 1) * 24 * 60 * 60 * 1000) // ✅ Fix
     );
   }, [pickupDate, pickupTime, days]);
 
   const handlePickupDateChange = (date) => {
     setPickupDate(date);
-
     const minDropoffDate = calculateMinDropoffDate(date, pickupTime);
-
-    // Ensure the dropoff date is updated properly
-    const adjustedDropoffDate = new Date(
-      minDropoffDate.getTime() + (days - 1) * 24 * 60 * 60 * 1000
+    setDropoffDate(
+      new Date(minDropoffDate.getTime() + days * 24 * 60 * 60 * 1000)
     );
-
-    setDropoffDate(adjustedDropoffDate);
   };
 
   const handlePickupTimeChange = (time) => {
@@ -104,36 +98,17 @@ const CheckoutForm = ({
   };
 
   const handleDropoffDateChange = (date) => {
-    if (!(date instanceof Date)) {
-      date = new Date(date);
-    }
-
-    if (isNaN(date.getTime())) {
-      console.error("Invalid dropoff date:", date);
-      return;
-    }
-
-    let minDropoffDate = calculateMinDropoffDate(pickupDate, pickupTime);
-    let maxDropoffDate = new Date(pickupDate);
-    maxDropoffDate.setDate(maxDropoffDate.getDate() + 10);
-
-    // Ensure the selected date is within the valid range
+    const minDropoffDate = calculateMinDropoffDate(pickupDate, pickupTime);
     if (date < minDropoffDate) {
-      date = minDropoffDate;
-    } else if (date > maxDropoffDate) {
-      date = maxDropoffDate;
+      setDropoffDate(minDropoffDate);
+    } else {
+      setDropoffDate(date);
     }
-
-    // Calculate the number of days between pickupDate and dropoffDate
-    const newDays = Math.max(
-      1,
-      Math.ceil((date - pickupDate) / (1000 * 60 * 60 * 24))
-    );
-
-    // Update days and dropoffDate
-    setDays(newDays);
-    setDropoffDate(date);
-    onDropoffDateChange(date); // Notify parent component
+    const newDays = Math.min(
+      10,
+      Math.ceil((date - pickupDate) / (1000 * 60 * 60 * 24)) + 1
+    ); // Convert difference from milliseconds to days
+    onDropoffDateChange(date); // Update RentForm
   };
 
   const handleDropoffTimeChange = (time) => {
@@ -204,18 +179,30 @@ const CheckoutForm = ({
         }),
       });
 
-      const { paymentIntent, reservation } = await response.json();
+      const data = await response.json();
+
+      if (!data.clientSecret) {
+        console.error("Error: Missing client_secret in API response", data);
+        setError("Payment failed: Missing payment secret from server.");
+        setLoading(false);
+        return;
+      }
+
+      const { clientSecret, reservation } = data;
 
       // Confirm the payment
-      const { error: stripeError, paymentIntent: confirmedIntent } =
-        await stripe.confirmCardPayment(paymentIntent.client_secret, {
+      const { error: stripeError } = await stripe.confirmCardPayment(
+        clientSecret,
+        {
+          // Use client_secret directly
           payment_method: {
             card: elements.getElement(CardNumberElement),
             billing_details: {
               name: name,
             },
           },
-        });
+        }
+      );
 
       if (stripeError) {
         setError(stripeError.message);
