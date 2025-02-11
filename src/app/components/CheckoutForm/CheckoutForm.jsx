@@ -18,6 +18,8 @@ const CheckoutForm = ({
   onSuccess,
   pickupDate: initialPickUpDate,
   dropoffDate: initialDropoffDate,
+  onDropoffDateChange,
+  setDays,
 }) => {
   const stripe = useStripe();
   const elements = useElements();
@@ -76,16 +78,21 @@ const CheckoutForm = ({
   useEffect(() => {
     const minDropoffDate = calculateMinDropoffDate(pickupDate, pickupTime);
     setDropoffDate(
-      new Date(minDropoffDate.getTime() + (days - 1) * 24 * 60 * 60 * 1000) // ✅ Fix
+      new Date(minDropoffDate.getTime() + (days - 1) * 24 * 60 * 60 * 1000)
     );
   }, [pickupDate, pickupTime, days]);
 
   const handlePickupDateChange = (date) => {
     setPickupDate(date);
+
     const minDropoffDate = calculateMinDropoffDate(date, pickupTime);
-    setDropoffDate(
-      new Date(minDropoffDate.getTime() + days * 24 * 60 * 60 * 1000)
+
+    // Ensure the dropoff date is updated properly
+    const adjustedDropoffDate = new Date(
+      minDropoffDate.getTime() + (days - 1) * 24 * 60 * 60 * 1000
     );
+
+    setDropoffDate(adjustedDropoffDate);
   };
 
   const handlePickupTimeChange = (time) => {
@@ -97,14 +104,36 @@ const CheckoutForm = ({
   };
 
   const handleDropoffDateChange = (date) => {
-    const minDropoffDate = calculateMinDropoffDate(pickupDate, pickupTime);
-    if (date < minDropoffDate) {
-      setDropoffDate(minDropoffDate);
-    } else {
-      setDropoffDate(date);
+    if (!(date instanceof Date)) {
+      date = new Date(date);
     }
-    const newDays = Math.min(10, Math.ceil((date - pickupDate) / (1000 * 60 * 60 * 24)) + 1); // Convert difference from milliseconds to days
-    onDropoffDateChange(date); // Update RentForm
+
+    if (isNaN(date.getTime())) {
+      console.error("Invalid dropoff date:", date);
+      return;
+    }
+
+    let minDropoffDate = calculateMinDropoffDate(pickupDate, pickupTime);
+    let maxDropoffDate = new Date(pickupDate);
+    maxDropoffDate.setDate(maxDropoffDate.getDate() + 10);
+
+    // Ensure the selected date is within the valid range
+    if (date < minDropoffDate) {
+      date = minDropoffDate;
+    } else if (date > maxDropoffDate) {
+      date = maxDropoffDate;
+    }
+
+    // Calculate the number of days between pickupDate and dropoffDate
+    const newDays = Math.max(
+      1,
+      Math.ceil((date - pickupDate) / (1000 * 60 * 60 * 24))
+    );
+
+    // Update days and dropoffDate
+    setDays(newDays);
+    setDropoffDate(date);
+    onDropoffDateChange(date); // Notify parent component
   };
 
   const handleDropoffTimeChange = (time) => {

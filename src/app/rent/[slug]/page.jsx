@@ -17,26 +17,49 @@ const RentForm = ({ params }) => {
   const [loading, setLoading] = useState(true);
   const [pickupDate, setPickupDate] = useState(() => {
     const initialPickupDate = new Date();
-    initialPickupDate.setHours(initialPickupDate.getHours() + 24); // Pickup date is 1 day ahead
+    initialPickupDate.setHours(initialPickupDate.getHours() + 24);
     return initialPickupDate;
   });
   
   const [dropoffDate, setDropoffDate] = useState(() => {
     const initialDropoffDate = new Date();
-    initialDropoffDate.setDate(initialDropoffDate.getDate() + 1); // ✅ Now only 1 day ahead
+    initialDropoffDate.setDate(initialDropoffDate.getDate() + 1); // Only 1 day ahead
     return initialDropoffDate;
   });
   
-
-    const handleDaysChange = (value) => {
-      const newDays = Math.max(1, Math.min(10, value));
-      setDays(newDays);
-
-      const newDropoffDate = new Date(pickupDate);
-      newDropoffDate.setDate(newDropoffDate.getDate() + newDays);
-      setDropoffDate(newDropoffDate);
-    };
-
+  const handleDaysChange = (value) => {
+    const newDays = Math.max(1, Math.min(10, value));
+    setDays(newDays);
+  
+    const newDropoffDate = new Date(pickupDate);
+    newDropoffDate.setDate(newDropoffDate.getDate() + newDays);
+    setDropoffDate(newDropoffDate);
+  };
+  
+  const handleDropoffDateChange = (newDropoffDate) => {
+    if (!(newDropoffDate instanceof Date)) {
+      newDropoffDate = new Date(newDropoffDate);
+    }
+  
+    if (isNaN(newDropoffDate.getTime())) {
+      console.error("Invalid dropoff date:", newDropoffDate);
+      return;
+    }
+  
+    let maxDropoffDate = new Date(pickupDate);
+    maxDropoffDate.setDate(maxDropoffDate.getDate() + 10);
+  
+    if (newDropoffDate > maxDropoffDate) {
+      newDropoffDate = maxDropoffDate;
+    }
+  
+    // Calculate the number of days between pickupDate and dropoffDate
+    const newDays = Math.max(1, Math.ceil((newDropoffDate - pickupDate) / (1000 * 60 * 60 * 24)));
+  
+    setDays(newDays);
+    setDropoffDate(newDropoffDate);
+  };
+  
   const getCars = async () => {
     try {
       setLoading(true);
@@ -101,6 +124,8 @@ const RentForm = ({ params }) => {
             pickupDate={pickupDate}
             dropoffDate={dropoffDate} // Pass the updated dropoffDate
             onSuccess={handleSuccess}
+            onDropoffDateChange={handleDropoffDateChange}
+            setDays={setDays}
           />
         </Elements>
 
