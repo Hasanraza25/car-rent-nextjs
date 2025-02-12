@@ -6,8 +6,8 @@ export default defineType({
   type: "document",
   fields: [
     {
-      name: "userId",
-      title: "User ID",
+      name: "carName",
+      title: "Car Name",
       type: "string",
     },
     {
@@ -16,8 +16,8 @@ export default defineType({
       type: "string",
     },
     {
-      name: "carName",
-      title: "Car Name",
+      name: "userId",
+      title: "User ID",
       type: "string",
     },
     {

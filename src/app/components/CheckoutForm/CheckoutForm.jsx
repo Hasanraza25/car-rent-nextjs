@@ -104,10 +104,6 @@ const CheckoutForm = ({
     } else {
       setDropoffDate(date);
     }
-    const newDays = Math.min(
-      10,
-      Math.ceil((date - pickupDate) / (1000 * 60 * 60 * 24)) + 1
-    ); // Convert difference from milliseconds to days
     onDropoffDateChange(date); // Update RentForm
   };
 
@@ -157,6 +153,7 @@ const CheckoutForm = ({
       // Calculate total amount in cents
       const amount = car.price * days * 100;
       const userId = user.id;
+      const userEmail = user.primaryEmailAddress?.emailAddress;
       // Create a PaymentIntent
       const response = await fetch("/api/create-payment-intent", {
         method: "POST",
@@ -176,6 +173,7 @@ const CheckoutForm = ({
           userPhone: phone,
           userAddress: address,
           userCity: city,
+          userEmail: userEmail,
         }),
       });
 

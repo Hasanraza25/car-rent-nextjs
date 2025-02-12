@@ -86,7 +86,7 @@ const ReservationDetail = ({ params }) => {
   return (
     <div className="container mx-auto p-8">
       {/* Page Header */}
-      <div className="flex justify-between items-center mb-8">
+      <div className="flex flex-wrap md:justify-between justify-center gap-7 items-center my-8">
         <h1 className="text-4xl font-bold text-gray-800">
           Reservation Details
         </h1>
@@ -100,7 +100,7 @@ const ReservationDetail = ({ params }) => {
         {/* Car Details */}
         <div className="lg:col-span-2 bg-white shadow-xl rounded-xl overflow-hidden">
           <div
-            className="relative w-1/2 mx-auto my-5 z-10 py-10 bg-cover bg-center rounded-lg"
+            className="relative w-[90%] mx-auto my-5 z-10 py-10 bg-cover bg-center rounded-lg"
             style={{
               backgroundImage: "url('/images/hero-arrows.svg')",
             }}
