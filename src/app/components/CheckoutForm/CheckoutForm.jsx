@@ -38,21 +38,29 @@ const CheckoutForm = ({
   const [dropoffDate, setDropoffDate] = useState(initialDropoffDate);
   const [pickupTime, setPickupTime] = useState("10:00 AM");
   const [dropoffTime, setDropoffTime] = useState("10:00 AM");
+  const [isLoadingCities, setIsLoadingCities] = useState(true);
 
   useEffect(() => {
     const fetchCities = async () => {
-      const response = await fetch("/api/fetchCities", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      setIsLoadingCities(true);
+      try {
+        const response = await fetch("/api/fetchCities", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
 
-      const data = await response.json();
-      if (response.ok) {
-        setCities(data);
-      } else {
-        console.error("Error fetching cities:", data.error);
+        const data = await response.json();
+        if (response.ok) {
+          setCities(data);
+        } else {
+          console.error("Error fetching cities:", data.error);
+        }
+      } catch (err) {
+        setError("Erro Fetching Cities", err);
+      } finally {
+        setIsLoadingCities(false);
       }
     };
 
@@ -175,7 +183,6 @@ const CheckoutForm = ({
           userAddress: address,
           userCity: city,
           userEmail: userEmail,
-          
         }),
       });
 
@@ -370,16 +377,18 @@ const CheckoutForm = ({
                     value={pickupCity}
                     onChange={(e) => setPickupCity(e.target.value)}
                   >
-                    <option>Select your city</option>
-                    {cities.map((city, index) => (
-                      <option
-                        key={index}
-                        value={city}
-                        className="text-gray-600"
-                      >
-                        {city}
-                      </option>
-                    ))}
+                    {isLoadingCities ? (
+                      <option>Loading cities...</option> // Show loading text
+                    ) : (
+                      <>
+                        <option value="">Select your city</option>
+                        {cities.map((city, index) => (
+                          <option key={index} value={city}>
+                            {city}
+                          </option>
+                        ))}
+                      </>
+                    )}
                   </select>
                 </div>
               </div>
@@ -495,12 +504,18 @@ const CheckoutForm = ({
                     value={dropoffCity}
                     onChange={(e) => setDropoffCity(e.target.value)}
                   >
-                    <option>Select your city</option>
-                    {cities.map((city, index) => (
-                      <option key={index} value={city}>
-                        {city}
-                      </option>
-                    ))}
+                    {isLoadingCities ? (
+                      <option>Loading cities...</option> // Show loading text
+                    ) : (
+                      <>
+                        <option value="">Select your city</option>
+                        {cities.map((city, index) => (
+                          <option key={index} value={city}>
+                            {city}
+                          </option>
+                        ))}
+                      </>
+                    )}
                   </select>
                 </div>
               </div>
