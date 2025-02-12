@@ -139,9 +139,9 @@ const CarDetail = ({ params }) => {
     } catch (err) {
       console.error("Error Occured:", err);
       Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: 'Something went wrong!',
+        icon: "error",
+        title: "Oops...",
+        text: "Something went wrong!",
       });
     } finally {
       setSubmitting(false);
@@ -247,7 +247,7 @@ const CarDetail = ({ params }) => {
                   <p className="ml-3 text-gray-400 text-sm">440+ Reviewier</p>
                 </div>
                 <p className="text-gray-500 mt-5 text-[1.3rem] leading-10 font-normal">
-                 {car.description}
+                  {car.description}
                 </p>
               </div>
 
@@ -299,11 +299,21 @@ const CarDetail = ({ params }) => {
                       {car.discount}
                     </span>
                   </div>
-                  <Link href={`/rent/${car.currentSlug}`}>
-                    <button className="bg-[#3563E9] hover:bg-[#54A6FF] py-3 px-5 text-white text-lg rounded-md">
-                      Rent Now
+
+                  {car.stock > 0 ? (
+                    <Link href={`/rent/${car.currentSlug}`}>
+                      <button className="bg-[#3563E9] hover:bg-[#54A6FF] py-3 px-5 text-white text-lg rounded-md">
+                        Rent Now
+                      </button>
+                    </Link>
+                  ) : (
+                    <button
+                      className="bg-red-500 text-white py-3 px-5 text-lg rounded-md cursor-not-allowed animate-wiggle"
+                      disabled
+                    >
+                      Out of Stock
                     </button>
-                  </Link>
+                  )}
                 </div>
               </div>
             </div>
@@ -347,7 +357,7 @@ const CarDetail = ({ params }) => {
                   className="animated-button text-lg w-60 mt-10 py-4 mx-auto text-white text-center rounded-[5px]"
                   disabled={submitting}
                 >
-                   {submitting ? "Submitting..." : "Submit Review"}
+                  {submitting ? "Submitting..." : "Submit Review"}
                 </button>
               </form>
             </div>

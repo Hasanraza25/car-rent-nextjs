@@ -31,11 +31,19 @@ const ProductCard = ({ product }) => {
             {product.name}
           </h3>
         </Link>
-        <Link href={`/cars/${product.categorySlug}`}>
-          <p className="text-[#90A3BF] text-sm font-semibold mt-2 hover:text-[#3563E9]">
-            {product.category}
-          </p>
-        </Link>
+
+        <div className="flex justify-between">
+          <Link href={`/cars/${product.categorySlug}`}>
+            <p className="text-[#90A3BF] text-sm font-semibold mt-2 hover:text-[#3563E9]">
+              {product.category}
+            </p>
+          </Link>
+          {product.stock === 0 && (
+            <div className="mt-2 bg-red-500 text-white text-xs font-bold py-1 px-3 rounded-lg shadow-md inline-block animate-wiggle">
+              Out of Stock
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Action Buttons (Heart) */}
@@ -105,11 +113,20 @@ const ProductCard = ({ product }) => {
               {product.discount}
             </span>
           </span>
-          <Link href={`/rent/${product.currentSlug}`}>
-            <button className="animated-button py-3 px-5 mobile:px-3 text-white rounded-[5px]">
-              Rent Now
+          {product.stock > 0 ? (
+            <Link href={`/rent/${product.currentSlug}`}>
+              <button className="animated-button py-3 px-5 mobile:px-3 text-white rounded-[5px]">
+                Rent Now
+              </button>
+            </Link>
+          ) : (
+            <button
+              className="py-3 px-5 mobile:px-3 bg-gray-400 text-white rounded-[5px] cursor-not-allowed"
+              disabled
+            >
+              Not Available
             </button>
-          </Link>
+          )}
         </div>
       </div>
     </div>
