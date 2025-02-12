@@ -149,23 +149,32 @@ const ReservationDetail = ({ params }) => {
           <div className="space-y-4 text-gray-700 text-lg">
             <div className="flex items-center">
               <FaMapMarkerAlt className="text-green-500 mr-3" />
-              <span>{reservation.pickupLocation}</span>
+              <span className="font-semibold">Pickup Location:</span>
+              <span className="ml-2">{reservation.pickupLocation}</span>
             </div>
             <div className="flex items-center">
               <FaMapMarkerAlt className="text-red-500 mr-3" />
-              <span>{reservation.dropoffLocation}</span>
+              <span className="font-semibold">Dropoff Location:</span>
+              <span className="ml-2">{reservation.dropoffLocation}</span>
             </div>
             <div className="flex items-center">
               <FaCalendarAlt className="text-yellow-500 mr-3" />
-              <span>
+              <span className="font-semibold">Pickup Date:</span>
+              <span className="ml-2">
                 {new Date(reservation.pickupDate).toLocaleDateString()}
               </span>
             </div>
             <div className="flex items-center">
               <FaCalendarAlt className="text-purple-500 mr-3" />
-              <span>
+              <span className="font-semibold">Dropoff Date:</span>
+              <span className="ml-2">
                 {new Date(reservation.dropoffDate).toLocaleDateString()}
               </span>
+            </div>
+            <div className="flex items-center">
+              <FaCalendarAlt className="text-blue-500 mr-3" />
+              <span className="font-semibold">Number of Days:</span>
+              <span className="ml-2">{reservation.days}</span>
             </div>
           </div>
 
@@ -198,19 +207,23 @@ const ReservationDetail = ({ params }) => {
             <div className="mt-3 space-y-3 text-lg text-gray-700">
               <div className="flex items-center">
                 <FaUser className="text-blue-500 mr-3" />
-                <span>{reservation.userName}</span>
+                <span className="font-semibold">Name:</span>
+                <span className="ml-2">{reservation.userName}</span>
               </div>
               <div className="flex items-center">
                 <FaPhone className="text-green-500 mr-3" />
-                <span>{reservation.userPhone}</span>
+                <span className="font-semibold">Phone:</span>
+                <span className="ml-2">{reservation.userPhone}</span>
               </div>
               <div className="flex items-center">
                 <FaHome className="text-yellow-500 mr-3" />
-                <span>{reservation.userAddress}</span>
+                <span className="font-semibold">Address:</span>
+                <span className="ml-2">{reservation.userAddress}</span>
               </div>
               <div className="flex items-center">
                 <FaCity className="text-purple-500 mr-3" />
-                <span>{reservation.userCity}</span>
+                <span className="font-semibold">City:</span>
+                <span className="ml-2">{reservation.userCity}</span>
               </div>
             </div>
           </div>

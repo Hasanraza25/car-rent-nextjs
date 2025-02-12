@@ -169,11 +169,13 @@ const CheckoutForm = ({
           dropoffLocation: dropoffCity,
           pickupDate,
           dropoffDate,
+          days,
           userName: name,
           userPhone: phone,
           userAddress: address,
           userCity: city,
           userEmail: userEmail,
+          
         }),
       });
 

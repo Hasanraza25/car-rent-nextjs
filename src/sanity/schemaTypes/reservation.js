@@ -41,6 +41,11 @@ export default defineType({
       type: "datetime",
     },
     {
+      name: "days",
+      title: "Number of Days",
+      type: "number",
+    },
+    {
       name: "status",
       title: "Status",
       type: "string",
