@@ -7,40 +7,9 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Link from "next/link";
 
-const RecentCars = () => {
-  const [recentProducts, setRecentProducts] = useState([]);
+const RelatedCars = ({ categories }) => {
   const [recommendedProducts, setRecommendedProducts] = useState([]);
-  const [recentloading, setRecentLoading] = useState(true);
   const [recommendedloading, setRecommendedLoading] = useState(true);
-
-  const getRecentCars = async () => {
-    try {
-      const query = `*[_type == 'car' && 'recent' in section ] | order(_createdAt asc){
-       name,
-        "category": type->name,
-        price,
-        stock,
-        image,
-        discount,
-        steering,
-        fuelCapacity,
-        seatingCapacity,
-        description,
-        "currentSlug": slug.current,
-         "categorySlug": type->slug.current
-        }`;
-      const products = await client.fetch(query);
-      setRecentProducts(products);
-    } catch (err) {
-      console.error("Error fetching cars:", err);
-    } finally {
-      setRecentLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    getRecentCars();
-  }, []);
 
   const getRecommendedCars = async () => {
     try {
@@ -100,26 +69,6 @@ const RecentCars = () => {
     swipeToSlide: true, // Enable grabbing on desktop and swipe on mobile
   };
 
-  if (recentloading) {
-    return (
-      <div className="container mx-auto flex flex-col mb-20">
-        <div className="flex mt-10 items-center font-bold justify-between px-10">
-          <h4 className="text-xl text-[#90A3BF] font-semibold">Recent Cars</h4>
-          <div>
-            <Link href={"/cars"} className="">
-              <button className="py-4 text-[#3563E9] rounded-[5px] hover:underline md:pr-20">
-                View All
-              </button>
-            </Link>
-          </div>
-        </div>
-        <div className="flex justify-center items-center h-screen">
-          <div className="loader"></div>
-        </div>
-      </div>
-    );
-  }
-
   if (recommendedloading) {
     return (
       <div className="container mx-auto flex flex-col mb-20">
@@ -143,25 +92,31 @@ const RecentCars = () => {
   return (
     <>
       <div className="container mx-auto flex flex-col mb-20">
-        <div className="flex mt-10 items-center font-bold justify-between px-5">
-          <h4 className="text-xl text-[#90A3BF] font-semibold">Recent Cars</h4>
-          <div>
-            <Link href={"/cars"} className="">
-              <button className="py-4 text-[#3563E9] rounded-[5px] hover:underline">
-                View All
-              </button>
-            </Link>
-          </div>
-        </div>
-        <div className="mt-6 px-2">
-          <Slider {...sliderSettings}>
-            {recentProducts.map((product, index) => (
-              <div key={index} className="w-full px-2">
-                <ProductCard key={index} product={product} />
+        {categories.length > 0 ? (
+          <>
+            <div className="flex mt-10 items-center font-bold justify-between px-5">
+              <h4 className="text-xl text-[#90A3BF] font-semibold">
+                Related Cars
+              </h4>
+              <div>
+                <Link href={"/cars"} className="">
+                  <button className="py-4 text-[#3563E9] rounded-[5px] hover:underline">
+                    View All
+                  </button>
+                </Link>
               </div>
-            ))}
-          </Slider>
-        </div>
+              <div className="grid mt-6 gap-6 w-full mx-auto sm:flex sm:flex-col sm:items-center md:grid md:grid-cols-2 lg:grid-cols-3">
+                {categories.map((product, index) => (
+                  <ProductCard key={index} product={product} />
+                ))}
+              </div>
+            </div>
+          </>
+        ) : (
+          <p className="text-2xl font-semibold mx-auto text-gray-700 my-2">
+            No Related Cars Found!
+          </p>
+        )}
       </div>
 
       <div className="container mx-auto flex flex-col mb-20">
@@ -191,4 +146,4 @@ const RecentCars = () => {
   );
 };
 
-export default RecentCars;
+export default RelatedCars;

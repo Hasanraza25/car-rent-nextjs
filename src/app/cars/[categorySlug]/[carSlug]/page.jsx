@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import ReviewsSection from "@/app/components/ReviewSection/ReviewSection";
-import RecentCars from "@/app/components/Cars/RecentCars";
+import RelatedCars from "@/app/components/Cars/RelatedCars";
 import { client, urlFor } from "@/sanity/lib/client";
 import { useWishlist } from "@/app/Context/WishlistContext";
 import Image from "next/image";
@@ -13,6 +13,7 @@ import Swal from "sweetalert2";
 const CarDetail = ({ params }) => {
   const slug = params.carSlug;
   const [car, setCar] = useState([]);
+  const [relatedCars, setRelatedCars] = useState([]);
   const [isHeartClicked, setIsHeartClicked] = useState(false);
   const [loading, setLoading] = useState(true);
   const [rating, setRating] = useState(0);
@@ -43,11 +44,39 @@ const CarDetail = ({ params }) => {
           "categorySlug": type->slug.current,
         }`;
       const products = await client.fetch(query);
-      setCar(products.find((car) => car.currentSlug === slug));
+      const foundCar = products.find((car) => car.currentSlug === slug);
+      setCar(foundCar);
+      if (foundCar) {
+        relatedCategoryCars(foundCar.categorySlug, foundCar.currentSlug);
+      }
     } catch (err) {
       console.error("Error fetching cars:", err);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const relatedCategoryCars = async (categorySlug, currentSlug) => {
+    try {
+      const query = `*[_type == 'car' && type->slug.current == "${categorySlug}" && slug.current != "${currentSlug}" ] | order(_createdAt desc)[0...3] {
+        _id,
+        name,
+        "category": type->name,
+        price,
+        stock,
+        image,
+        discount,
+        steering,
+        fuelCapacity,
+        seatingCapacity,
+        description,
+        "currentSlug": slug.current,
+        "categorySlug": type->slug.current,
+      }`;
+      const categoryCars = await client.fetch(query);
+      setRelatedCars(categoryCars);
+    } catch (err) {
+      console.error(err);
     }
   };
 
@@ -364,7 +393,7 @@ const CarDetail = ({ params }) => {
           )}
 
           <ReviewsSection reviews={reviews} />
-          <RecentCars />
+          <RelatedCars categories={relatedCars} />
         </div>
       </div>
     </div>
