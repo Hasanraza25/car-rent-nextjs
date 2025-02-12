@@ -99,17 +99,17 @@ const RelatedCars = ({ categories }) => {
                 Related Cars
               </h4>
               <div>
-                <Link href={"/cars"} className="">
+                <Link href={`/cars/${categories[0].categorySlug}`} className="">
                   <button className="py-4 text-[#3563E9] rounded-[5px] hover:underline">
                     View All
                   </button>
                 </Link>
               </div>
-              <div className="grid mt-6 gap-6 w-full mx-auto sm:flex sm:flex-col sm:items-center md:grid md:grid-cols-2 lg:grid-cols-3">
-                {categories.map((product, index) => (
-                  <ProductCard key={index} product={product} />
-                ))}
-              </div>
+            </div>
+            <div className="grid mt-6 gap-6 w-full mx-auto sm:flex sm:flex-col sm:items-center md:grid md:grid-cols-2 lg:grid-cols-3">
+              {categories.map((product, index) => (
+                <ProductCard key={index} product={product} />
+              ))}
             </div>
           </>
         ) : (
