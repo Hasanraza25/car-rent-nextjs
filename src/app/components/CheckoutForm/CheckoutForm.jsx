@@ -19,6 +19,10 @@ const CheckoutForm = ({
   pickupDate: initialPickUpDate,
   dropoffDate: initialDropoffDate,
   onDropoffDateChange,
+  onPickupDateChange,
+  pickupTime,
+  onPickupTimeChange,
+  maxDropoffDate,
 }) => {
   const stripe = useStripe();
   const elements = useElements();
@@ -34,9 +38,8 @@ const CheckoutForm = ({
   const [cities, setCities] = useState([]);
   const [pickupCity, setPickupCity] = useState("");
   const [dropoffCity, setDropoffCity] = useState("");
-  const [pickupDate, setPickupDate] = useState(initialPickUpDate);
-  const [dropoffDate, setDropoffDate] = useState(initialDropoffDate);
-  const [pickupTime, setPickupTime] = useState("10:00 AM");
+  const pickupDate = initialPickUpDate;
+  const dropoffDate = initialDropoffDate;
   const [dropoffTime, setDropoffTime] = useState("10:00 AM");
   const [isLoadingCities, setIsLoadingCities] = useState(true);
 
@@ -83,38 +86,44 @@ const CheckoutForm = ({
   };
 
   useEffect(() => {
-    const minDropoffDate = calculateMinDropoffDate(pickupDate, pickupTime);
-    setDropoffDate(
-      new Date(minDropoffDate.getTime() + (days - 1) * 24 * 60 * 60 * 1000) // ✅ Fix
-    );
-  }, [pickupDate, pickupTime, days]);
+    const minDropoff = calculateMinDropoffDate(pickupDate, pickupTime);
+    if (dropoffDate < minDropoff) {
+      onDropoffDateChange(minDropoff);
+    }
+  }, [pickupDate, pickupTime]);
 
   const handlePickupDateChange = (date) => {
-    setPickupDate(date);
-    const minDropoffDate = calculateMinDropoffDate(date, pickupTime);
-    setDropoffDate(
-      new Date(minDropoffDate.getTime() + days * 24 * 60 * 60 * 1000)
-    );
-  };
-
-  const handlePickupTimeChange = (time) => {
-    setPickupTime(time);
-    const minDropoffDate = calculateMinDropoffDate(pickupDate, time);
-    setDropoffDate(
-      new Date(minDropoffDate.getTime() + days * 24 * 60 * 60 * 1000)
-    );
+    onPickupDateChange(date[0]); // Assuming Flatpickr returns array
   };
 
   const handleDropoffDateChange = (date) => {
-    const minDropoffDate = calculateMinDropoffDate(pickupDate, pickupTime);
-    if (date < minDropoffDate) {
-      setDropoffDate(minDropoffDate);
-    } else {
-      setDropoffDate(date);
-    }
-    onDropoffDateChange(date); // Update RentForm
+    onDropoffDateChange(date[0]);
   };
 
+  // CheckoutForm Component
+  const handlePickupTimeChange = (selectedDates) => {
+    const formattedTime = selectedDates[0].toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
+    });
+
+    // Create new Date object with updated time
+    const newDate = new Date(pickupDate);
+    const [time, modifier] = formattedTime.split(" ");
+    let [hours, minutes] = time.split(":");
+
+    if (modifier === "PM" && hours !== "12") {
+      hours = parseInt(hours) + 12;
+    }
+    if (modifier === "AM" && hours === "12") {
+      hours = "00";
+    }
+
+    newDate.setHours(hours, minutes);
+    onPickupTimeChange(formattedTime);
+    onPickupDateChange(newDate); // Update pickup date with new time
+  };
   const handleDropoffTimeChange = (time) => {
     setDropoffTime(time);
   };
@@ -534,6 +543,8 @@ const CheckoutForm = ({
                       dateFormat: "Y-m-d", // Format: YYYY-MM-DD
                       minDate: calculateMinDropoffDate(pickupDate, pickupTime), // Prevent past dates
                       clickOpens: true, // Open only when clicked
+                      defaultDate: dropoffDate,
+                      maxDate: maxDropoffDate,
                       disableMobile: true,
                     }}
                     id="dropoff-date"
