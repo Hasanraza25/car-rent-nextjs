@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import CheckoutForm from "@/app/components/CheckoutForm/CheckoutForm";
+import Link from "next/link";
 
 const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
@@ -106,8 +107,26 @@ const RentForm = ({ params }) => {
 
   if (!car) {
     return (
-      <div className="flex justify-center items-center h-screen">
-        <p className="text-red-500 text-lg font-semibold">Car not found</p>
+      <div className="flex flex-col items-center justify-center text-center px-3 my-10">
+        <Image
+          src="/images/no-cars-found.png" // Replace with the actual path to your image
+          alt="No cars found"
+          width={400}
+          height={300}
+          className="w-full max-w-md h-auto mb-6"
+        />
+        <h2 className="text-2xl font-bold text-gray-700 mb-2">
+          No Cars Found!
+        </h2>
+        <p className="text-gray-500 mb-4">
+          We couldn&#34;t find any cars with this name. Try other cars.
+        </p>
+        <Link
+          href="/cars"
+          className="animated-button py-3 px-6 text-white text-center rounded-md"
+        >
+          Get Other Cars
+        </Link>
       </div>
     );
   }

@@ -590,15 +590,28 @@ const Header = () => {
             <div className="absolute top-0 right-0 w-4 h-4 bg-[#ED3F3F] rounded-full border border-white"></div>
           </div>
 
-          <div className="p-3 w-[55px] h-[55px] border border-gray-300 rounded-full flex items-center justify-center">
-            <Image
-              src="/images/setting.svg"
-              alt="Settings Logo"
-              width={30}
-              height={30}
-              className="object-cover w-[30px] h-[30px] min-w-[30px] min-h-[30px]"
-            />
-          </div>
+          <Link
+            href="/reservations/dashboard"
+            className="p-3 w-[55px] h-[55px] border border-gray-300 rounded-full flex items-center justify-center"
+          >
+            {pathname.startsWith("/reservations") ? (
+              <Image
+                src="/images/calendar-symbol-blue.svg"
+                alt="Settings Logo"
+                width={25}
+                height={25}
+                className="object-cover w-[25px] h-[25px] min-w-[25px] min-h-[25px]"
+              />
+            ) : (
+              <Image
+                src="/images/calendar-symbol.svg"
+                alt="Settings Logo"
+                width={25}
+                height={25}
+                className="object-cover w-[25px] h-[25px] min-w-[25px] min-h-[25px]"
+              />
+            )}
+          </Link>
 
           <Menu as="div" className="relative">
             {/* Profile Button */}
@@ -630,25 +643,13 @@ const Header = () => {
                       My Profile
                     </Link>
                   </MenuItem>
-
-                  <MenuItem as="div">
-                    <Link
-                      href="/reservations/dashboard"
-                      className={`flex items-center gap-2 px-4 py-2 cursor-pointer  hover:bg-gray-100
-                  ${pathname === "/reservations/dashboard" ? "text-blue-500" : "text-gray-700 hover:text-blue-500"}
-                `}
-                    >
-                      <CalendarIcon className="w-5 h-5" />
-                      Reservations
-                    </Link>
-                  </MenuItem>
                   <MenuItem
                     as="div"
                     className="flex items-center gap-2 px-4 py-2 text-left w-full text-gray-700 hover:bg-gray-100 cursor-pointer"
                   >
                     <button
                       onClick={handleLogout}
-                      className="flex items-center gap-2 w-full hover:text-blue-500" 
+                      className="flex items-center gap-2 w-full hover:text-blue-500"
                     >
                       <ArrowLeftOnRectangleIcon className="w-5 h-5" />
                       Logout

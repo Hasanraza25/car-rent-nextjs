@@ -97,7 +97,7 @@ const ReservationDashboard = () => {
   }
 
   return (
-    <div className="container mx-auto p-4 h-screen my-10">
+    <div className="container mx-auto p-4 h-full my-10">
       <div className="flex flex-wrap justify-center items-center my-10">
         <FaClipboardList className="text-4xl mobile:text-xl text-blue-500 mr-3" />
         <h1 className="text-5xl font-bold text-center mobile:text-xl">

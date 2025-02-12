@@ -81,7 +81,7 @@ const CategoryCars = ({ filters, carsSectionRef }) => {
         </p>
         <button
           onClick={() => window.location.reload()}
-          className="bg-[#3563E9] hover:bg-[#54A6FF] py-3 px-6 text-white text-center rounded-md"
+          className="animated-button py-3 px-6 text-white text-center rounded-md"
         >
           Reset Filters
         </button>
@@ -95,13 +95,6 @@ const CategoryCars = ({ filters, carsSectionRef }) => {
         {products.map((product, index) => (
           <ProductCard key={index} product={product} />
         ))}
-      </div>
-      <div className="flex items-center">
-        <Link href="/cars" className="mx-auto">
-          <button className="animated-button text-lg w-60 mt-10 py-4 mx-auto text-white text-center rounded-[5px]">
-            Show more cars
-          </button>
-        </Link>
       </div>
     </div>
   );
