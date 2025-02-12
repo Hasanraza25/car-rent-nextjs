@@ -58,6 +58,8 @@ export async function POST(req) {
 
     const result = await client.create(reservation);
 
+    const reservationUrl = `${process.env.BASE_URL}/reservations/${result._id}`;
+
     await transporter.sendMail({
       from: process.env.EMAIL_USER,
       to: userEmail,
@@ -70,7 +72,8 @@ export async function POST(req) {
            <li>Dropoff Location: ${dropoffLocation}</li>
            <li>Pickup Date: ${pickupDate}</li>
            <li>Dropoff Date: ${dropoffDate}</li>
-         </ul>`,
+         </ul>
+         <p>You can view your reservation details <a href="${reservationUrl}" target="_blank">here</a>.</p>`,
     });
 
     if (!paymentIntent.client_secret) {
@@ -85,6 +88,7 @@ export async function POST(req) {
       clientSecret: paymentIntent.client_secret,
       reservation: result,
     });
+
   } catch (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }

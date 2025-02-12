@@ -34,7 +34,11 @@ const ReservationDetail = ({ params }) => {
           setReservation(response.data);
           setStatus(response.data.status);
         } catch (err) {
-          setError(err.message);
+          if (err.response && err.response.status === 401) {
+            setError("You are not signed in or the reservation ID is incorrect.");
+          } else {
+            setError(err.message);
+          }
         } finally {
           setLoading(false);
         }
