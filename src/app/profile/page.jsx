@@ -190,7 +190,7 @@ export default function ProfilePage() {
 
   if (!isSignedIn)
     return (
-      <div className="min-h-screen flex flex-col justify-center items-center bg-white text-center animate-fadeInSlideUp">
+      <div className="min-h-screen flex flex-col justify-center items-center bg-gradient-to-r from-blue-50 to-blue-50 text-center animate-fadeInSlideUp">
         {/* Bouncing Lock Icon */}
         <div className="animate-bounce">
           <LockClosedIcon className="w-24 h-24 text-gray-900 bg-gray-200 p-5 rounded-full shadow-lg" />
@@ -223,106 +223,127 @@ export default function ProfilePage() {
     );
 
   return (
-    <div className="container h-screen mx-auto my-10 px-5 animate-fadeInSlideUp">
-      <h1 className="text-3xl font-bold mb-8 text-center">Edit Profile</h1>
-      <div className="flex flex-col items-center">
-        {/* Profile Picture Upload */}
-        <div className="relative mb-6">
-          <input
-            type="file"
-            accept="image/*"
-            ref={fileInputRef}
-            className="hidden"
-            onChange={handleImageChange}
-          />
-          <img
-            src={previewImage}
-            alt="Profile"
-            className="w-32 h-32 rounded-full border border-gray-300 cursor-pointer transition-transform duration-300 hover:scale-110"
-            onClick={() => fileInputRef.current.click()}
-          />
-          {imageUploading && (
-            <p className="text-sm text-gray-500 absolute top-0 left-0 w-full h-full flex items-center justify-center bg-white bg-opacity-75">
-              Uploading...
-            </p>
-          )}
-        </div>
+    <div className="min-h-screen bg-gradient-to-r from-blue-50 to-blue-50 py-10 px-5 animate-fadeInSlideUp">
+      <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-2xl overflow-hidden">
+        <div className="p-8">
+          <h1 className="text-4xl font-bold text-center text-gray-900 mb-10">
+            Edit Profile
+          </h1>
+          <div className="flex flex-col items-center space-y-8">
+            {/* Profile Picture Upload */}
+            <div className="relative group">
+              <input
+                type="file"
+                accept="image/*"
+                ref={fileInputRef}
+                className="hidden"
+                onChange={handleImageChange}
+              />
+              <div
+                className="relative w-40 h-40 rounded-full overflow-hidden border-4 border-white shadow-lg cursor-pointer transition-all duration-300"
+                onClick={() => fileInputRef.current.click()}
+              >
+                {/* Profile Image */}
+                <div className="w-full h-full rounded-full overflow-hidden">
+                  <img
+                    src={previewImage}
+                    alt="Profile"
+                    className="w-full h-full object-cover object-center"
+                  />
+                </div>
 
-        <div className="w-full max-w-md space-y-4">
-          <div>
-            <label className="block text-sm font-medium mb-1">First Name</label>
-            <input
-              type="text"
-              value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
-            />
+                {/* Change Photo Overlay */}
+              </div>
+              {imageUploading && (
+                <p className="text-sm text-gray-500 absolute top-0 left-0 w-full h-full flex items-center justify-center bg-white bg-opacity-75 rounded-full">
+                  Uploading...
+                </p>
+              )}
+            </div>
+
+            <div className="w-full space-y-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  First Name
+                </label>
+                <input
+                  type="text"
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Last Name
+                </label>
+                <input
+                  type="text"
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Email
+                </label>
+                <input
+                  type="email"
+                  value={email}
+                  disabled
+                  className="w-full px-4 py-3 border border-gray-300 bg-gray-100 rounded-lg cursor-not-allowed"
+                />
+              </div>
+
+              {/* Password Fields */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Old Password
+                </label>
+                <input
+                  type="password"
+                  value={oldPassword}
+                  onChange={(e) => setOldPassword(e.target.value)}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  New Password
+                </label>
+                <input
+                  type="password"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Confirm Password
+                </label>
+                <input
+                  type="password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                />
+              </div>
+
+              <button
+                onClick={handleUpdateProfile}
+                className="w-full animated-button text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2  focus:ring-offset-2"
+                disabled={updatingProfile}
+              >
+                {updatingProfile ? "Updating..." : "Update Profile"}
+              </button>
+            </div>
           </div>
-
-          <div>
-            <label className="block text-sm font-medium mb-1">Last Name</label>
-            <input
-              type="text"
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium mb-1">Email</label>
-            <input
-              type="email"
-              value={email}
-              disabled
-              className="w-full px-4 py-2 border bg-gray-100 rounded-lg cursor-not-allowed"
-            />
-          </div>
-
-          {/* Password Fields */}
-          <div>
-            <label className="block text-sm font-medium mb-1">
-              Old Password
-            </label>
-            <input
-              type="password"
-              value={oldPassword}
-              onChange={(e) => setOldPassword(e.target.value)}
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium mb-1">
-              New Password
-            </label>
-            <input
-              type="password"
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium mb-1">
-              Confirm Password
-            </label>
-            <input
-              type="password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
-            />
-          </div>
-
-          <button
-            onClick={handleUpdateProfile}
-            className="animated-button w-full text-lg mt-20 py-3 mx-auto text-white text-center rounded-[5px] transition-transform transform hover:scale-105 duration-300"
-            disabled={updatingProfile}
-          >
-            {updatingProfile ? "Updating..." : "Update Profile"}
-          </button>
         </div>
       </div>
     </div>
