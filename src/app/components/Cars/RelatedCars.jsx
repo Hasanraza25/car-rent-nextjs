@@ -106,7 +106,7 @@ const RelatedCars = ({ categories }) => {
                 </Link>
               </div>
             </div>
-            <div className="grid mt-6 gap-6 w-full mx-auto sm:flex sm:flex-col sm:items-center md:grid md:grid-cols-2 lg:grid-cols-3">
+            <div className="grid mt-6 gap-6 w-full mx-auto sm:flex sm:flex-col sm:items-center md:grid md:grid-cols-2 lg:grid-cols-3 px-2">
               {categories.map((product, index) => (
                 <ProductCard key={index} product={product} />
               ))}
@@ -130,7 +130,7 @@ const RelatedCars = ({ categories }) => {
             </button>
           </div>
         </div>
-        <div className="mt-6 px-2">
+        <div className="mt-6 ">
           <Suspense fallback={<div className="loader"></div>}>
             <Slider {...sliderSettings}>
               {recommendedProducts.map((product, index) => (

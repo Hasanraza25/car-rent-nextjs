@@ -11,7 +11,7 @@ const ReviewsSection = ({ reviews }) => {
 
   return (
     <div className="py-12 max-w-[1700px] mx-auto w-full">
-      <div className="px-4">
+      <div className="px-2">
         <div className="flex items-center space-x-6 mb-5 ml-5">
           <h2 className="text-2xl font-semibold">Reviews</h2>
           <span className="text-white bg-[#3563E9] px-4 py-2 rounded-lg">

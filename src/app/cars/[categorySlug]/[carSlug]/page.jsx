@@ -383,7 +383,7 @@ const CarDetail = ({ params }) => {
                 ></textarea>
                 <button
                   type="submit"
-                  className="animated-button text-lg w-60 mt-10 py-4 mx-auto text-white text-center rounded-[5px]"
+                  className="animated-button text-lg md:w-60 w-full mt-10 py-4 mx-auto text-white text-center rounded-[5px]"
                   disabled={submitting}
                 >
                   {submitting ? "Submitting..." : "Submit Review"}
