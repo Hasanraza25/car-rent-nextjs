@@ -7,7 +7,7 @@ import RelatedCars from "@/app/components/Cars/RelatedCars";
 import { client, urlFor } from "@/sanity/lib/client";
 import { useWishlist } from "@/app/Context/WishlistContext";
 import Image from "next/image";
-import { useUser } from "@clerk/nextjs";
+import { useClerk, useUser } from "@clerk/nextjs";
 import Swal from "sweetalert2";
 
 const CarDetail = ({ params }) => {
@@ -22,7 +22,7 @@ const CarDetail = ({ params }) => {
   const [submitting, setSubmitting] = useState(false);
 
   const { user, isSignedIn } = useUser();
-
+  const { updateUser } = useClerk();
   const { wishlistItems, addToWishlist, removeFromWishlist } = useWishlist();
 
   const getCars = async () => {
@@ -140,13 +140,34 @@ const CarDetail = ({ params }) => {
       return;
     }
 
+    if (!user.fullName) {
+      const { value: fullName } = await Swal.fire({
+        title: "Enter your Full Name",
+        input: "text",
+        inputLabel: "Full Name",
+        inputPlaceholder: "Enter your Full Name",
+        showCancelButton: true,
+        inputValidator: (value) => {
+          if (!value) {
+            return "Full Name is required!";
+          }
+        },
+      });
+      if (fullName) {
+        const [firstName, ...lastName] = fullName.split(" ");
+        await user.update({ firstName, lastName: lastName.join(" ") });
+      } else {
+        return;
+      }
+    }
+
     setSubmitting(true);
 
     const review = {
       _type: "review",
       carId: car._id,
       userId: user.id,
-      userName: user.fullName,
+      userName: user.fullName || user.firstName,
       userImage: user.imageUrl,
       rating,
       reviewText,
