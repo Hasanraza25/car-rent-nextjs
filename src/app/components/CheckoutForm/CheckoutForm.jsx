@@ -141,8 +141,10 @@ const CheckoutForm = ({
     if (
       !pickupCity ||
       pickupCity === "Select your city" ||
+      pickupCity === "Loading cities..." ||
       !dropoffCity ||
       dropoffCity === "Select your city" ||
+      dropoffCity === "Loading cities..." ||
       !pickupDate ||
       !dropoffDate ||
       !pickupTime ||

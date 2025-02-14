@@ -54,6 +54,7 @@ export default defineType({
           { title: "Confirmed", value: "confirmed" },
           { title: "In Progress", value: "in_progress" },
           { title: "Completed", value: "completed" },
+          { title: "Canceled", value: "canceled" },
         ],
       },
     },

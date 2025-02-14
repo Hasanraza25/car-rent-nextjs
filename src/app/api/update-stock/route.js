@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 
 export async function POST(request) {
   try {
-    const { carId } = await request.json();
+    const { carId, increment } = await request.json();
 
     if (!carId) {
       return NextResponse.json(
@@ -25,7 +25,7 @@ export async function POST(request) {
       );
     }
 
-    const updatedStock = car.stock - 1;
+    const updatedStock = increment ? car.stock + 1 : car.stock - 1;
 
     await client.patch(carId).set({ stock: updatedStock }).commit();
 

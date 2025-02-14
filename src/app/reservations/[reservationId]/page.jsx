@@ -16,6 +16,7 @@ import {
   FaHourglassHalf,
   FaFlagCheckered,
 } from "react-icons/fa";
+import Swal from "sweetalert2";
 
 const ReservationDetail = ({ params }) => {
   const { reservationId } = params;
@@ -35,7 +36,9 @@ const ReservationDetail = ({ params }) => {
           setStatus(response.data.status);
         } catch (err) {
           if (err.response && err.response.status === 401) {
-            setError("You are not signed in or the reservation ID is incorrect.");
+            setError(
+              "You are not signed in or the reservation ID is incorrect."
+            );
           } else {
             setError(err.message);
           }
@@ -56,6 +59,68 @@ const ReservationDetail = ({ params }) => {
       setStatus(newStatus);
     } catch (err) {
       console.error("Error updating status:", err.message);
+    }
+  };
+
+  const handleCancelReservation = async () => {
+    const { value: reason } = await Swal.fire({
+      title: "Cancel Reservation",
+      input: "select",
+      inputOptions: {
+        "Change of plans": "Change of plans",
+        "Found a better deal": "Found a better deal",
+        "Booking mistake": "Booking mistake",
+        "Trip canceled": "Trip canceled",
+        "Car not needed anymore": "Car not needed anymore",
+        "Unable to travel": "Unable to travel",
+        "Issue with the car": "Issue with the car",
+        "COVID-19 concerns": "COVID-19 concerns",
+        "Weather conditions": "Weather conditions",
+        "Personal reasons": "Personal reasons",
+        Other: "Other",
+      },
+      inputPlaceholder: "Select a reason",
+      showCancelButton: true,
+      cancelButtonText: "Close",
+    });
+
+    if (reason == "Other") {
+      const { value: otherReason } = await Swal.fire({
+        title: "Cancel Reservation",
+        input: "text",
+        inputPlaceholder: "Enter your reason",
+        showCancelButton: true,
+        cancelButtonText: "Close",
+      });
+
+      if (otherReason) {
+        await cancelReservation(otherReason);
+      }
+    } else if (reason) {
+      await cancelReservation(reason);
+    }
+  };
+
+  const cancelReservation = async (reason) => {
+    try {
+      await axios.patch(`/api/reservations/${reservationId}/status`, {
+        status: "canceled",
+      });
+
+      await axios.post(`/api/update-stock`, {
+        carId: reservation.carId,
+        increment: true,
+      });
+
+      setStatus("canceled");
+      Swal.fire("Canceled", "Your reservation has been canceled.", "success");
+    } catch (err) {
+      console.error("Error canceling reservation: ", err);
+      Swal.fire(
+        "Error",
+        "An error occurred while canceling your reservation.",
+        "error"
+      );
     }
   };
 
@@ -186,25 +251,34 @@ const ReservationDetail = ({ params }) => {
           <div className="mt-6">
             <h3 className="text-xl font-semibold text-gray-800">Status</h3>
             <div className="flex items-center mt-3">
-              {status === "confirmed" ? (
-                <FaCheckCircle className="text-green-500 mr-3" />
-              ) : status === "in_progress" ? (
-                <FaHourglassHalf className="text-lg text-blue-500 mr-3" />
-              ) : (
-                <FaFlagCheckered className="text-lg text-purple-500 mr-2" />
-              )}
-              <select
-                value={status}
-                onChange={(e) => handleStatusChange(e.target.value)}
-                className="ml-2 border border-gray-300 rounded p-2 w-full bg-gray-100"
-              >
-                <option value="confirmed">Confirmed</option>
-                <option value="in_progress">In Progress</option>
-                <option value="completed">Completed</option>
-              </select>
+              <div className="flex items-center gap-2">
+                {status === "confirmed" && (
+                  <div className="flex items-center bg-green-100 text-green-700 px-4 py-2 rounded-lg">
+                    <FaCheckCircle className="mr-2" />
+                    <span>Confirmed</span>
+                  </div>
+                )}
+                {status === "in_progress" && (
+                  <div className="flex items-center bg-blue-100 text-blue-700 px-4 py-2 rounded-lg">
+                    <FaHourglassHalf className="mr-2" />
+                    <span>In Progress</span>
+                  </div>
+                )}
+                {status === "canceled" && (
+                  <div className="flex items-center bg-red-100 text-red-700 px-4 py-2 rounded-lg">
+                    <FaTimesCircle className="mr-2" />
+                    <span>Canceled</span>
+                  </div>
+                )}
+                {status === "completed" && (
+                  <div className="flex items-center bg-purple-100 text-purple-700 px-4 py-2 rounded-lg">
+                    <FaFlagCheckered className="mr-2" />
+                    <span>Completed</span>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
-
           {/* User Details */}
           <div className="mt-6">
             <h3 className="text-xl font-semibold text-gray-800">User Info</h3>
@@ -230,6 +304,18 @@ const ReservationDetail = ({ params }) => {
                 <span className="ml-2">{reservation.userCity}</span>
               </div>
             </div>
+          </div>
+
+          <div className="mt-6">
+            <button
+              onClick={handleCancelReservation}
+              className={`w-full text-white py-2 px-4 rounded hover:bg-red-600 transition duration-200 ${status === "canceled" ? "bg-red-600" : " bg-red-500"}`}
+              disabled={status === "canceled"}
+            >
+              {status === "canceled"
+                ? "Reservation Canceled"
+                : "Cancel Reservation"}
+            </button>
           </div>
         </div>
       </div>

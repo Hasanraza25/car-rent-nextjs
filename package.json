@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "import-data": "node scripts/importSanityData.mjs"
+    "import-data": "node scripts/importSanityData.mjs",
+    "import-locations": "node scripts/importLocations.mjs",
+    "delete-locations": "node scripts/deleteAllLocations.mjs"
   },
   "dependencies": {
     "@clerk/nextjs": "^6.11.0",

@@ -226,6 +226,12 @@ const ReservationDashboard = () => {
                             <span className="text-gray-900">Completed</span>
                           </>
                         )}
+                        {reservation.status === "canceled" && (
+                          <>
+                            <FaTimesCircle className="text-lg text-red-500 mr-3" />
+                            <span className="text-gray-900">Canceled</span>
+                          </>
+                        )}
                       </div>
                     </td>
                   </td>

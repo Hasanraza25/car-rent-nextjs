@@ -15,23 +15,30 @@ const RentForm = ({ params }) => {
   const [car, setCar] = useState(null);
   const [loading, setLoading] = useState(true);
   const [pickupTime, setPickupTime] = useState("10:00 AM");
+
   const initialPickupDate = new Date();
   initialPickupDate.setDate(initialPickupDate.getDate() + 1);
-  initialPickupDate.setHours(10, 0, 0, 0); // Set initial time to 10:00 AM
+  initialPickupDate.setHours(10, 0, 0, 0);
+
   const calculateMinDropoffDate = (date, time) => {
     const [period, modifier] = time.split(" ");
     let [hours, minutes] = period.split(":");
 
-    // Convert to 24-hour format
     hours = parseInt(hours);
     if (modifier === "PM" && hours !== 12) hours += 12;
+    // 10 pm 
+    // 10 + 12 = 22 = 10 am
+    // 12 pm = 12 pm
     if (modifier === "AM" && hours === 12) hours = 0;
+    // 12 am
+    // 12 + 0 = 12
 
     const minDate = new Date(date);
     minDate.setHours(hours, minutes);
-    minDate.setDate(minDate.getDate() + 1); // Always add 1 day minimum
+    minDate.setDate(minDate.getDate() + 1);
     return minDate;
   };
+
   const [pickupDate, setPickupDate] = useState(initialPickupDate);
   const [dropoffDate, setDropoffDate] = useState(() => {
     const minDate = calculateMinDropoffDate(initialPickupDate, "10:00 AM");
@@ -41,7 +48,7 @@ const RentForm = ({ params }) => {
 
   const calculateMaxDropoffDate = (pickupDate) => {
     const maxDate = new Date(pickupDate);
-    maxDate.setDate(maxDate.getDate() + 10); // Add 10 days to pickup date
+    maxDate.setDate(maxDate.getDate() + 10);
     return maxDate;
   };
 
@@ -49,18 +56,14 @@ const RentForm = ({ params }) => {
     const diffTime = dropoffDate - pickupDate;
     const initialDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
     setDays(initialDays);
-  }, []); // Run only once on mount
+  }, []);
 
-  // Update calculateMinDropoffDate function
-
-  // Unified date handler
   const updateDates = (newPickupDate, newPickupTime) => {
     const minDropoff = calculateMinDropoffDate(newPickupDate, newPickupTime);
     const newDropoff = new Date(
       minDropoff.getTime() + (days - 1) * 24 * 60 * 60 * 1000
     );
 
-    // Ensure dropoff is never before minimum
     if (newDropoff < minDropoff) {
       setDropoffDate(minDropoff);
       setDays(1);
@@ -79,7 +82,6 @@ const RentForm = ({ params }) => {
     setDropoffDate(newDropoff);
   };
 
-  // Add this useEffect to handle time changes
   useEffect(() => {
     const minDropoff = calculateMinDropoffDate(pickupDate, pickupTime);
     if (dropoffDate < minDropoff) {
@@ -91,7 +93,6 @@ const RentForm = ({ params }) => {
     const minDropoff = calculateMinDropoffDate(pickupDate, pickupTime);
     const maxDropoff = calculateMaxDropoffDate(pickupDate);
 
-    // Enforce minimum and maximum dropoff dates
     if (newDropoffDate < minDropoff) {
       newDropoffDate = minDropoff;
     }
@@ -99,7 +100,6 @@ const RentForm = ({ params }) => {
       newDropoffDate = maxDropoff;
     }
 
-    // Calculate days difference
     const diffTime = newDropoffDate - pickupDate;
     const newDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
@@ -107,27 +107,21 @@ const RentForm = ({ params }) => {
     setDropoffDate(newDropoffDate);
   };
   const handleDaysChange = (newDays) => {
-    newDays = Math.max(1, Math.min(10, newDays)); // Enforce 1-10 day limit
+    newDays = Math.max(1, Math.min(10, newDays));
     setDays(newDays);
 
     const minDropoff = calculateMinDropoffDate(pickupDate, pickupTime);
     let newDropoff = new Date(
       minDropoff.getTime() + (newDays - 1) * 24 * 60 * 60 * 1000
-    ); // Use `let` here
+    );
 
-    // Ensure dropoff doesn't exceed max date
     const maxDropoff = calculateMaxDropoffDate(pickupDate);
     if (newDropoff > maxDropoff) {
-      newDropoff = maxDropoff; // Now this reassignment is allowed
-      setDays(10); // Reset days to max if exceeded
+      newDropoff = maxDropoff;
+      setDays(10);
     }
 
     setDropoffDate(newDropoff);
-  };
-  // Add time change handler
-  const handlePickupTimeChange = (newTime) => {
-    setPickupTime(newTime);
-    updateDates(pickupDate, newTime);
   };
 
   const getCars = async () => {
@@ -194,7 +188,7 @@ const RentForm = ({ params }) => {
             pickupTime={pickupTime}
             onPickupTimeChange={setPickupTime}
             pickupDate={pickupDate}
-            dropoffDate={dropoffDate} // Pass the updated dropoffDate
+            dropoffDate={dropoffDate}
             onSuccess={handleSuccess}
             onPickupDateChange={handlePickupDateChange}
             onDropoffDateChange={handleDropoffDateChange}
