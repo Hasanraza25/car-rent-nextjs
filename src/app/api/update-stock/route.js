@@ -18,7 +18,7 @@ export async function POST(request) {
       return NextResponse.json({ error: "Car not found" }, { status: 404 });
     }
 
-    if (car.stock <= 0) {
+    if (!increment && car.stock <= 0) {
       return NextResponse.json(
         { error: "No stock available" },
         { status: 400 }

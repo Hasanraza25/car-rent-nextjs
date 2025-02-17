@@ -61,6 +61,11 @@ export async function POST(req) {
     if (isNaN(pickupDateTime.getTime()) || isNaN(dropoffDateTime.getTime())) {
       throw new Error("Invalid date or time format");
     }
+    // Before creating Date objects, validate time format
+    const isValidTime = (time) => /^([01]?[0-9]|2[0-3]):[0-5][0-9]$/.test(time);
+    if (!isValidTime(pickupTime)) throw new Error("Invalid pickup time format");
+    if (!isValidTime(dropoffTime))
+      throw new Error("Invalid dropoff time format");
 
     // Format the dates to a more user-friendly format
     const formattedPickupDate = pickupDateTime.toLocaleString("en-US", {

@@ -40,7 +40,7 @@ const CheckoutForm = ({
   const [dropoffCity, setDropoffCity] = useState("");
   const pickupDate = initialPickUpDate;
   const dropoffDate = initialDropoffDate;
-  const [dropoffTime, setDropoffTime] = useState("10:00 AM");
+  const [dropoffTime, setDropoffTime] = useState("10:00");
   const [isLoadingCities, setIsLoadingCities] = useState(true);
 
   useEffect(() => {
@@ -167,6 +167,10 @@ const CheckoutForm = ({
       const userId = user.id;
       const userEmail = user.primaryEmailAddress?.emailAddress;
 
+      // Ensure default values for pickupTime and dropoffTime
+      const formattedPickupTime = pickupTime || "10:00";
+      const formattedDropoffTime = dropoffTime || "10:00";
+
       // Format the pickup and dropoff dates and times
       const formattedPickupDate = new Date(pickupDate)
         .toISOString()
@@ -174,8 +178,6 @@ const CheckoutForm = ({
       const formattedDropoffDate = new Date(dropoffDate)
         .toISOString()
         .split("T")[0];
-      const formattedPickupTime = pickupTime; // Assuming pickupTime is already in the correct format
-      const formattedDropoffTime = dropoffTime; // Assuming dropoffTime is already in the correct format
 
       // Create a PaymentIntent
       const response = await fetch("/api/create-payment-intent", {
@@ -261,7 +263,7 @@ const CheckoutForm = ({
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ carId: car._id }),
+          body: JSON.stringify({ carId: car._id, increment: false }),
         });
 
         const updateStockData = await updateStockResponse.json();
@@ -269,7 +271,7 @@ const CheckoutForm = ({
         console.log("Stock Update Response:", updateStockData);
 
         if (updateStockData.success) {
-          onSuccess(reservation);
+          onSuccess(reservationData.reservation);
         } else {
           setError(
             `Stock update failed: ${updateStockData.error || "Unknown error"} ${car._id}`
@@ -475,12 +477,13 @@ const CheckoutForm = ({
                   <Flatpickr
                     options={{
                       enableTime: true,
-                      dateFormat: "H:i", // 24-hour format
-                      time_24hr: true,
                       noCalendar: true,
-                      time_24hr: false,
+                      dateFormat: "H:i", // 24-hour format
+                      time_24hr: true, // Show 24-hour clock
                       minuteIncrement: 5,
                       disableMobile: true,
+                      defaultHour: 10, // Set default hour
+                      defaultMinute: 0, // Set default minute
                     }}
                     id="pickup-time"
                     className="block w-full p-5 pl-7 pr-10 rounded-md bg-gray-100 text-gray-500 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm appearance-none"
@@ -598,12 +601,13 @@ const CheckoutForm = ({
                   <Flatpickr
                     options={{
                       enableTime: true,
-                      dateFormat: "H:i", // 24-hour format
-                      time_24hr: true,
                       noCalendar: true,
-                      time_24hr: false,
+                      dateFormat: "H:i", // 24-hour format
+                      time_24hr: true, // Show 24-hour clock
                       minuteIncrement: 5,
                       disableMobile: true,
+                      defaultHour: 10, // Set default hour
+                      defaultMinute: 0, // Set default minute
                     }}
                     id="dropoff-time"
                     className="block w-full p-5 pl-7 pr-10 rounded-md bg-gray-100 text-gray-500 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm appearance-none"
