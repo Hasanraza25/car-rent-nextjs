@@ -14,7 +14,7 @@ const RentForm = ({ params }) => {
   const slug = params.slug;
   const [car, setCar] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [pickupTime, setPickupTime] = useState("10:00 AM");
+  const [pickupTime, setPickupTime] = useState("10:00");
 
   const initialPickupDate = new Date();
   initialPickupDate.setDate(initialPickupDate.getDate() + 1);
@@ -26,7 +26,7 @@ const RentForm = ({ params }) => {
 
     hours = parseInt(hours);
     if (modifier === "PM" && hours !== 12) hours += 12;
-    // 10 pm 
+    // 10 pm
     // 10 + 12 = 22 = 10 am
     // 12 pm = 12 pm
     if (modifier === "AM" && hours === 12) hours = 0;

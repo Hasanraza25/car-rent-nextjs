@@ -56,7 +56,7 @@ const CheckoutForm = ({
 
         const data = await response.json();
         if (response.ok) {
-          setCities(data);
+          setCities(data.locations);
         } else {
           console.error("Error fetching cities:", data.error);
         }
@@ -70,27 +70,18 @@ const CheckoutForm = ({
     fetchCities();
   }, []);
 
-  const calculateMinDropoffDate = (pickupDate, pickupTime) => {
-    const [time, modifier] = pickupTime.split(" ");
-    let [hours, minutes] = time.split(":");
-    if (modifier === "PM" && hours !== "12") {
-      hours = parseInt(hours, 10) + 12;
-    }
-    if (modifier === "AM" && hours === "12") {
-      hours = "00";
-    }
+  const calculateMinDropoffDate = (pickupDate) => {
     const minDropoffDate = new Date(pickupDate);
-    minDropoffDate.setHours(hours, minutes);
-    minDropoffDate.setHours(minDropoffDate.getHours() + 24);
+    minDropoffDate.setDate(minDropoffDate.getDate() + 1);
     return minDropoffDate;
   };
 
   useEffect(() => {
-    const minDropoff = calculateMinDropoffDate(pickupDate, pickupTime);
+    const minDropoff = calculateMinDropoffDate(pickupDate);
     if (dropoffDate < minDropoff) {
       onDropoffDateChange(minDropoff);
     }
-  }, [pickupDate, pickupTime]);
+  }, [pickupDate]);
 
   const handlePickupDateChange = (date) => {
     onPickupDateChange(date[0]); // Assuming Flatpickr returns array
@@ -100,32 +91,36 @@ const CheckoutForm = ({
     onDropoffDateChange(date[0]);
   };
 
-  // CheckoutForm Component
-  const handlePickupTimeChange = (selectedDates) => {
-    const formattedTime = selectedDates[0].toLocaleTimeString([], {
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: true,
-    });
-
-    // Create new Date object with updated time
-    const newDate = new Date(pickupDate);
-    const [time, modifier] = formattedTime.split(" ");
-    let [hours, minutes] = time.split(":");
-
-    if (modifier === "PM" && hours !== "12") {
-      hours = parseInt(hours) + 12;
+  useEffect(() => {
+    const minDropoff = calculateMinDropoffDate(pickupDate, pickupTime);
+    if (dropoffDate < minDropoff) {
+      onDropoffDateChange(minDropoff);
     }
-    if (modifier === "AM" && hours === "12") {
-      hours = "00";
-    }
+  }, [pickupDate, pickupTime]);
 
-    newDate.setHours(hours, minutes);
-    onPickupTimeChange(formattedTime);
-    onPickupDateChange(newDate); // Update pickup date with new time
+  const handleCityChange = (setter) => (e) => {
+    const value = e.target.value;
+    if (value !== "Loading cities..." && value !== "Select your city") {
+      setter(JSON.parse(value));
+    }
   };
-  const handleDropoffTimeChange = (time) => {
-    setDropoffTime(time);
+
+  // In handlePickupTimeChange
+  const handlePickupTimeChange = (selectedDates) => {
+    if (selectedDates.length > 0 && selectedDates[0] instanceof Date) {
+      const hours = selectedDates[0].getHours().toString().padStart(2, "0");
+      const minutes = selectedDates[0].getMinutes().toString().padStart(2, "0");
+      onPickupTimeChange(`${hours}:${minutes}`);
+    }
+  };
+
+  // In handleDropoffTimeChange
+  const handleDropoffTimeChange = (selectedDates) => {
+    if (selectedDates.length > 0 && selectedDates[0] instanceof Date) {
+      const hours = selectedDates[0].getHours().toString().padStart(2, "0");
+      const minutes = selectedDates[0].getMinutes().toString().padStart(2, "0");
+      setDropoffTime(`${hours}:${minutes}`);
+    }
   };
 
   useEffect(() => {
@@ -146,12 +141,10 @@ const CheckoutForm = ({
       dropoffCity === "Select your city" ||
       dropoffCity === "Loading cities..." ||
       !pickupDate ||
-      !dropoffDate ||
-      !pickupTime ||
-      !dropoffTime
+      !dropoffDate
     ) {
       setError(
-        "Please fill in all required fields (pickup and dropoff locations, dates, and times)."
+        "Please fill in all required fields (pickup and dropoff locations, dates)."
       );
       return;
     }
@@ -173,6 +166,17 @@ const CheckoutForm = ({
       const amount = car.price * days * 100;
       const userId = user.id;
       const userEmail = user.primaryEmailAddress?.emailAddress;
+
+      // Format the pickup and dropoff dates and times
+      const formattedPickupDate = new Date(pickupDate)
+        .toISOString()
+        .split("T")[0];
+      const formattedDropoffDate = new Date(dropoffDate)
+        .toISOString()
+        .split("T")[0];
+      const formattedPickupTime = pickupTime; // Assuming pickupTime is already in the correct format
+      const formattedDropoffTime = dropoffTime; // Assuming dropoffTime is already in the correct format
+
       // Create a PaymentIntent
       const response = await fetch("/api/create-payment-intent", {
         method: "POST",
@@ -181,19 +185,6 @@ const CheckoutForm = ({
         },
         body: JSON.stringify({
           amount,
-          userId,
-          carId: car._id,
-          carName: car.name,
-          pickupLocation: pickupCity,
-          dropoffLocation: dropoffCity,
-          pickupDate,
-          dropoffDate,
-          days,
-          userName: name,
-          userPhone: phone,
-          userAddress: address,
-          userCity: city,
-          userEmail: userEmail,
         }),
       });
 
@@ -206,7 +197,7 @@ const CheckoutForm = ({
         return;
       }
 
-      const { clientSecret, reservation } = data;
+      const { clientSecret } = data;
 
       // Confirm the payment
       const { error: stripeError } = await stripe.confirmCardPayment(
@@ -226,7 +217,44 @@ const CheckoutForm = ({
         setError(stripeError.message);
         setLoading(false);
       } else {
-        // ✅ Call API to update stock after successful payment
+        const reservationResponse = await fetch(
+          "/api/reservations/create-reservation",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              userId,
+              carId: car._id,
+              carName: car.name,
+              pickupCity: pickupCity.city,
+              pickupLocation: pickupCity.address,
+              dropOffCity: dropoffCity.city,
+              dropoffLocation: dropoffCity.address,
+              pickupDate: formattedPickupDate,
+              pickupTime: formattedPickupTime,
+              dropoffDate: formattedDropoffDate,
+              dropoffTime: formattedDropoffTime,
+              days,
+              userName: name,
+              userPhone: phone,
+              userAddress: address,
+              userCity: city,
+              userEmail: userEmail,
+            }),
+          }
+        );
+
+        const reservationData = await reservationResponse.json();
+
+        if (reservationData.error) {
+          setError(`Reservation failed: ${reservationData.error}`);
+          setLoading(false);
+          return;
+        }
+
+        onSuccess(reservationData.reservation);
         const updateStockResponse = await fetch("/api/update-stock", {
           method: "POST",
           headers: {
@@ -385,17 +413,17 @@ const CheckoutForm = ({
                       backgroundPosition: "right 1rem center",
                       backgroundSize: "1.5em",
                     }}
-                    value={pickupCity}
-                    onChange={(e) => setPickupCity(e.target.value)}
+                    value={pickupCity ? JSON.stringify(pickupCity) : ""}
+                    onChange={handleCityChange(setPickupCity)}
                   >
                     {isLoadingCities ? (
-                      <option>Loading cities...</option> // Show loading text
+                      <option>Loading cities...</option>
                     ) : (
                       <>
                         <option value="">Select your city</option>
                         {cities.map((city, index) => (
-                          <option key={index} value={city}>
-                            {city}
+                          <option key={index} value={JSON.stringify(city)}>
+                            {city.city}
                           </option>
                         ))}
                       </>
@@ -446,8 +474,9 @@ const CheckoutForm = ({
                   <Flatpickr
                     options={{
                       enableTime: true,
+                      dateFormat: "H:i", // 24-hour format
+                      time_24hr: true,
                       noCalendar: true,
-                      dateFormat: "h:i K", // 12-hour format with AM/PM
                       time_24hr: false,
                       minuteIncrement: 5,
                       disableMobile: true,
@@ -462,15 +491,7 @@ const CheckoutForm = ({
                       backgroundSize: "1.5em",
                     }}
                     value={pickupTime}
-                    onChange={(selectedDates) =>
-                      handlePickupTimeChange(
-                        selectedDates[0].toLocaleTimeString([], {
-                          hour: "2-digit",
-                          minute: "2-digit",
-                          hour12: true,
-                        })
-                      )
-                    }
+                    onChange={handlePickupTimeChange}
                   />
                 </div>
               </div>
@@ -512,17 +533,17 @@ const CheckoutForm = ({
                       backgroundPosition: "right 1rem center",
                       backgroundSize: "1.5em",
                     }}
-                    value={dropoffCity}
-                    onChange={(e) => setDropoffCity(e.target.value)}
+                    value={dropoffCity ? JSON.stringify(dropoffCity) : ""}
+                    onChange={handleCityChange(setDropoffCity)}
                   >
                     {isLoadingCities ? (
-                      <option>Loading cities...</option> // Show loading text
+                      <option>Loading cities...</option>
                     ) : (
                       <>
                         <option value="">Select your city</option>
                         {cities.map((city, index) => (
-                          <option key={index} value={city}>
-                            {city}
+                          <option key={index} value={JSON.stringify(city)}>
+                            {city.city}
                           </option>
                         ))}
                       </>
@@ -576,10 +597,11 @@ const CheckoutForm = ({
                   <Flatpickr
                     options={{
                       enableTime: true,
+                      dateFormat: "H:i", // 24-hour format
+                      time_24hr: true,
                       noCalendar: true,
-                      dateFormat: "h:i K", // 12-hour format with AM/PM
                       time_24hr: false,
-                      minuteIncrement: 5, // Adjust for smooth scrolling
+                      minuteIncrement: 5,
                       disableMobile: true,
                     }}
                     id="dropoff-time"

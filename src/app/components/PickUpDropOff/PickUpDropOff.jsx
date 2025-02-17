@@ -23,30 +23,30 @@ const PickUpDropOff = () => {
   const [dropoffTime, setDropoffTime] = useState("10:00 AM");
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchCities = async () => {
-      setIsLoading(true); // Start loading
-      try {
-        const response = await fetch("/api/fetchCities", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
+  const fetchCities = async () => {
+    setIsLoading(true);
+    try {
+      const response = await fetch("/api/fetchCities", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
-        const data = await response.json();
-        if (response.ok) {
-          setCities(data);
-        } else {
-          console.error("Error fetching cities:", data.error);
-        }
-      } catch (error) {
-        console.error("Network error:", error);
-      } finally {
-        setIsLoading(false); // Stop loading after fetch
+      const data = await response.json();
+      if (response.ok) {
+        setCities(data.locations); // Ensure you are setting the correct data
+      } else {
+        console.error("Error fetching cities:", data.error);
       }
-    };
+    } catch (err) {
+      console.error("Error Fetching Cities:", err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchCities();
   }, []);
 
@@ -131,7 +131,7 @@ const PickUpDropOff = () => {
                     <option value="">Select your city</option>
                     {cities.map((city, index) => (
                       <option key={index} value={city}>
-                        {city}
+                        {city.city}
                       </option>
                     ))}
                   </>
@@ -246,7 +246,7 @@ const PickUpDropOff = () => {
                     <option value="">Select your city</option>
                     {cities.map((city, index) => (
                       <option key={index} value={city}>
-                        {city}
+                        {city.city}
                       </option>
                     ))}
                   </>

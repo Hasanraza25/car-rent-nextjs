@@ -1,15 +1,11 @@
+import { client } from "@/sanity/lib/client";
 import { NextResponse } from "next/server";
 
 export async function POST() {
-  const username = process.env.GEONAMES_USERNAME;
-
   try {
-    const response = await fetch(
-      `http://api.geonames.org/searchJSON?country=US&maxRows=1000&username=${username}&featureClass=P`
-    );
-    const data = await response.json();
-    const cities = data.geonames.map((city) => city.name);
-    return NextResponse.json(cities, { status: 200 });
+    const query = '*[_type == "location"]{city, locationName, address}';
+    const locations = await client.fetch(query);
+    return NextResponse.json({ locations });
   } catch (err) {
     console.error("Error fetching cities:", error);
     return NextResponse.json(
@@ -18,5 +14,3 @@ export async function POST() {
     );
   }
 }
-
-
