@@ -284,7 +284,6 @@ const CheckoutForm = ({
       setLoading(false);
     }
   };
-
   return (
     <div className="order-2 lg:order-1 w-full lg:w-2/3 flex flex-col space-y-6 lg:space-y-10">
       <form onSubmit={handleSubmit}>
