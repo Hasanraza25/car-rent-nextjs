@@ -70,10 +70,7 @@ export default function PaymentSuccess() {
         </button>
 
         <p className="text-sm text-gray-500 mt-6">
-          Need help?{" "}
-          <a href="/contact" className="text-green-600 hover:underline">
-            Contact us
-          </a>
+          Please check your email for the reservation details and further instructions.
         </p>
       </div>
     </div>

@@ -255,6 +255,7 @@ const CheckoutForm = ({
         }
 
         onSuccess(reservationData.reservation);
+
         const updateStockResponse = await fetch("/api/update-stock", {
           method: "POST",
           headers: {
