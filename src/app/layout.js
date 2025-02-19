@@ -7,6 +7,8 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { ProfileProvider } from "./Context/ProfileCOntext";
+import { SessionProvider } from "next-auth/react";
+import ClientSessionProvider from "./components/ClientSessionProvider";
 
 const jakartaSans = localFont({
   src: "./fonts/Plus_Jakarta_Sans/static/PlusJakartaSans-Medium.ttf",
@@ -41,7 +43,7 @@ export default function RootLayout({ children }) {
             <WishlistProvider>
               <ToastContainer />
               <Header />
-              {children}
+              <ClientSessionProvider>{children}</ClientSessionProvider>
               <Footer />
             </WishlistProvider>
           </ProfileProvider>
