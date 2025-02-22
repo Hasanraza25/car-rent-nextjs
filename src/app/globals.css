@@ -43,6 +43,9 @@ body {
   padding-top: 120px;
 }
 
+body.admin-route {
+  padding-top: 0;
+}
 h1,
 h2,
 h3,

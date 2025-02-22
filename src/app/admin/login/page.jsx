@@ -91,13 +91,6 @@ const AdminLogin = () => {
           >
             Login
           </button>
-          <div className="text-center">
-            <Link href="/admin/signUp">
-              <button className="text-indigo-600 hover:underline">
-                Don&#34;t have an account? Sign Up
-              </button>
-            </Link>
-          </div>
         </form>
       </div>
     </div>

@@ -1,14 +1,13 @@
 import localFont from "next/font/local";
 import "./globals.css";
 import { WishlistProvider } from "./Context/WishlistContext";
-import Header from "./components/Header/Header";
-import Footer from "./components/Footer/Footer";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { ProfileProvider } from "./Context/ProfileCOntext";
 import { SessionProvider } from "next-auth/react";
 import ClientSessionProvider from "./components/ClientSessionProvider";
+import ConditionalLayout from "./components/ConditionalLayout";
 
 const jakartaSans = localFont({
   src: "./fonts/Plus_Jakarta_Sans/static/PlusJakartaSans-Medium.ttf",
@@ -33,6 +32,7 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
+
   return (
     <html lang="en">
       <body
@@ -42,9 +42,9 @@ export default function RootLayout({ children }) {
           <ProfileProvider>
             <WishlistProvider>
               <ToastContainer />
-              <Header />
-              <ClientSessionProvider>{children}</ClientSessionProvider>
-              <Footer />
+              <ClientSessionProvider>
+                <ConditionalLayout>{children}</ConditionalLayout>
+              </ClientSessionProvider>
             </WishlistProvider>
           </ProfileProvider>
         </ClerkProvider>
