@@ -16,7 +16,6 @@ const ConditionalLayout = ({ children }) => {
       document.body.classList.remove('admin-route');
     }
   }, [isAdminRoute]);
-
   return (
     <>
       {!isAdminRoute && <Header />}
