@@ -1,7 +1,11 @@
 "use client";
-import { useSession, signOut } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import DashboardCards from "../components/DashboardCards";
+import DashboardCharts from "../components/DashboardCharts";
+import RecentBookings from "../components/RecentBookings";
+import QuickActions from "../components/QuickActions";
 
 const AdminDashboard = () => {
   const { data: session } = useSession();
@@ -19,9 +23,12 @@ const AdminDashboard = () => {
 
   return (
     <>
-      <h1>Admin Dashboard</h1>
-      <p>Welcome to the admin panel.</p>
-      <button onClick={() => signOut({ callbackUrl: "/" })}>Logout</button>
+      <div className="p-6 space-y-6">
+        <DashboardCards />
+        <DashboardCharts />
+        <RecentBookings />
+        <QuickActions />
+      </div>
     </>
   );
 };
