@@ -1,24 +1,27 @@
 "use client";
 
 import { useState } from "react";
-import AdminSidebar from "../components/AdminSidebar";
-import AdminHeader from "../components/AdminHeader";
+import AdminSidebar from "./AdminSidebar";
+import AdminHeader from "./AdminHeader";
 
 const AdminLayout = ({ children }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   return (
-    <div className="flex h-screen bg-gray-100 dark:bg-gray-900">
+    <div className="flex h-screen w-full overflow-hidden bg-gray-100 dark:bg-gray-900 ">
       {/* Sidebar */}
-      <AdminSidebar isOpen={isSidebarOpen} toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
+      <AdminSidebar
+        isOpen={isSidebarOpen}
+        toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
+      />
 
-      {/* Main content container */}
-      <div className="flex flex-col flex-grow md:ml-64 transition-all duration-300">
+      {/* Main Content */}
+      <div className="flex flex-col flex-grow w-full min-h-screen md:ml-64 overflow-x-hidden">
         {/* Header */}
         <AdminHeader toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
 
-        {/* Main content */}
-        <main className="p-6 flex-grow">{children}</main>
+        {/* Main Dashboard Content */}
+        <main className="p-6 w-full overflow-x-hidden">{children}</main>
       </div>
     </div>
   );

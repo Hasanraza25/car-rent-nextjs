@@ -26,16 +26,14 @@ const AdminHeader = ({ toggleSidebar }) => {
   }, []);
 
   return (
-    <header className="flex items-center justify-between p-4 bg-gray-900 text-white shadow-md w-full md:ml-64 overflow-x-hidden relative">
+    <header className="relative flex items-center justify-between p-4 bg-gray-900 text-white shadow-md w-full overflow-visible">
       {/* Mobile Sidebar Toggle */}
-      <button className="md:hidden p-2" onClick={toggleSidebar}>
+      <button className="md:hidden" onClick={toggleSidebar}>
         <MdMenu size={24} />
       </button>
 
       {/* Title */}
-      <h1 className="text-xl font-bold text-center sm:text-left">
-        Morent{"\n"}Panel
-      </h1>
+      <h1 className="text-xl font-bold truncate">Admin Panel</h1>
 
       {/* Right Section */}
       <div className="flex items-center space-x-4 relative">
@@ -60,7 +58,10 @@ const AdminHeader = ({ toggleSidebar }) => {
           </button>
 
           {showDropdown && (
-            <div className="absolute right-0 mt-2 w-48 bg-gray-800 text-white rounded-md shadow-lg py-2 z-50">
+            <div
+              className="absolute right-0 mt-2 w-48 bg-gray-800 text-white rounded-md shadow-lg py-2 z-[1000]"
+              style={{ top: "100%", position: "absolute" }}
+            >
               <button
                 onClick={() => router.push("/admin/profile")}
                 className="block w-full text-left px-4 py-2 hover:bg-gray-700"
